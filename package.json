@@ -1,0 +1,23 @@
+{
+  "name": "PokeMonster",
+  "version": "1.0.0",
+  "description": "Site de Pokémon com backend Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "pokemon",
+    "nodejs",
+    "express"
+  ],
+  "author": "Helton e Pedro",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

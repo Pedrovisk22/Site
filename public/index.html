@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Friends - Home</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/svg/pokeball.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="/"><img src="assets/img/logo.png" alt="PokeMonster Logo"></a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#">JOGAR</a></li>
+                    <li><a href="#">PROMOÇÕES</a></li>
+                    <li><a href="/ranking">RANKING</a></li>
+                    <li><a href="/shop">SHOP</a></li>
+                </ul>
+            </nav>
+            <div class="login-section">
+                <a href="#" class="btn-login"><img src="assets/svg/enter.svg" alt="Logar"> LOGAR</a>
+                <div class="language-dropdown">
+                    <button class="dropdown-toggle">
+                        <img id="selected-flag" src="assets/images/flag-br.png" alt="Bandeira do Brasil">
+                        <span id="selected-lang-code">PT</span>
+                        <img class="dropdown-arrow" src="assets/svg/arrow-down.svg" alt="Seta para baixo">
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#" data-lang="br" data-code="PT"><img src="assets/images/flag-br.png" alt="Português"> PT</a>
+                        <a href="#" data-lang="us" data-code="EN"><img src="assets/images/flag-us.png" alt="English"> EN</a>
+                        <a href="#" data-lang="es" data-code="ES"><img src="assets/images/flag-es.png" alt="Español"> ES</a>
+                        <a href="#" data-lang="de" data-code="DE"><img src="assets/images/flag-de.png" alt="Deutsch"> DE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+
+        <!-- HERO SECTION NOVA -->
+        <section class="hero-section animate-on-scroll">
+            <div class="container hero-content-wrapper">
+                <div class="hero-main">
+                    <img src="assets/img/slide2.jpg" alt="Bem vindo ao Poke Amigos" class="hero-main-img">
+                    <div class="hero-text">
+                        <h1>SEJA BEM VINDO AO POKÉ AMIGOS</h1>
+                        <p>APROVEITE AGORA AS MISSÕES EXCLUSIVAS E COMEMORATIVAS DO PokeMonster! SERVIDOR EM COMEMORAÇÃO DE ANIVERSÁRIO!</p>
+                        <a href="#" class="btn-primary hero-cta">DIVIRTA-SE AGORA!</a>
+                    </div>
+                </div>
+                <div class="hero-secondary-promo animate-on-scroll" style="animation-delay: 0.2s;">
+                    <img src="assets/img/slide1.jpg" alt="Resgate Chien Pao">
+                    <div class="promo-overlay">
+                        <h3>Promoção Especial!</h3>
+                        <p>Resgate Chien Pao e outros lendários!</p>
+                        <a href="#" class="btn-secondary">Ver Detalhes</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACTION BUTTONS REIMAGINADOS -->
+        <section class="quick-actions-section animate-on-scroll" style="animation-delay: 0.4s;">
+            <div class="container action-buttons">
+                <a href="#" class="action-btn">
+                    <img src="assets/svg/download.svg" alt="Download">
+                    <span class="btn-title">BAIXAR JOGO</span>
+                    <span class="btn-subtitle">PokeMonster Client</span>
+                </a>
+                <a href="#" class="action-btn">
+                    <img src="assets/svg/register.svg" alt="Registrar">
+                    <span class="btn-title">CRIAR CONTA</span>
+                    <span class="btn-subtitle">Junte-se à Aventura</span>
+                </a>
+                <a href="#" class="action-btn">
+                    <img src="assets/svg/discord_icon.svg" alt="Discord"> <!-- Novo Ícone -->
+                    <span class="btn-title">NOSSO DISCORD</span>
+                    <span class="btn-subtitle">Comunidade Ativa</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- NOTÍCIAS E COMUNIDADE -->
+        <section class="news-community-section">
+            <div class="container">
+                <div class="news-main-column animate-on-scroll">
+                    <div class="news-card-wrapper">
+                        <h2 class="section-title card-title typewriter">ÚLTIMAS NOTÍCIAS</h2>
+                        <div class="main-news-card news-card highlight animate-on-scroll">
+                            <img src="assets/img/news1.jpg" alt="Novas Promoções">
+                            <div class="news-content">
+                                <h3>EVENTO DE ANIVERSÁRIO: NOVAS PROMOÇÕES IMPERDÍVEIS!</h3>
+                                <p>Neste mês comemorativo, liberamos todos os packs atualizados e adicionamos bônus exclusivos para jogadores veteranos e novatos. Não perca!</p>
+                                <div class="news-meta">
+                                    <img src="assets/svg/clock.svg" alt="Relógio">
+                                    <span>08/05/2025 por Administrador</span>
+                                </div>
+                                <a href="#" class="btn-tertiary">Ler Mais</a>
+                            </div>
+                        </div>
+                        <div class="news-grid">
+                            <div class="news-card animate-on-scroll" style="animation-delay: 0.1s;">
+                                <img src="assets/img/news2.jpg" alt="O Queridinho Chegou">
+                                <div class="news-content">
+                                    <h4>O QUERIDINHO CHEGOU</h4>
+                                    <p>Pokémon exclusivo do Mês (Stitch - Addons incluso)</p>
+                                    <div class="news-meta">
+                                        <img src="assets/svg/clock.svg" alt="Relógio">
+                                        <span>05/05/2025 por ADM</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="news-card animate-on-scroll" style="animation-delay: 0.2s;">
+                                <img src="assets/img/news3.jpg" alt="Promoções Abril">
+                                <div class="news-content">
+                                    <h4>PROMOÇÕES ABRIL</h4>
+                                    <p>Válidas a partir do Dia 05</p>
+                                    <div class="news-meta">
+                                        <img src="assets/svg/clock.svg" alt="Relógio">
+                                        <span>05/04/2025 por ADM</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="news-card animate-on-scroll" style="animation-delay: 0.3s;">
+                                <img src="assets/img/news4.jpg" alt="Chien Pao Island">
+                                <div class="news-content">
+                                    <h4>CHIEN PAO ISLAND</h4>
+                                    <p>Conclua as Tasks e capture!</p>
+                                    <div class="news-meta">
+                                        <img src="assets/svg/clock.svg" alt="Relógio">
+                                        <span>05/04/2025 por ADM</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="community-sidebar animate-on-scroll" style="animation-delay: 0.3s;">
+                    <div class="top-level-ranking-wrapper">
+                        <h3 class="section-title card-title typewriter">TOP 5 JOGADORES</h3>
+                        <div class="top-level-ranking">
+                            <table>
+                                <!-- Simplificado para Top 5 na Home -->
+                                <tbody>
+                                    <tr> <td><img src="assets/svg/trophy1.svg" alt="1st"></td> <td>Tumi Frutti</td> <td>898</td> </tr>
+                                    <tr> <td><img src="assets/svg/trophy2.svg" alt="2nd"></td> <td>Whitenomore</td> <td>807</td> </tr>
+                                    <tr> <td><img src="assets/svg/trophy3.svg" alt="3rd"></td> <td>Lucas</td> <td>750</td> </tr>
+                                    <tr> <td>4</td> <td>Gato Galactico</td> <td>720</td> </tr>
+                                    <tr> <td>5</td> <td>Meliodas</td> <td>700</td> </tr>
+                                </tbody>
+                            </table>
+                            <a href="/ranking" class="btn-secondary view-full-ranking">Ver Ranking Completo</a>
+                        </div>
+                    </div>
+
+                    <div class="online-players-wrapper animate-on-scroll" style="animation-delay: 0.5s;">
+                        <h3 class="section-title card-title typewriter">STATUS DO SERVIDOR</h3>
+                        <div class="online-players-card">
+                            <div class="player-status-item">
+                                <div class="status-info">
+                                    <span class="status-indicator online"></span>
+                                    <span class="game-name">PokeMonster: <strong class="accent-text">Online</strong></span>
+                                </div>
+                            </div>
+                            <div class="player-status-item">
+                                <div class="status-info">
+                                    <span class="game-name">Jogadores Ativos:</span>
+                                </div>
+                                <span class="player-count-number">70</span> <!-- Ajuste conforme o real -->
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- POKEMON EM DESTAQUE -->
+        <section class="master-pokemon-section animate-on-scroll">
+            <div class="container">
+                <h2 class="section-title main-title typewriter">POKÉMON EM DESTAQUE</h2>
+                <div class="filter-buttons animate-on-scroll">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="fogo">Fogo</button>
+                    <button class="filter-btn" data-filter="agua">Água</button>
+                    <button class="filter-btn" data-filter="grama">Grama</button>
+                    <button class="filter-btn" data-filter="eletrico">Elétrico</button>
+                    <!-- Adicione mais filtros se necessário -->
+                </div>
+            </div>
+            <div class="container featured-pokemon-grid">
+                <!-- Card Pokémon Exemplo (repita e altere para seus pokémons) -->
+                <div class="pokemon-card animate-on-scroll" data-type="fogo">
+                    <img src="assets/img/charizard.jpg" alt="Charizard"> <!-- Imagem do Pokémon -->
+                    <span class="pokemon-status fogo">Fogo / Voador</span>
+                    <div class="pokemon-info-overlay">
+                        <h3>Charizard</h3>
+                        <p>Um pokémon poderoso do tipo fogo, conhecido por suas chamas intensas.</p>
+                        <a href="#" class="btn-primary btn-small">Ver Detalhes</a>
+                    </div>
+                </div>
+                <div class="pokemon-card animate-on-scroll" data-type="agua" style="animation-delay: 0.1s;">
+                    <img src="assets/img/blastoise.jpg" alt="Blastoise">
+                    <span class="pokemon-status agua">Água</span>
+                     <div class="pokemon-info-overlay">
+                        <h3>Blastoise</h3>
+                        <p>Possui canhões de água poderosos em suas costas.</p>
+                        <a href="#" class="btn-primary btn-small">Ver Detalhes</a>
+                    </div>
+                </div>
+                 <div class="pokemon-card animate-on-scroll" data-type="grama" style="animation-delay: 0.2s;">
+                    <img src="assets/img/venusaur.jpg" alt="Venusaur">
+                    <span class="pokemon-status grama">Grama / Veneno</span>
+                     <div class="pokemon-info-overlay">
+                        <h3>Venusaur</h3>
+                        <p>Carrega uma flor gigante que libera um aroma calmante.</p>
+                        <a href="#" class="btn-primary btn-small">Ver Detalhes</a>
+                    </div>
+                </div>
+                <!-- Adicione mais cards aqui -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <!-- Conteúdo do footer original -->
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <img src="assets/img/logo.png" alt="PokeMonster Logo">
+                <p>© 2025 PokeMonster. Todos os direitos reservados.</p>
+            </div>
+            <nav class="footer-nav">
+                <h3>Links Úteis</h3>
+                <ul>
+                    <li><a href="#">Sobre Nós</a></li>
+                    <li><a href="#">Termos de Serviço</a></li>
+                    <li><a href="#">Política de Privacidade</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </nav>
+            <div class="footer-social">
+                <h3>Siga-nos</h3>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+            <div class="footer-contact">
+                <h3>Contato</h3>
+                <p>Email: suporte@pokemonster.com</p>
+                <p>Telefone: (XX) XXXX-XXXX</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

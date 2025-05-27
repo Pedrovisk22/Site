@@ -1,0 +1,1093 @@
+/* style.css Atualizado */
+
+:root {
+    /* Paleta de Cores Mantida: Verde e Cinza Escuro */
+    --primary-color: #66BB6A;
+    --secondary-color: #1A1A1A;
+    --text-light: #E0E0E0;
+    --text-muted: #AAAAAA;
+    --bg-dark: #1A1A1A;
+    --bg-medium: #2C2C2C;
+    --bg-light: #3A3A3A;
+    --border-color: #555555;
+    --accent-green-dark: #388E3C;
+    --accent-yellow: #FFC107;
+    --footer-bg: #121212;
+
+    /* Gradientes Mantidos */
+    --gradient-dark-to-medium: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+    --gradient-medium-to-dark: linear-gradient(135deg, var(--bg-medium) 0%, var(--bg-dark) 100%);
+    --gradient-primary: linear-gradient(45deg, var(--accent-green-dark) 0%, var(--primary-color) 100%);
+    --gradient-primary-hover: linear-gradient(45deg, var(--primary-color) 0%, var(--accent-green-dark) 100%);
+    --gradient-card: linear-gradient(135deg, #2C2C2C 0%, #1A1A1A 100%);
+    --gradient-card-hover: linear-gradient(135deg, #3A3A3A 0%, #2C2C2C 100%);
+}
+
+/* --- RESET BÁSICO E ESTILOS GLOBAIS --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+    overflow-x: hidden;
+    background-image: url('../assets/images/background.png'); /* MANTIDO - ajuste o caminho se mudou */
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-light);
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* --- HEADER --- (Mantido e com adição de transição para efeito de scroll) */
+.header {
+    background: var(--gradient-dark-to-medium);
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out; /* Efeito JS */
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 65px;
+}
+
+.main-nav ul {
+    display: flex;
+    gap: 30px;
+}
+
+.main-nav a {
+    color: var(--text-light);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 1em;
+    position: relative;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 3px;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.main-nav a:hover::after {
+    width: 100%;
+}
+
+.main-nav a:hover {
+    color: var(--primary-color);
+}
+
+.login-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-login {
+    background: var(--gradient-primary);
+    color: var(--text-light);
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    border: none;
+}
+
+.btn-login img {
+    height: 20px;
+    width: 20px;
+    filter: invert(100%);
+}
+
+.btn-login:hover {
+    background: var(--gradient-primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+/* Dropdown de Idioma - Mantido */
+.language-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-toggle {
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    padding: 8px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.dropdown-toggle img {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.dropdown-toggle .dropdown-arrow {
+    height: 20px; /* Tamanho igual à imagem */
+    width: 20px;
+    fill: white; /* Garante que o SVG seja branco */
+    filter: invert(100%); /* Para SVGs que podem ser pretos por padrão */
+    transition: transform 0.3s ease;
+}
+.dropdown-toggle.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+.dropdown-toggle:hover {
+    background-color: #4a4a4a;
+    border-color: var(--primary-color);
+}
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: var(--bg-light);
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+    z-index: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 5px;
+    left: 0; /* Para alinhar à esquerda do botão */
+    border: 1px solid var(--border-color);
+}
+.dropdown-menu.show { display: block; }
+.dropdown-menu a {
+    color: var(--text-light);
+    padding: 10px 15px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+.dropdown-menu a img {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.dropdown-menu a:hover {
+    background-color: var(--primary-color);
+    color: var(--text-light); /* Garante que o texto continue claro */
+}
+
+
+/* --- MAIN CONTENT AREA --- */
+.main-content {
+    /* Padding global ou margens entre seções podem ser adicionadas aqui se necessário */
+}
+
+/* --- HERO SECTION (NOVA) --- */
+.hero-section {
+    padding: 50px 0; /* Ajustado o padding */
+    background: var(--gradient-medium-to-dark);
+}
+
+.hero-content-wrapper {
+    display: flex;
+    gap: 30px;
+    align-items: stretch; /* Para que .hero-main e .hero-secondary-promo tenham a mesma altura */
+}
+
+.hero-main {
+    flex: 2; /* Mais espaço para o banner principal */
+    background-color: var(--bg-medium);
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column; /* Imagem acima, texto abaixo */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    border: 1px solid var(--border-color);
+}
+
+.hero-main-img {
+    width: 100%;
+    height: 350px; /* Altura para a imagem do banner */
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+}
+
+.hero-text {
+    padding: 30px;
+    text-align: center;
+    flex-grow: 1; /* Permite que esta área cresça se houver espaço */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centraliza o conteúdo verticalmente */
+}
+
+.hero-text h1 {
+    font-size: 2.6em; /* Tamanho do título principal */
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.hero-text p {
+    font-size: 1.1em;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+.btn-primary.hero-cta {
+    padding: 16px 35px; /* Botão CTA maior */
+    font-size: 1.2em;
+    align-self: center; /* Centraliza o botão no container flex */
+    /* Herda o estilo de .btn-primary definido abaixo */
+}
+
+.hero-secondary-promo {
+    flex: 1;
+    background-color: var(--bg-light); /* Cor de fundo para o card promocional */
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    border: 1px solid var(--border-color);
+    display: flex; /* Para permitir que a imagem preencha */
+}
+
+.hero-secondary-promo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.hero-secondary-promo:hover img {
+    transform: scale(1.05);
+}
+
+.promo-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    padding: 25px;
+    text-align: center;
+}
+
+.promo-overlay h3 {
+    color: var(--primary-color);
+    font-size: 1.4em; /* Título do promo card */
+    margin-bottom: 8px;
+}
+
+.promo-overlay p {
+    font-size: 0.9em;
+    color: var(--text-light); /* Usar text-light para contraste com overlay escuro */
+    margin-bottom: 15px;
+}
+
+/* --- BOTÕES GENÉRICOS (PRIMÁRIO JÁ ESTAVA DEFINIDO PARA O SLIDER, SECUNDÁRIO E TERCIÁRIO NOVOS) --- */
+.btn-primary { /* Mantém o estilo que já tinha, bom para CTAs */
+    background: var(--gradient-primary);
+    color: var(--text-light);
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+.btn-primary:hover {
+    background: var(--gradient-primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--primary-color);
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-dark); /* Texto escuro para contraste */
+}
+
+.btn-tertiary {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none; /* Pode adicionar underline se preferir */
+    transition: color 0.3s ease;
+    border-bottom: 1px dashed var(--primary-color);
+    padding-bottom: 2px;
+}
+.btn-tertiary:hover {
+    color: var(--accent-green-dark);
+    border-bottom-color: var(--accent-green-dark);
+}
+
+/* --- QUICK ACTIONS SECTION (ANTIGOS ACTION BUTTONS) --- */
+.quick-actions-section {
+    padding: 50px 0; /* Espaçamento da seção */
+}
+
+/* Os estilos originais .action-buttons e .action-btn parecem adequados */
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+    /* margin-top: 50px; -> Removido, a seção pai controla espaçamento */
+}
+
+.action-btn {
+    flex: 1;
+    background: var(--gradient-card);
+    border-radius: 15px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn:hover {
+    transform: translateY(-8px);
+    background: var(--gradient-card-hover);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    border-color: var(--primary-color);
+}
+
+.action-btn img {
+    height: 65px; /* Certifique-se que o novo SVG 'discord_icon.svg' tem esse tamanho ou se ajusta bem */
+    width: 65px;
+    margin-bottom: 20px;
+    filter: invert(85%) sepia(15%) saturate(600%) hue-rotate(80deg) brightness(100%) contrast(90%); /* Coloração sutil verde para combinar */
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+.action-btn:hover img {
+    filter: invert(58%) sepia(67%) saturate(475%) hue-rotate(86deg) brightness(95%) contrast(90%); /* Coloração primária no hover */
+    transform: scale(1.1);
+}
+
+.action-btn .btn-title {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-transform: uppercase;
+}
+
+.action-btn .btn-subtitle {
+    font-size: 1em;
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+/* --- NEWS AND COMMUNITY SECTION --- */
+.news-community-section {
+    padding: 50px 0 70px 0; /* Espaçamento da seção */
+}
+
+.news-community-section > .container { /* '>' para afetar apenas o container direto */
+    display: flex;
+    gap: 40px;
+}
+
+.news-main-column {
+    flex: 3; /* Mais espaço para a coluna de notícias */
+}
+
+/* Wrappers de Cards com Título Interno - .news-card-wrapper foi usado como base */
+.news-card-wrapper, /* Usado na coluna de notícias */
+.top-level-ranking-wrapper, /* Usado na sidebar da comunidade */
+.online-players-wrapper {  /* Usado na sidebar da comunidade */
+    background: var(--gradient-card);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px; /* Espaço entre wrappers se houver mais de um na mesma coluna */
+}
+.news-card-wrapper:last-child,
+.top-level-ranking-wrapper:last-child,
+.online-players-wrapper:last-child {
+    margin-bottom: 0;
+}
+
+
+/* Section Titles (dentro dos cards wrappers e títulos de seção principais) */
+.section-title {
+    font-size: 2.2em; /* Padrão para títulos de seção */
+    color: var(--text-light);
+    text-transform: uppercase;
+    text-align: left;
+    margin-bottom: 25px;
+    position: relative;
+    padding-bottom: 15px;
+    font-weight: 700;
+}
+.section-title::after { /* Linha decorativa abaixo do título */
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 80px;
+    height: 5px;
+    background-color: var(--primary-color);
+    border-radius: 5px;
+}
+
+/* Títulos de card podem ser um pouco menores */
+.section-title.card-title { /* Usado dentro dos .news-card-wrapper, etc. */
+    font-size: 1.8em; /* Um pouco menor que títulos de seção principais */
+    margin-top: 0; /* Se já está dentro de um card com padding */
+}
+.section-title.card-title::after {
+    width: 60px;
+    height: 4px;
+}
+
+/* Para títulos centrais de seção, como "POKÉMON EM DESTAQUE" */
+.section-title.main-title {
+    text-align: center;
+    font-size: 2.8em; /* Maior para destaque */
+    margin-bottom: 35px;
+}
+.section-title.main-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Main News Card (Destaque) */
+.main-news-card {
+    background-color: var(--bg-medium);
+    border-radius: 15px;
+    display: flex; /* Layout horizontal */
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px; /* Espaço antes da grade de notícias menores */
+}
+.main-news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.main-news-card.highlight {
+    border-color: var(--primary-color);
+    background-color: color-mix(in srgb, var(--primary-color) 10%, var(--bg-medium)); /* Leve tom da cor primária */
+}
+.main-news-card img {
+    width: 40%; /* Ou um valor fixo */
+    max-height: 280px;
+    object-fit: cover;
+    border-radius: 15px 0 0 15px; /* Apenas na esquerda */
+}
+.main-news-card .news-content {
+    padding: 25px;
+    flex: 1; /* Para ocupar o espaço restante */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.main-news-card .news-content h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 10px; /* Ajustado */
+    font-size: 1.7em; /* Ajustado */
+    font-weight: 700;
+}
+.main-news-card .news-content p {
+    font-size: 1em; /* Ajustado */
+    color: var(--text-muted);
+    margin-bottom: 15px; /* Ajustado */
+    flex-grow: 1; /* Para empurrar a meta para baixo se necessário */
+}
+.main-news-card .news-meta { /* Mantido do CSS original */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85em;
+    color: var(--text-muted);
+    margin-top: auto; /* Empurra para baixo */
+}
+.main-news-card .news-meta img {
+    height: 16px;
+    width: 16px;
+    filter: invert(0.8);
+    border-radius: 0; /* Reset para não herdar de .main-news-card img */
+}
+
+
+/* News Grid (para notícias secundárias) */
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Ajustado minmax */
+    gap: 25px;
+}
+.news-grid .news-card { /* Notícias menores, usando a classe .news-card base */
+    background-color: var(--bg-medium);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column; /* Imagem em cima, conteúdo abaixo */
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+.news-grid .news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+.news-grid .news-card.highlight { /* Para destacar alguma notícia menor */
+    border-color: var(--primary-color);
+}
+.news-grid .news-card img {
+    width: 100%;
+    height: 160px; /* Altura para imagens de notícias menores */
+    object-fit: cover;
+    border-radius: 15px 15px 0 0; /* Apenas em cima */
+}
+.news-grid .news-card .news-content {
+    padding: 20px;
+    flex-grow: 1; /* Para preencher o espaço */
+    display: flex;
+    flex-direction: column;
+}
+.news-grid .news-card .news-content h4 { /* Usando h4 para notícias menores */
+    color: var(--primary-color);
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.25em;
+    font-weight: 700;
+}
+.news-grid .news-card .news-content p {
+    font-size: 0.9em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    flex-grow: 1;
+}
+.news-grid .news-card .news-meta { /* Estilo de meta similar ao .main-news-card */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8em;
+    color: var(--text-muted);
+    margin-top: auto; /* Empurra para baixo */
+}
+.news-grid .news-card .news-meta img {
+    height: 14px;
+    width: 14px;
+    filter: invert(0.8);
+    border-radius: 0;
+}
+
+
+/* Community Sidebar */
+.community-sidebar {
+    flex: 1.5; /* Espaço para a sidebar */
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Espaço entre os wrappers da sidebar */
+}
+/* Estilos de .top-level-ranking-wrapper e .online-players-wrapper já definidos acima */
+.top-level-ranking {
+    background-color: transparent; /* Fundo vem do wrapper */
+    /* padding, box-shadow, border removidos pois estão no wrapper */
+}
+.top-level-ranking table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.top-level-ranking th,
+.top-level-ranking td {
+    padding: 12px 0; /* Reduzido o padding para resumo */
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+.top-level-ranking th {
+    color: var(--primary-color);
+    text-transform: uppercase;
+    font-size: 0.9em; /* Menor para resumo */
+    font-weight: 600;
+}
+.top-level-ranking td {
+    color: var(--text-light);
+    font-size: 0.95em; /* Menor para resumo */
+    font-weight: 500;
+}
+.top-level-ranking tbody tr:last-child td {
+    border-bottom: none;
+}
+.top-level-ranking td:first-child { /* Coluna do troféu/número */
+    width: 40px; /* Reduzido */
+    text-align: center;
+}
+.top-level-ranking td img { /* Ícone de troféu */
+    height: 24px;
+    width: 24px;
+    vertical-align: middle;
+}
+.view-full-ranking { /* Estilo para o botão "Ver Ranking Completo" */
+    display: block; /* Para ocupar a largura e permitir text-align */
+    text-align: center;
+    margin-top: 20px; /* Espaço acima do botão */
+    /* Usa o estilo .btn-secondary já definido */
+}
+
+/* Players Online Card na Sidebar */
+.online-players-card {
+    background-color: transparent; /* Fundo do wrapper */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre itens de status */
+}
+.player-status-item { /* Mantido do CSS original, mas revisado */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--border-color);
+}
+.player-status-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+.status-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.game-name {
+    font-size: 1.1em; /* Ajustado */
+    font-weight: 600;
+    color: var(--text-light);
+}
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.status-indicator.online { background-color: var(--primary-color); }
+/* .status-indicator.players-online foi removido no HTML, mas o estilo fica aqui caso volte */
+.status-indicator.players-online { background-color: var(--accent-yellow); }
+
+.accent-text { /* Classe para destacar texto, como "Online" */
+    color: var(--primary-color);
+    font-weight: bold;
+}
+.player-count-number {
+    color: var(--primary-color);
+    font-size: 1.6em; /* Ajustado */
+    font-weight: 700;
+}
+
+
+/* --- MASTER POKÉMON SECTION (POKÉMON EM DESTAQUE) --- */
+.master-pokemon-section {
+    padding: 60px 0;
+    background-color: var(--bg-medium); /* Fundo sutilmente diferente */
+}
+/* Estilo para .section-title.main-title já definido acima */
+
+.filter-buttons { /* Container dos botões de filtro */
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap; /* Para quebrar linha em telas menores */
+}
+
+.filter-btn { /* Mantido do CSS original */
+    background: var(--gradient-card);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.filter-btn:hover {
+    background: var(--gradient-card-hover);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.filter-btn.active {
+    background: var(--gradient-primary);
+    border-color: var(--accent-green-dark); /* Borda mais escura para contraste */
+    color: var(--text-light);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.featured-pokemon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 35px;
+    /* margin-top e padding-bottom removidos daqui, seção pai controla */
+}
+
+.pokemon-card {
+    width: 100%; /* Ocupa o espaço do grid */
+    /* height: 270px; Removida altura fixa para overlay */
+    background: var(--gradient-card);
+    border-radius: 15px;
+    overflow: hidden; /* Importante para o overlay */
+    position: relative;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    border: 2px solid var(--border-color);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    display: flex; /* Para min-height funcionar bem com a imagem */
+    flex-direction: column; /* Garante que a imagem e o overlay se alinhem corretamente */
+    min-height: 280px; /* Altura mínima para consistência visual */
+}
+.pokemon-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary-color);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+.pokemon-card > img { /* Seletor direto para a imagem principal do Pokémon */
+    width: 100%;
+    height: 100%; /* Flex child para ocupar espaço disponível */
+    object-fit: cover;
+    transition: opacity 0.4s ease; /* Para o efeito de hover */
+}
+.pokemon-card:hover > img {
+    opacity: 0.6; /* Levemente escurece a imagem para o texto do overlay sobressair */
+}
+.pokemon-status { /* Mantido do CSS original, com z-index */
+    position: absolute;
+    top: 15px; /* Ajustado */
+    left: 15px; /* Ajustado */
+    background-color: rgba(0, 0, 0, 0.75);
+    color: var(--text-light);
+    padding: 6px 12px; /* Ajustado */
+    border-radius: 20px;
+    font-size: 0.85em; /* Ajustado */
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 2; /* Acima da imagem, mas abaixo do overlay se houver */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+/* Cores de status mantidas */
+.pokemon-status.fogo { background-color: #E53935; }
+.pokemon-status.agua { background-color: #2196F3; }
+.pokemon-status.terra { background-color: #795548; }
+.pokemon-status.eletrico { background-color: var(--accent-yellow); color: var(--bg-dark); } /* Melhor contraste */
+.pokemon-status.grama { background-color: var(--primary-color); }
+.pokemon-status.psiquico { background-color: #9C27B0; }
+
+.pokemon-info-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(var(--bg-dark-rgb, 26, 26, 26), 0.95) 30%, transparent); /* Usar RGB da var para opacidade */
+    padding: 20px;
+    padding-top: 50px; /* Mais padding no topo para o gradiente ser suave */
+    box-sizing: border-box;
+    color: var(--text-light);
+    opacity: 0;
+    transform: translateY(15px); /* Efeito de subida sutil */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    text-align: center;
+    z-index: 3; /* Acima de .pokemon-status */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Alinha conteúdo na parte inferior */
+    min-height: 60%; /* Ocupa boa parte do card */
+}
+/* Adicionar :root com a versão RGB de --bg-dark para o gradiente funcionar com opacidade */
+:root {
+    /* ... outras vars ... */
+    --bg-dark-rgb: 26, 26, 26; /* Corresponde a #1A1A1A */
+}
+
+.pokemon-card:hover .pokemon-info-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+.pokemon-info-overlay h3 {
+    color: var(--primary-color);
+    font-size: 1.5em; /* Ajustado */
+    margin-bottom: 8px;
+}
+.pokemon-info-overlay p {
+    font-size: 0.85em; /* Ajustado */
+    margin-bottom: 15px;
+    color: var(--text-muted);
+    flex-grow: 1; /* Para ocupar espaço */
+}
+.btn-primary.btn-small { /* Botão "Ver Detalhes" no card Pokémon */
+    padding: 8px 16px; /* Menor */
+    font-size: 0.85em;
+    align-self: center; /* Centraliza o botão */
+}
+
+
+/* --- FOOTER --- (Mantido do CSS Original) */
+.footer {
+    background: var(--gradient-medium-to-dark);
+    color: var(--text-light);
+    padding: 60px 0;
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5);
+}
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* minmax ajustado */
+    gap: 35px; /* gap ajustado */
+    text-align: left;
+}
+.footer-logo img {
+    height: 70px;
+    margin-bottom: 15px;
+}
+.footer-logo p {
+    font-size: 0.9em;
+    color: var(--text-muted);
+}
+.footer-nav h3,
+.footer-social h3,
+.footer-contact h3 {
+    color: var(--primary-color);
+    font-size: 1.25em; /* Ajustado */
+    margin-bottom: 18px; /* Ajustado */
+    text-transform: uppercase;
+}
+.footer-nav ul li {
+    margin-bottom: 10px;
+}
+.footer-nav a {
+    color: var(--text-muted);
+    font-size: 0.95em;
+    transition: color 0.3s ease;
+}
+.footer-nav a:hover {
+    color: var(--primary-color);
+}
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+.social-icons a {
+    color: var(--text-light);
+    font-size: 1.7em; /* Ajustado */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+.social-icons a:hover {
+    color: var(--primary-color);
+    transform: translateY(-3px);
+}
+.footer-contact p {
+    font-size: 0.95em;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+}
+
+
+/* --- EFEITOS JS E CLASSES DE UTILIDADE --- */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px); /* Inicia um pouco abaixo */
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* cubic-bezier para suavidade */
+}
+.animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 992px) {
+    .header-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .main-nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+    .login-section {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Hero Section Responsiva */
+    .hero-content-wrapper {
+        flex-direction: column;
+        gap: 25px; /* Espaço entre banner principal e promo */
+    }
+    .hero-main-img { height: 280px; }
+    .hero-text h1 { font-size: 2.1em; }
+    .hero-secondary-promo { min-height: 250px; } /* Altura mínima para o card de promo */
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    /* News & Community Responsivo */
+    .news-community-section > .container {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .main-news-card {
+        flex-direction: column; /* Imagem em cima, conteúdo abaixo */
+    }
+    .main-news-card img {
+        width: 100%;
+        max-height: 220px;
+        border-radius: 15px 15px 0 0; /* Arredondar cantos superiores */
+    }
+    .main-news-card .news-content {
+        width: 100%; /* Ocupar toda a largura */
+    }
+
+    /* Wrappers de cards em geral */
+    .news-card-wrapper,
+    .top-level-ranking-wrapper,
+    .online-players-wrapper {
+        padding: 25px;
+    }
+    .section-title {
+        font-size: 1.9em;
+        padding-bottom: 12px;
+    }
+    .section-title.card-title { font-size: 1.6em; }
+    .section-title.main-title { font-size: 2.3em; }
+    .section-title::after { width: 60px; height: 4px; }
+
+    /* Featured Pokémon Responsivo */
+    .featured-pokemon-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    .pokemon-card { min-height: 260px; }
+
+    .footer-content {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 576px) {
+    body { font-size: 15px; /* Base de fonte ligeiramente menor */}
+    .container { padding: 0 15px; }
+
+    .main-nav ul { flex-direction: column; align-items: center; }
+    .main-nav a { font-size: 0.95em; }
+    .btn-login { padding: 8px 15px; font-size: 0.9em; }
+    .logo img { height: 55px; }
+
+    .hero-main-img { height: 200px; }
+    .hero-text h1 { font-size: 1.7em; }
+    .hero-text p { font-size: 0.9em; }
+    .btn-primary.hero-cta { font-size: 1em; padding: 12px 25px; }
+    .promo-overlay h3 { font-size: 1.2em; }
+    .promo-overlay p { font-size: 0.85em; }
+
+    .action-btn img { height: 55px; width: 55px; }
+    .action-btn .btn-title { font-size: 1.3em; }
+
+    .section-title { font-size: 1.6em; padding-bottom: 10px; }
+    .section-title.card-title { font-size: 1.4em; }
+    .section-title.main-title { font-size: 1.9em; }
+    .section-title::after { width: 50px; height: 3px; }
+
+    .main-news-card img { max-height: 180px; }
+    .main-news-card .news-content h3 { font-size: 1.4em; }
+    .main-news-card .news-content p { font-size: 0.9em; }
+    .news-grid { grid-template-columns: 1fr; } /* Uma coluna para notícias menores */
+    .news-grid .news-card img { height: 150px; }
+    .news-grid .news-card .news-content h4 { font-size: 1.15em; }
+
+    .top-level-ranking th, .top-level-ranking td { font-size: 0.9em; padding: 10px 0;}
+    .player-status-item span, .game-name { font-size: 1em;}
+    .player-count-number { font-size: 1.4em;}
+    
+    .filter-btn { font-size: 0.85em; padding: 8px 14px;}
+    .featured-pokemon-grid { grid-template-columns: 1fr; }
+    .pokemon-card { min-height: 240px; }
+    /* Em telas pequenas, o overlay do card Pokémon pode ser sempre visível para melhor UX */
+    .pokemon-card > img { opacity: 0.8; } /* Um pouco menos opaco */
+    .pokemon-info-overlay {
+        opacity: 1;
+        transform: translateY(0);
+        background: linear-gradient(to top, rgba(var(--bg-dark-rgb), 0.9) 40%, transparent);
+        padding-top: 40px; /* Ajustar para não cobrir muito */
+    }
+    .pokemon-status { font-size: 0.75em; padding: 5px 10px; }
+
+    .footer-content { text-align: center; grid-template-columns: 1fr; }
+    .footer-logo img { margin: 0 auto 15px auto; }
+    .footer-nav ul { padding-left: 0; }
+    .footer-social .social-icons { justify-content: center; }
+}

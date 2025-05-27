@@ -1,0 +1,122 @@
+
+        /* Estilos específicos para a página de Ranking */
+        .ranking-page-header {
+            text-align: center;
+            padding: 50px 0;
+            background: var(--gradient-dark-to-medium);
+            border-bottom: 2px solid var(--primary-color);
+        }
+        .ranking-page-header h1 {
+            font-size: 3em;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .ranking-page-header p {
+            font-size: 1.2em;
+            color: var(--text-muted);
+        }
+
+        .ranking-filters {
+            padding: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            background-color: var(--bg-medium);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .full-ranking-table-wrapper {
+            padding: 40px 0;
+            background: var(--gradient-card);
+            border-radius: 15px;
+            margin: 40px auto;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+
+        .full-ranking-table-wrapper .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+         .full-ranking-table-wrapper .section-title::after{
+            left: 50%;
+            transform: translateX(-50%);
+         }
+
+
+        .full-ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .full-ranking-table th, .full-ranking-table td {
+            padding: 18px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .full-ranking-table thead tr {
+            background-color: var(--bg-light);
+        }
+        .full-ranking-table th {
+            color: var(--primary-color);
+            text-transform: uppercase;
+            font-size: 1em;
+            font-weight: 700;
+        }
+        .full-ranking-table td {
+            color: var(--text-light);
+            font-size: 1.05em;
+        }
+        .full-ranking-table tbody tr:hover {
+            background-color: var(--bg-light);
+        }
+        .full-ranking-table td.rank-position {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: var(--primary-color);
+            text-align: center;
+            width: 80px;
+        }
+        .full-ranking-table td.rank-position img {
+            height: 32px;
+            width: 32px;
+            vertical-align: middle;
+        }
+        .player-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid var(--border-color);
+        }
+        .player-name {
+            display: flex;
+            align-items: center;
+        }
+        .guild-tag {
+            background-color: var(--primary-color);
+            color: var(--bg-dark);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+         .pagination {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .pagination a, .pagination span {
+            color: var(--text-muted);
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .pagination a:hover, .pagination span.current {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border-color: var(--primary-color);
+        }

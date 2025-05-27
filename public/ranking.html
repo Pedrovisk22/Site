@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking de Jogadores - Pokémon Friends</title>
+    <link rel="stylesheet" href="css/style.css">
+     <link rel="stylesheet" href="css/ranking.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/svg/pokeball.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos específicos para a página de Ranking */
+        .ranking-page-header {
+            text-align: center;
+            padding: 50px 0;
+            background: var(--gradient-dark-to-medium);
+            border-bottom: 2px solid var(--primary-color);
+        }
+        .ranking-page-header h1 {
+            font-size: 3em;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .ranking-page-header p {
+            font-size: 1.2em;
+            color: var(--text-muted);
+        }
+
+        .ranking-filters {
+            padding: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            background-color: var(--bg-medium);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .full-ranking-table-wrapper {
+            padding: 40px 0;
+            background: var(--gradient-card);
+            border-radius: 15px;
+            margin: 40px auto;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+
+        .full-ranking-table-wrapper .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+         .full-ranking-table-wrapper .section-title::after{
+            left: 50%;
+            transform: translateX(-50%);
+         }
+
+
+        .full-ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .full-ranking-table th, .full-ranking-table td {
+            padding: 18px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .full-ranking-table thead tr {
+            background-color: var(--bg-light);
+        }
+        .full-ranking-table th {
+            color: var(--primary-color);
+            text-transform: uppercase;
+            font-size: 1em;
+            font-weight: 700;
+        }
+        .full-ranking-table td {
+            color: var(--text-light);
+            font-size: 1.05em;
+        }
+        .full-ranking-table tbody tr:hover {
+            background-color: var(--bg-light);
+        }
+        .full-ranking-table td.rank-position {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: var(--primary-color);
+            text-align: center;
+            width: 80px;
+        }
+        .full-ranking-table td.rank-position img {
+            height: 32px;
+            width: 32px;
+            vertical-align: middle;
+        }
+        .player-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid var(--border-color);
+        }
+        .player-name {
+            display: flex;
+            align-items: center;
+        }
+        .guild-tag {
+            background-color: var(--primary-color);
+            color: var(--bg-dark);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+         .pagination {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .pagination a, .pagination span {
+            color: var(--text-muted);
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .pagination a:hover, .pagination span.current {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border-color: var(--primary-color);
+        }
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <!-- Mesmo header da index.html -->
+        <div class="container header-content">
+            <div class="logo">
+                <a href="/"><img src="assets/img/logo.png" alt="PokeMonster Logo"></a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#">JOGAR</a></li>
+                    <li><a href="#">PROMOÇÕES</a></li>
+                    <li><a href="/ranking">RANKING</a></li>
+                    <li><a href="/shop">SHOP</a></li>
+                </ul>
+            </nav>
+            <div class="login-section">
+                 <a href="#" class="btn-login"><img src="assets/svg/enter.svg" alt="Logar"> LOGAR</a>
+                <div class="language-dropdown">
+                    <button class="dropdown-toggle">
+                        <img id="selected-flag" src="assets/images/flag-br.png" alt="Bandeira do Brasil">
+                        <span id="selected-lang-code">PT</span>
+                        <img class="dropdown-arrow" src="assets/svg/arrow-down.svg" alt="Seta para baixo">
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#" data-lang="br" data-code="PT"><img src="assets/images/flag-br.png" alt="Português"> PT</a>
+                        <a href="#" data-lang="us" data-code="EN"><img src="assets/images/flag-us.png" alt="English"> EN</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="ranking-page-header animate-on-scroll">
+            <div class="container">
+                <h1>Ranking de Jogadores</h1>
+                <p>Confira os melhores treinadores de PokeMonster!</p>
+            </div>
+        </div>
+
+        <div class="ranking-filters filter-buttons animate-on-scroll">
+            <button class="filter-btn active" data-filter="level">Top Level</button>
+            <button class="filter-btn" data-filter="pvp">Top PvP</button>
+            <button class="filter-btn" data-filter="richest">Mais Ricos</button>
+            <button class="filter-btn" data-filter="guild">Melhores Guildas</button>
+        </div>
+
+        <div class="container full-ranking-table-wrapper animate-on-scroll">
+            <h2 class="section-title typewriter">Ranking Geral - Top Level</h2>
+            <table class="full-ranking-table">
+                <thead>
+                    <tr>
+                        <th class="rank-position">Pos.</th>
+                        <th>Jogador</th>
+                        <th>Level</th>
+                        <th>Guilda</th>
+                        <th>Último Login</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dados de exemplo - substitua por dados reais do backend -->
+                    <tr>
+                        <td class="rank-position"><img src="assets/svg/trophy1.svg" alt="1st Place"></td>
+                        <td class="player-name"><img src="assets/img/avatar1.png" alt="Avatar Tumi" class="player-avatar"> Tumi Frutti</td>
+                        <td>898</td>
+                        <td><span class="guild-tag">HEROES</span></td>
+                        <td>Hoje</td>
+                    </tr>
+                    <tr>
+                        <td class="rank-position"><img src="assets/svg/trophy2.svg" alt="2nd Place"></td>
+                        <td class="player-name"><img src="assets/img/avatar2.png" alt="Avatar White" class="player-avatar"> Whitenomore</td>
+                        <td>807</td>
+                        <td><span class="guild-tag">ELITE</span></td>
+                        <td>Ontem</td>
+                    </tr>
+                    <tr>
+                        <td class="rank-position"><img src="assets/svg/trophy3.svg" alt="3rd Place"></td>
+                        <td class="player-name"><img src="assets/img/avatar3.png" alt="Avatar Lucas" class="player-avatar"> Lucas</td>
+                        <td>750</td>
+                        <td>-</td>
+                        <td>Há 2 dias</td>
+                    </tr>
+                    <tr><td class="rank-position">4</td> <td class="player-name"><img src="assets/img/avatar-placeholder.png" alt="Avatar" class="player-avatar">Gato Galactico</td><td>720</td><td><span class="guild-tag">MEOW</span></td><td>Hoje</td></tr>
+                    <tr><td class="rank-position">5</td> <td class="player-name"><img src="assets/img/avatar-placeholder.png" alt="Avatar" class="player-avatar">Meliodas</td><td>700</td><td>-</td><td>Há 3 dias</td></tr>
+                    <tr><td class="rank-position">6</td> <td class="player-name"><img src="assets/img/avatar-placeholder.png" alt="Avatar" class="player-avatar">Vanderlei</td><td>680</td><td><span class="guild-tag">OLD</span></td><td>Ontem</td></tr>
+                    <tr><td class="rank-position">7</td> <td class="player-name"><img src="assets/img/avatar-placeholder.png" alt="Avatar" class="player-avatar">Jotaro</td><td>650</td><td>-</td><td>Hoje</td></tr>
+                    <tr><td class="rank-position">8</td> <td class="player-name"><img src="assets/img/avatar-placeholder.png" alt="Avatar" class="player-avatar">Joseph</td><td>630</td><td><span class="guild-tag">JOJO</span></td><td>Há 5 dias</td></tr>
+                    <tr><td class="rank-position">9</td> <td class="player-name"><img src="assets/img/avatar-placeholder.png" alt="Avatar" class="player-avatar">Pedro</td><td>610</td><td>-</td><td>Hoje</td></tr>
+                    <tr><td class="rank-position">10</td><td class="player-name"><img src="assets/img/avatar-placeholder.png" alt="Avatar" class="player-avatar">Paulo</td><td>590</td><td><span class="guild-tag">BR</span></td><td>Há 1 semana</td></tr>
+                    <!-- Adicione mais linhas conforme necessário -->
+                </tbody>
+            </table>
+            <div class="pagination animate-on-scroll">
+                <span class="current">1</span>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <span>...</span>
+                <a href="#">10</a>
+                <a href="#">Próxima »</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <!-- Mesmo footer da index.html -->
+        <div class="container footer-content">
+            <div class="footer-logo"> <img src="assets/img/logo.png" alt="PokeMonster Logo"> <p>© 2025 PokeMonster. Todos os direitos reservados.</p> </div>
+            <nav class="footer-nav"> <h3>Links Úteis</h3> <ul> <li><a href="#">Sobre Nós</a></li> <li><a href="#">Termos de Serviço</a></li> <li><a href="#">Política de Privacidade</a></li> <li><a href="#">FAQ</a></li> </ul> </nav>
+            <div class="footer-social"> <h3>Siga-nos</h3> <div class="social-icons"> <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a> <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a> <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a> <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a> </div> </div>
+            <div class="footer-contact"> <h3>Contato</h3> <p>Email: suporte@pokemonster.com</p> <p>Telefone: (XX) XXXX-XXXX</p> </div>
+        </div>
+    </footer>
+    <script src="js/script.js"></script>
+</body>
+</html>
