@@ -161,6 +161,11 @@ img {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
 }
 
+.btn-login:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 .language-dropdown {
     position: relative;
     display: inline-block;
@@ -177,7 +182,7 @@ img {
     gap: 8px;
     font-size: 0.9em;
     font-weight: 600;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.1s ease;
 }
 .dropdown-toggle img {
     height: 20px;
@@ -198,6 +203,10 @@ img {
 .dropdown-toggle:hover {
     background-color: #4a4a4a;
     border-color: var(--primary-color);
+}
+.dropdown-toggle:active {
+    background-color: #3a3a3a;
+    transform: translateY(1px);
 }
 .dropdown-menu {
     display: none;
@@ -294,10 +303,66 @@ img {
     margin-bottom: 30px;
 }
 
-.btn-primary.hero-cta {
-    padding: 16px 35px;
-    font-size: 1.2em;
-    align-self: center;
+.btn-primary {
+    background: var(--gradient-primary);
+    color: var(--text-light);
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+.btn-primary:hover {
+    background: var(--gradient-primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+.btn-primary:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--primary-color);
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-dark);
+}
+.btn-secondary:active {
+    background-color: var(--accent-green-dark);
+    transform: translateY(1px);
+    color: var(--bg-dark);
+}
+
+.btn-tertiary {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.1s ease;
+    border-bottom: 1px dashed var(--primary-color);
+    padding-bottom: 2px;
+}
+.btn-tertiary:hover {
+    color: var(--accent-green-dark);
+    border-bottom-color: var(--accent-green-dark);
+}
+.btn-tertiary:active {
+    color: var(--primary-color);
+    transform: translateY(1px);
 }
 
 .hero-secondary-promo {
@@ -350,53 +415,10 @@ img {
     margin-bottom: 15px;
 }
 
-.btn-primary {
-    background: var(--gradient-primary);
-    color: var(--text-light);
-    padding: 15px 30px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 700;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-}
-.btn-primary:hover {
-    background: var(--gradient-primary-hover);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-}
-
-.btn-secondary {
-    background-color: transparent;
-    color: var(--primary-color);
-    padding: 10px 20px;
-    border: 2px solid var(--primary-color);
-    border-radius: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-}
-.btn-secondary:hover {
-    background-color: var(--primary-color);
-    color: var(--bg-dark);
-}
-
-.btn-tertiary {
-    display: inline-block;
-    margin-top: 15px;
-    color: var(--primary-color);
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    border-bottom: 1px dashed var(--primary-color);
-    padding-bottom: 2px;
-}
-.btn-tertiary:hover {
-    color: var(--accent-green-dark);
-    border-bottom-color: var(--accent-green-dark);
+.btn-primary.hero-cta {
+    padding: 16px 35px;
+    font-size: 1.2em;
+    align-self: center;
 }
 
 .quick-actions-section {
@@ -429,6 +451,12 @@ img {
     box-shadow: var(--floating-hover-shadow);
     border-color: var(--primary-color);
 }
+.action-btn:active {
+    transform: translateY(-4px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+    background: rgba(var(--bg-medium-rgb), 0.8);
+    border-color: var(--accent-green-dark);
+}
 
 .action-btn img {
     height: 65px;
@@ -440,6 +468,9 @@ img {
 .action-btn:hover img {
     filter: invert(58%) sepia(67%) saturate(475%) hue-rotate(86deg) brightness(95%) contrast(90%);
     transform: scale(1.1);
+}
+.action-btn:active img {
+    transform: scale(1.05);
 }
 
 .action-btn .btn-title {
@@ -781,6 +812,12 @@ img {
     transform: translateY(-2px);
     box-shadow: var(--floating-hover-shadow);
 }
+.filter-btn:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: rgba(var(--bg-medium-rgb), 0.8);
+    border-color: var(--accent-green-dark);
+}
 .filter-btn.active {
     background: var(--gradient-primary);
     border-color: var(--accent-green-dark);
@@ -936,10 +973,9 @@ img {
     color: var(--primary-color);
     transform: translateY(-3px);
 }
-.footer-contact p {
-    font-size: 0.95em;
-    margin-bottom: 10px;
-    color: var(--text-muted);
+.social-icons a:active {
+    color: var(--accent-green-dark);
+    transform: translateY(-1px);
 }
 
 .animate-on-scroll {
@@ -973,7 +1009,10 @@ img {
     }
     .hero-main-img { height: 280px; }
     .hero-text h1 { font-size: 2.1em; }
-    .hero-secondary-promo { min-height: 250px; }
+    .hero-text p { font-size: 0.9em; }
+    .btn-primary.hero-cta { font-size: 1em; padding: 12px 25px; }
+    .promo-overlay h3 { font-size: 1.2em; }
+    .promo-overlay p { font-size: 0.85em; }
     
     .action-buttons {
         flex-direction: column;
