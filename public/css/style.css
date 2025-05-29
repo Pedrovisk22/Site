@@ -1,7 +1,4 @@
-/* style.css Atualizado */
-
 :root {
-    /* Paleta de Cores Mantida: Verde e Cinza Escuro */
     --primary-color: #66BB6A;
     --secondary-color: #1A1A1A;
     --text-light: #E0E0E0;
@@ -13,17 +10,27 @@
     --accent-green-dark: #388E3C;
     --accent-yellow: #FFC107;
     --footer-bg: #121212;
-
-    /* Gradientes Mantidos */
+    --primary-color-rgb: 102, 187, 106;
+    --secondary-color-rgb: 26, 26, 26;
+    --text-light-rgb: 224, 224, 224;
+    --text-muted-rgb: 170, 170, 170;
+    --bg-dark-rgb: 26, 26, 26;
+    --bg-medium-rgb: 44, 44, 44;
+    --bg-light-rgb: 58, 58, 58;
+    --border-color-rgb: 85, 85, 85;
+    --accent-green-dark-rgb: 56, 142, 60;
+    --accent-yellow-rgb: 255, 193, 7;
+    --footer-bg-rgb: 18, 18, 18;
     --gradient-dark-to-medium: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
     --gradient-medium-to-dark: linear-gradient(135deg, var(--bg-medium) 0%, var(--bg-dark) 100%);
     --gradient-primary: linear-gradient(45deg, var(--accent-green-dark) 0%, var(--primary-color) 100%);
     --gradient-primary-hover: linear-gradient(45deg, var(--primary-color) 0%, var(--accent-green-dark) 100%);
-    --gradient-card: linear-gradient(135deg, #2C2C2C 0%, #1A1A1A 100%);
-    --gradient-card-hover: linear-gradient(135deg, #3A3A3A 0%, #2C2C2C 100%);
+    --floating-bg-color: rgba(var(--bg-dark-rgb), 0.7);
+    --floating-border-color: rgba(var(--primary-color-rgb), 0.4);
+    --floating-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --floating-hover-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
 }
 
-/* --- RESET BÁSICO E ESTILOS GLOBAIS --- */
 *,
 *::before,
 *::after {
@@ -38,7 +45,7 @@ body {
     color: var(--text-light);
     line-height: 1.6;
     overflow-x: hidden;
-    background-image: url('../assets/images/background.png'); /* MANTIDO - ajuste o caminho se mudou */
+    background-image: url('../assets/images/background.png');
     background-size: cover;
     background-attachment: fixed;
     background-position: center center;
@@ -65,7 +72,6 @@ img {
     display: block;
 }
 
-/* --- HEADER --- (Mantido e com adição de transição para efeito de scroll) */
 .header {
     background: var(--gradient-dark-to-medium);
     padding: 15px 0;
@@ -74,7 +80,7 @@ img {
     top: 0;
     z-index: 1000;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out; /* Efeito JS */
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
 }
 
 .header-content {
@@ -155,7 +161,11 @@ img {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
 }
 
-/* Dropdown de Idioma - Mantido */
+.btn-login:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 .language-dropdown {
     position: relative;
     display: inline-block;
@@ -172,7 +182,7 @@ img {
     gap: 8px;
     font-size: 0.9em;
     font-weight: 600;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.1s ease;
 }
 .dropdown-toggle img {
     height: 20px;
@@ -181,10 +191,10 @@ img {
     object-fit: cover;
 }
 .dropdown-toggle .dropdown-arrow {
-    height: 20px; /* Tamanho igual à imagem */
+    height: 20px;
     width: 20px;
-    fill: white; /* Garante que o SVG seja branco */
-    filter: invert(100%); /* Para SVGs que podem ser pretos por padrão */
+    fill: white;
+    filter: invert(100%);
     transition: transform 0.3s ease;
 }
 .dropdown-toggle.active .dropdown-arrow {
@@ -193,6 +203,10 @@ img {
 .dropdown-toggle:hover {
     background-color: #4a4a4a;
     border-color: var(--primary-color);
+}
+.dropdown-toggle:active {
+    background-color: #3a3a3a;
+    transform: translateY(1px);
 }
 .dropdown-menu {
     display: none;
@@ -204,7 +218,7 @@ img {
     border-radius: 8px;
     overflow: hidden;
     margin-top: 5px;
-    left: 0; /* Para alinhar à esquerda do botão */
+    left: 0;
     border: 1px solid var(--border-color);
 }
 .dropdown-menu.show { display: block; }
@@ -226,55 +240,57 @@ img {
 }
 .dropdown-menu a:hover {
     background-color: var(--primary-color);
-    color: var(--text-light); /* Garante que o texto continue claro */
+    color: var(--text-light);
 }
 
-
-/* --- MAIN CONTENT AREA --- */
 .main-content {
-    /* Padding global ou margens entre seções podem ser adicionadas aqui se necessário */
 }
 
-/* --- HERO SECTION (NOVA) --- */
 .hero-section {
-    padding: 50px 0; /* Ajustado o padding */
-    background: var(--gradient-medium-to-dark);
+    padding: 50px 0;
+    
 }
 
 .hero-content-wrapper {
     display: flex;
     gap: 30px;
-    align-items: stretch; /* Para que .hero-main e .hero-secondary-promo tenham a mesma altura */
+    align-items: stretch;
 }
 
 .hero-main {
-    flex: 2; /* Mais espaço para o banner principal */
-    background-color: var(--bg-medium);
+    flex: 2;
+    background-color: var(--floating-bg-color);
     border-radius: 15px;
     overflow: hidden;
     display: flex;
-    flex-direction: column; /* Imagem acima, texto abaixo */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    border: 1px solid var(--border-color);
+    flex-direction: column;
+    box-shadow: var(--floating-box-shadow);
+    border: 1px solid var(--floating-border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.hero-main:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--floating-hover-shadow);
+    border-color: var(--primary-color);
 }
 
 .hero-main-img {
     width: 100%;
-    height: 350px; /* Altura para a imagem do banner */
-    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+    height: 350px;
+    object-fit: cover;
 }
 
 .hero-text {
     padding: 30px;
     text-align: center;
-    flex-grow: 1; /* Permite que esta área cresça se houver espaço */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centraliza o conteúdo verticalmente */
+    justify-content: center;
 }
 
 .hero-text h1 {
-    font-size: 2.6em; /* Tamanho do título principal */
+    font-size: 2.6em;
     color: var(--primary-color);
     margin-bottom: 15px;
     line-height: 1.2;
@@ -287,22 +303,83 @@ img {
     margin-bottom: 30px;
 }
 
-.btn-primary.hero-cta {
-    padding: 16px 35px; /* Botão CTA maior */
-    font-size: 1.2em;
-    align-self: center; /* Centraliza o botão no container flex */
-    /* Herda o estilo de .btn-primary definido abaixo */
+.btn-primary {
+    background: var(--gradient-primary);
+    color: var(--text-light);
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+.btn-primary:hover {
+    background: var(--gradient-primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+.btn-primary:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--primary-color);
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-dark);
+}
+.btn-secondary:active {
+    background-color: var(--accent-green-dark);
+    transform: translateY(1px);
+    color: var(--bg-dark);
+}
+
+.btn-tertiary {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.1s ease;
+    border-bottom: 1px dashed var(--primary-color);
+    padding-bottom: 2px;
+}
+.btn-tertiary:hover {
+    color: var(--accent-green-dark);
+    border-bottom-color: var(--accent-green-dark);
+}
+.btn-tertiary:active {
+    color: var(--primary-color);
+    transform: translateY(1px);
 }
 
 .hero-secondary-promo {
     flex: 1;
-    background-color: var(--bg-light); /* Cor de fundo para o card promocional */
+    background-color: var(--floating-bg-color);
     border-radius: 15px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    border: 1px solid var(--border-color);
-    display: flex; /* Para permitir que a imagem preencha */
+    box-shadow: var(--floating-box-shadow);
+    border: 1px solid var(--floating-border-color);
+    display: flex;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.3s ease;
+}
+.hero-secondary-promo:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--floating-hover-shadow);
+    border-color: var(--primary-color);
 }
 
 .hero-secondary-promo img {
@@ -321,89 +398,42 @@ img {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    background: linear-gradient(to top, rgba(var(--bg-dark-rgb), 0.9), transparent);
     padding: 25px;
     text-align: center;
 }
 
 .promo-overlay h3 {
     color: var(--primary-color);
-    font-size: 1.4em; /* Título do promo card */
+    font-size: 1.4em;
     margin-bottom: 8px;
 }
 
 .promo-overlay p {
     font-size: 0.9em;
-    color: var(--text-light); /* Usar text-light para contraste com overlay escuro */
+    color: var(--text-light);
     margin-bottom: 15px;
 }
 
-/* --- BOTÕES GENÉRICOS (PRIMÁRIO JÁ ESTAVA DEFINIDO PARA O SLIDER, SECUNDÁRIO E TERCIÁRIO NOVOS) --- */
-.btn-primary { /* Mantém o estilo que já tinha, bom para CTAs */
-    background: var(--gradient-primary);
-    color: var(--text-light);
-    padding: 15px 30px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 700;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-}
-.btn-primary:hover {
-    background: var(--gradient-primary-hover);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+.btn-primary.hero-cta {
+    padding: 16px 35px;
+    font-size: 1.2em;
+    align-self: center;
 }
 
-.btn-secondary {
-    background-color: transparent;
-    color: var(--primary-color);
-    padding: 10px 20px;
-    border: 2px solid var(--primary-color);
-    border-radius: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-}
-.btn-secondary:hover {
-    background-color: var(--primary-color);
-    color: var(--bg-dark); /* Texto escuro para contraste */
-}
-
-.btn-tertiary {
-    display: inline-block;
-    margin-top: 15px;
-    color: var(--primary-color);
-    font-weight: 600;
-    text-decoration: none; /* Pode adicionar underline se preferir */
-    transition: color 0.3s ease;
-    border-bottom: 1px dashed var(--primary-color);
-    padding-bottom: 2px;
-}
-.btn-tertiary:hover {
-    color: var(--accent-green-dark);
-    border-bottom-color: var(--accent-green-dark);
-}
-
-/* --- QUICK ACTIONS SECTION (ANTIGOS ACTION BUTTONS) --- */
 .quick-actions-section {
-    padding: 50px 0; /* Espaçamento da seção */
+    padding: 50px 0;
 }
 
-/* Os estilos originais .action-buttons e .action-btn parecem adequados */
 .action-buttons {
     display: flex;
     justify-content: space-between;
     gap: 25px;
-    /* margin-top: 50px; -> Removido, a seção pai controla espaçamento */
 }
 
 .action-btn {
     flex: 1;
-    background: var(--gradient-card);
+    background: var(--floating-bg-color);
     border-radius: 15px;
     padding: 25px;
     display: flex;
@@ -411,27 +441,36 @@ img {
     align-items: center;
     text-align: center;
     transition: all 0.3s ease;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--floating-border-color);
+    box-shadow: var(--floating-box-shadow);
 }
 
 .action-btn:hover {
     transform: translateY(-8px);
-    background: var(--gradient-card-hover);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    background: rgba(var(--bg-medium-rgb), 0.7);
+    box-shadow: var(--floating-hover-shadow);
     border-color: var(--primary-color);
+}
+.action-btn:active {
+    transform: translateY(-4px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+    background: rgba(var(--bg-medium-rgb), 0.8);
+    border-color: var(--accent-green-dark);
 }
 
 .action-btn img {
-    height: 65px; /* Certifique-se que o novo SVG 'discord_icon.svg' tem esse tamanho ou se ajusta bem */
+    height: 65px;
     width: 65px;
     margin-bottom: 20px;
-    filter: invert(85%) sepia(15%) saturate(600%) hue-rotate(80deg) brightness(100%) contrast(90%); /* Coloração sutil verde para combinar */
+    filter: invert(85%) sepia(15%) saturate(600%) hue-rotate(80deg) brightness(100%) contrast(90%);
     transition: filter 0.3s ease, transform 0.3s ease;
 }
 .action-btn:hover img {
-    filter: invert(58%) sepia(67%) saturate(475%) hue-rotate(86deg) brightness(95%) contrast(90%); /* Coloração primária no hover */
+    filter: invert(58%) sepia(67%) saturate(475%) hue-rotate(86deg) brightness(95%) contrast(90%);
     transform: scale(1.1);
+}
+.action-btn:active img {
+    transform: scale(1.05);
 }
 
 .action-btn .btn-title {
@@ -447,30 +486,36 @@ img {
     margin-top: 5px;
 }
 
-/* --- NEWS AND COMMUNITY SECTION --- */
 .news-community-section {
-    padding: 50px 0 70px 0; /* Espaçamento da seção */
+    padding: 50px 0 70px 0;
 }
 
-.news-community-section > .container { /* '>' para afetar apenas o container direto */
+.news-community-section > .container {
     display: flex;
     gap: 40px;
 }
 
 .news-main-column {
-    flex: 3; /* Mais espaço para a coluna de notícias */
+    flex: 3;
 }
 
-/* Wrappers de Cards com Título Interno - .news-card-wrapper foi usado como base */
-.news-card-wrapper, /* Usado na coluna de notícias */
-.top-level-ranking-wrapper, /* Usado na sidebar da comunidade */
-.online-players-wrapper {  /* Usado na sidebar da comunidade */
-    background: var(--gradient-card);
+.news-card-wrapper,
+.top-level-ranking-wrapper,
+.online-players-wrapper {
+    background: var(--floating-bg-color);
     border-radius: 15px;
     padding: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color);
-    margin-bottom: 30px; /* Espaço entre wrappers se houver mais de um na mesma coluna */
+    box-shadow: var(--floating-box-shadow);
+    border: 1px solid var(--floating-border-color);
+    margin-bottom: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.news-card-wrapper:hover,
+.top-level-ranking-wrapper:hover,
+.online-players-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--floating-hover-shadow);
+    border-color: var(--primary-color);
 }
 .news-card-wrapper:last-child,
 .top-level-ranking-wrapper:last-child,
@@ -478,10 +523,8 @@ img {
     margin-bottom: 0;
 }
 
-
-/* Section Titles (dentro dos cards wrappers e títulos de seção principais) */
 .section-title {
-    font-size: 2.2em; /* Padrão para títulos de seção */
+    font-size: 2.2em;
     color: var(--text-light);
     text-transform: uppercase;
     text-align: left;
@@ -490,7 +533,7 @@ img {
     padding-bottom: 15px;
     font-weight: 700;
 }
-.section-title::after { /* Linha decorativa abaixo do título */
+.section-title::after {
     content: '';
     position: absolute;
     left: 0;
@@ -501,20 +544,18 @@ img {
     border-radius: 5px;
 }
 
-/* Títulos de card podem ser um pouco menores */
-.section-title.card-title { /* Usado dentro dos .news-card-wrapper, etc. */
-    font-size: 1.8em; /* Um pouco menor que títulos de seção principais */
-    margin-top: 0; /* Se já está dentro de um card com padding */
+.section-title.card-title {
+    font-size: 1.8em;
+    margin-top: 0;
 }
 .section-title.card-title::after {
     width: 60px;
     height: 4px;
 }
 
-/* Para títulos centrais de seção, como "POKÉMON EM DESTAQUE" */
 .section-title.main-title {
     text-align: center;
-    font-size: 2.8em; /* Maior para destaque */
+    font-size: 2.8em;
     margin-bottom: 35px;
 }
 .section-title.main-title::after {
@@ -522,34 +563,34 @@ img {
     transform: translateX(-50%);
 }
 
-/* Main News Card (Destaque) */
 .main-news-card {
-    background-color: var(--bg-medium);
+    background-color: var(--floating-bg-color);
     border-radius: 15px;
-    display: flex; /* Layout horizontal */
+    display: flex;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid var(--border-color);
-    margin-bottom: 30px; /* Espaço antes da grade de notícias menores */
+    box-shadow: var(--floating-box-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid var(--floating-border-color);
+    margin-bottom: 30px;
 }
 .main-news-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--floating-hover-shadow);
+    border-color: var(--primary-color);
 }
 .main-news-card.highlight {
     border-color: var(--primary-color);
-    background-color: color-mix(in srgb, var(--primary-color) 10%, var(--bg-medium)); /* Leve tom da cor primária */
+    background-color: color-mix(in srgb, var(--primary-color) 10%, rgba(var(--bg-medium-rgb), 0.7));
 }
 .main-news-card img {
-    width: 40%; /* Ou um valor fixo */
+    width: 40%;
     max-height: 280px;
     object-fit: cover;
-    border-radius: 15px 0 0 15px; /* Apenas na esquerda */
+    border-radius: 15px 0 0 15px;
 }
 .main-news-card .news-content {
     padding: 25px;
-    flex: 1; /* Para ocupar o espaço restante */
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -557,68 +598,67 @@ img {
 .main-news-card .news-content h3 {
     color: var(--primary-color);
     margin-top: 0;
-    margin-bottom: 10px; /* Ajustado */
-    font-size: 1.7em; /* Ajustado */
+    margin-bottom: 10px;
+    font-size: 1.7em;
     font-weight: 700;
 }
 .main-news-card .news-content p {
-    font-size: 1em; /* Ajustado */
+    font-size: 1em;
     color: var(--text-muted);
-    margin-bottom: 15px; /* Ajustado */
-    flex-grow: 1; /* Para empurrar a meta para baixo se necessário */
+    margin-bottom: 15px;
+    flex-grow: 1;
 }
-.main-news-card .news-meta { /* Mantido do CSS original */
+.main-news-card .news-meta {
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 0.85em;
     color: var(--text-muted);
-    margin-top: auto; /* Empurra para baixo */
+    margin-top: auto;
 }
 .main-news-card .news-meta img {
     height: 16px;
     width: 16px;
     filter: invert(0.8);
-    border-radius: 0; /* Reset para não herdar de .main-news-card img */
+    border-radius: 0;
 }
 
-
-/* News Grid (para notícias secundárias) */
 .news-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Ajustado minmax */
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 25px;
 }
-.news-grid .news-card { /* Notícias menores, usando a classe .news-card base */
-    background-color: var(--bg-medium);
+.news-grid .news-card {
+    background-color: var(--floating-bg-color);
     border-radius: 15px;
     display: flex;
-    flex-direction: column; /* Imagem em cima, conteúdo abaixo */
+    flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid var(--border-color);
+    box-shadow: var(--floating-box-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid var(--floating-border-color);
 }
 .news-grid .news-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--floating-hover-shadow);
+    border-color: var(--primary-color);
 }
-.news-grid .news-card.highlight { /* Para destacar alguma notícia menor */
+.news-grid .news-card.highlight {
     border-color: var(--primary-color);
 }
 .news-grid .news-card img {
     width: 100%;
-    height: 160px; /* Altura para imagens de notícias menores */
+    height: 160px;
     object-fit: cover;
-    border-radius: 15px 15px 0 0; /* Apenas em cima */
+    border-radius: 15px 15px 0 0;
 }
 .news-grid .news-card .news-content {
     padding: 20px;
-    flex-grow: 1; /* Para preencher o espaço */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
-.news-grid .news-card .news-content h4 { /* Usando h4 para notícias menores */
+.news-grid .news-card .news-content h4 {
     color: var(--primary-color);
     margin-top: 0;
     margin-bottom: 8px;
@@ -631,13 +671,13 @@ img {
     margin-bottom: 12px;
     flex-grow: 1;
 }
-.news-grid .news-card .news-meta { /* Estilo de meta similar ao .main-news-card */
+.news-grid .news-card .news-meta {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 0.8em;
     color: var(--text-muted);
-    margin-top: auto; /* Empurra para baixo */
+    margin-top: auto;
 }
 .news-grid .news-card .news-meta img {
     height: 14px;
@@ -646,18 +686,14 @@ img {
     border-radius: 0;
 }
 
-
-/* Community Sidebar */
 .community-sidebar {
-    flex: 1.5; /* Espaço para a sidebar */
+    flex: 1.5;
     display: flex;
     flex-direction: column;
-    gap: 30px; /* Espaço entre os wrappers da sidebar */
+    gap: 30px;
 }
-/* Estilos de .top-level-ranking-wrapper e .online-players-wrapper já definidos acima */
 .top-level-ranking {
-    background-color: transparent; /* Fundo vem do wrapper */
-    /* padding, box-shadow, border removidos pois estão no wrapper */
+    background-color: transparent;
 }
 .top-level-ranking table {
     width: 100%;
@@ -665,48 +701,46 @@ img {
 }
 .top-level-ranking th,
 .top-level-ranking td {
-    padding: 12px 0; /* Reduzido o padding para resumo */
+    padding: 12px 0;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
 }
 .top-level-ranking th {
     color: var(--primary-color);
     text-transform: uppercase;
-    font-size: 0.9em; /* Menor para resumo */
+    font-size: 0.9em;
     font-weight: 600;
 }
 .top-level-ranking td {
     color: var(--text-light);
-    font-size: 0.95em; /* Menor para resumo */
+    font-size: 0.95em;
     font-weight: 500;
 }
 .top-level-ranking tbody tr:last-child td {
     border-bottom: none;
 }
-.top-level-ranking td:first-child { /* Coluna do troféu/número */
-    width: 40px; /* Reduzido */
+.top-level-ranking td:first-child {
+    width: 40px;
     text-align: center;
 }
-.top-level-ranking td img { /* Ícone de troféu */
+.top-level-ranking td img {
     height: 24px;
     width: 24px;
     vertical-align: middle;
 }
-.view-full-ranking { /* Estilo para o botão "Ver Ranking Completo" */
-    display: block; /* Para ocupar a largura e permitir text-align */
+.view-full-ranking {
+    display: block;
     text-align: center;
-    margin-top: 20px; /* Espaço acima do botão */
-    /* Usa o estilo .btn-secondary já definido */
+    margin-top: 20px;
 }
 
-/* Players Online Card na Sidebar */
 .online-players-card {
-    background-color: transparent; /* Fundo do wrapper */
+    background-color: transparent;
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Espaço entre itens de status */
+    gap: 15px;
 }
-.player-status-item { /* Mantido do CSS original, mas revisado */
+.player-status-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -723,7 +757,7 @@ img {
     gap: 10px;
 }
 .game-name {
-    font-size: 1.1em; /* Ajustado */
+    font-size: 1.1em;
     font-weight: 600;
     color: var(--text-light);
 }
@@ -734,39 +768,35 @@ img {
     display: inline-block;
 }
 .status-indicator.online { background-color: var(--primary-color); }
-/* .status-indicator.players-online foi removido no HTML, mas o estilo fica aqui caso volte */
 .status-indicator.players-online { background-color: var(--accent-yellow); }
 
-.accent-text { /* Classe para destacar texto, como "Online" */
+.accent-text {
     color: var(--primary-color);
     font-weight: bold;
 }
 .player-count-number {
     color: var(--primary-color);
-    font-size: 1.6em; /* Ajustado */
+    font-size: 1.6em;
     font-weight: 700;
 }
 
-
-/* --- MASTER POKÉMON SECTION (POKÉMON EM DESTAQUE) --- */
 .master-pokemon-section {
     padding: 60px 0;
-    background-color: var(--bg-medium); /* Fundo sutilmente diferente */
+    background-color: var(--bg-medium);
 }
-/* Estilo para .section-title.main-title já definido acima */
 
-.filter-buttons { /* Container dos botões de filtro */
+.filter-buttons {
     display: flex;
     justify-content: center;
     gap: 15px;
     margin-bottom: 40px;
-    flex-wrap: wrap; /* Para quebrar linha em telas menores */
+    flex-wrap: wrap;
 }
 
-.filter-btn { /* Mantido do CSS original */
-    background: var(--gradient-card);
+.filter-btn {
+    background: var(--floating-bg-color);
     color: var(--text-light);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--floating-border-color);
     padding: 10px 18px;
     border-radius: 8px;
     cursor: pointer;
@@ -774,75 +804,78 @@ img {
     font-weight: 600;
     text-transform: uppercase;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--floating-box-shadow);
 }
 .filter-btn:hover {
-    background: var(--gradient-card-hover);
+    background: rgba(var(--bg-medium-rgb), 0.7);
     border-color: var(--primary-color);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--floating-hover-shadow);
+}
+.filter-btn:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: rgba(var(--bg-medium-rgb), 0.8);
+    border-color: var(--accent-green-dark);
 }
 .filter-btn.active {
     background: var(--gradient-primary);
-    border-color: var(--accent-green-dark); /* Borda mais escura para contraste */
+    border-color: var(--accent-green-dark);
     color: var(--text-light);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--floating-hover-shadow);
 }
 
 .featured-pokemon-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 35px;
-    /* margin-top e padding-bottom removidos daqui, seção pai controla */
 }
 
 .pokemon-card {
-    width: 100%; /* Ocupa o espaço do grid */
-    /* height: 270px; Removida altura fixa para overlay */
-    background: var(--gradient-card);
+    width: 100%;
+    background: var(--floating-bg-color);
     border-radius: 15px;
-    overflow: hidden; /* Importante para o overlay */
+    overflow: hidden;
     position: relative;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    border: 2px solid var(--border-color);
+    box-shadow: var(--floating-box-shadow);
+    border: 2px solid var(--floating-border-color);
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    display: flex; /* Para min-height funcionar bem com a imagem */
-    flex-direction: column; /* Garante que a imagem e o overlay se alinhem corretamente */
-    min-height: 280px; /* Altura mínima para consistência visual */
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
 }
 .pokemon-card:hover {
     transform: translateY(-10px);
     border-color: var(--primary-color);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    box-shadow: var(--floating-hover-shadow);
 }
-.pokemon-card > img { /* Seletor direto para a imagem principal do Pokémon */
+.pokemon-card > img {
     width: 100%;
-    height: 100%; /* Flex child para ocupar espaço disponível */
+    height: 100%;
     object-fit: cover;
-    transition: opacity 0.4s ease; /* Para o efeito de hover */
+    transition: opacity 0.4s ease;
 }
 .pokemon-card:hover > img {
-    opacity: 0.6; /* Levemente escurece a imagem para o texto do overlay sobressair */
+    opacity: 0.6;
 }
-.pokemon-status { /* Mantido do CSS original, com z-index */
+.pokemon-status {
     position: absolute;
-    top: 15px; /* Ajustado */
-    left: 15px; /* Ajustado */
+    top: 15px;
+    left: 15px;
     background-color: rgba(0, 0, 0, 0.75);
     color: var(--text-light);
-    padding: 6px 12px; /* Ajustado */
+    padding: 6px 12px;
     border-radius: 20px;
-    font-size: 0.85em; /* Ajustado */
+    font-size: 0.85em;
     font-weight: 700;
     text-transform: uppercase;
-    z-index: 2; /* Acima da imagem, mas abaixo do overlay se houver */
+    z-index: 2;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
-/* Cores de status mantidas */
 .pokemon-status.fogo { background-color: #E53935; }
 .pokemon-status.agua { background-color: #2196F3; }
 .pokemon-status.terra { background-color: #795548; }
-.pokemon-status.eletrico { background-color: var(--accent-yellow); color: var(--bg-dark); } /* Melhor contraste */
+.pokemon-status.eletrico { background-color: var(--accent-yellow); color: var(--bg-dark); }
 .pokemon-status.grama { background-color: var(--primary-color); }
 .pokemon-status.psiquico { background-color: #9C27B0; }
 
@@ -851,50 +884,42 @@ img {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: linear-gradient(to top, rgba(var(--bg-dark-rgb, 26, 26, 26), 0.95) 30%, transparent); /* Usar RGB da var para opacidade */
+    background: linear-gradient(to top, rgba(var(--bg-dark-rgb), 0.95) 30%, transparent);
     padding: 20px;
-    padding-top: 50px; /* Mais padding no topo para o gradiente ser suave */
+    padding-top: 50px;
     box-sizing: border-box;
     color: var(--text-light);
     opacity: 0;
-    transform: translateY(15px); /* Efeito de subida sutil */
+    transform: translateY(15px);
     transition: opacity 0.4s ease, transform 0.4s ease;
     text-align: center;
-    z-index: 3; /* Acima de .pokemon-status */
+    z-index: 3;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Alinha conteúdo na parte inferior */
-    min-height: 60%; /* Ocupa boa parte do card */
+    justify-content: flex-end;
+    min-height: 60%;
 }
-/* Adicionar :root com a versão RGB de --bg-dark para o gradiente funcionar com opacidade */
-:root {
-    /* ... outras vars ... */
-    --bg-dark-rgb: 26, 26, 26; /* Corresponde a #1A1A1A */
-}
-
 .pokemon-card:hover .pokemon-info-overlay {
     opacity: 1;
     transform: translateY(0);
 }
 .pokemon-info-overlay h3 {
     color: var(--primary-color);
-    font-size: 1.5em; /* Ajustado */
+    font-size: 1.5em;
     margin-bottom: 8px;
 }
 .pokemon-info-overlay p {
-    font-size: 0.85em; /* Ajustado */
+    font-size: 0.85em;
     margin-bottom: 15px;
     color: var(--text-muted);
-    flex-grow: 1; /* Para ocupar espaço */
+    flex-grow: 1;
 }
-.btn-primary.btn-small { /* Botão "Ver Detalhes" no card Pokémon */
-    padding: 8px 16px; /* Menor */
+.btn-primary.btn-small {
+    padding: 8px 16px;
     font-size: 0.85em;
-    align-self: center; /* Centraliza o botão */
+    align-self: center;
 }
 
-
-/* --- FOOTER --- (Mantido do CSS Original) */
 .footer {
     background: var(--gradient-medium-to-dark);
     color: var(--text-light);
@@ -904,8 +929,8 @@ img {
 }
 .footer-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* minmax ajustado */
-    gap: 35px; /* gap ajustado */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 35px;
     text-align: left;
 }
 .footer-logo img {
@@ -920,8 +945,8 @@ img {
 .footer-social h3,
 .footer-contact h3 {
     color: var(--primary-color);
-    font-size: 1.25em; /* Ajustado */
-    margin-bottom: 18px; /* Ajustado */
+    font-size: 1.25em;
+    margin-bottom: 18px;
     text-transform: uppercase;
 }
 .footer-nav ul li {
@@ -941,32 +966,28 @@ img {
 }
 .social-icons a {
     color: var(--text-light);
-    font-size: 1.7em; /* Ajustado */
+    font-size: 1.7em;
     transition: color 0.3s ease, transform 0.2s ease;
 }
 .social-icons a:hover {
     color: var(--primary-color);
     transform: translateY(-3px);
 }
-.footer-contact p {
-    font-size: 0.95em;
-    margin-bottom: 10px;
-    color: var(--text-muted);
+.social-icons a:active {
+    color: var(--accent-green-dark);
+    transform: translateY(-1px);
 }
 
-
-/* --- EFEITOS JS E CLASSES DE UTILIDADE --- */
 .animate-on-scroll {
     opacity: 0;
-    transform: translateY(30px); /* Inicia um pouco abaixo */
-    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* cubic-bezier para suavidade */
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .animate-on-scroll.is-visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* --- RESPONSIVIDADE --- */
 @media (max-width: 992px) {
     .header-content {
         flex-direction: column;
@@ -982,38 +1003,38 @@ img {
         gap: 15px;
     }
 
-    /* Hero Section Responsiva */
     .hero-content-wrapper {
         flex-direction: column;
-        gap: 25px; /* Espaço entre banner principal e promo */
+        gap: 25px;
     }
     .hero-main-img { height: 280px; }
     .hero-text h1 { font-size: 2.1em; }
-    .hero-secondary-promo { min-height: 250px; } /* Altura mínima para o card de promo */
+    .hero-text p { font-size: 0.9em; }
+    .btn-primary.hero-cta { font-size: 1em; padding: 12px 25px; }
+    .promo-overlay h3 { font-size: 1.2em; }
+    .promo-overlay p { font-size: 0.85em; }
     
     .action-buttons {
         flex-direction: column;
         gap: 20px;
     }
     
-    /* News & Community Responsivo */
     .news-community-section > .container {
         flex-direction: column;
         gap: 30px;
     }
     .main-news-card {
-        flex-direction: column; /* Imagem em cima, conteúdo abaixo */
+        flex-direction: column;
     }
     .main-news-card img {
         width: 100%;
         max-height: 220px;
-        border-radius: 15px 15px 0 0; /* Arredondar cantos superiores */
+        border-radius: 15px 15px 0 0;
     }
     .main-news-card .news-content {
-        width: 100%; /* Ocupar toda a largura */
+        width: 100%;
     }
 
-    /* Wrappers de cards em geral */
     .news-card-wrapper,
     .top-level-ranking-wrapper,
     .online-players-wrapper {
@@ -1027,7 +1048,6 @@ img {
     .section-title.main-title { font-size: 2.3em; }
     .section-title::after { width: 60px; height: 4px; }
 
-    /* Featured Pokémon Responsivo */
     .featured-pokemon-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
@@ -1039,7 +1059,7 @@ img {
 }
 
 @media (max-width: 576px) {
-    body { font-size: 15px; /* Base de fonte ligeiramente menor */}
+    body { font-size: 15px; }
     .container { padding: 0 15px; }
 
     .main-nav ul { flex-direction: column; align-items: center; }
@@ -1065,7 +1085,7 @@ img {
     .main-news-card img { max-height: 180px; }
     .main-news-card .news-content h3 { font-size: 1.4em; }
     .main-news-card .news-content p { font-size: 0.9em; }
-    .news-grid { grid-template-columns: 1fr; } /* Uma coluna para notícias menores */
+    .news-grid { grid-template-columns: 1fr; }
     .news-grid .news-card img { height: 150px; }
     .news-grid .news-card .news-content h4 { font-size: 1.15em; }
 
@@ -1076,13 +1096,12 @@ img {
     .filter-btn { font-size: 0.85em; padding: 8px 14px;}
     .featured-pokemon-grid { grid-template-columns: 1fr; }
     .pokemon-card { min-height: 240px; }
-    /* Em telas pequenas, o overlay do card Pokémon pode ser sempre visível para melhor UX */
-    .pokemon-card > img { opacity: 0.8; } /* Um pouco menos opaco */
+    .pokemon-card > img { opacity: 0.8; }
     .pokemon-info-overlay {
         opacity: 1;
         transform: translateY(0);
         background: linear-gradient(to top, rgba(var(--bg-dark-rgb), 0.9) 40%, transparent);
-        padding-top: 40px; /* Ajustar para não cobrir muito */
+        padding-top: 40px;
     }
     .pokemon-status { font-size: 0.75em; padding: 5px 10px; }
 

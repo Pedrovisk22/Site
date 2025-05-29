@@ -1,0 +1,54 @@
+COMO USAR OS COMANDOS GIT   
+git init
+Inicializa um novo repositório Git na pasta atual.
+
+git clone <url>
+Clona um repositório remoto para seu computador.
+
+git status
+Mostra os arquivos modificados e prontos para commit.
+
+git add .
+Adiciona todas as alterações ao staging (área de preparação para commit).
+
+git commit -m "mensagem"
+Salva as alterações com uma mensagem descritiva.
+
+git push
+Envia os commits locais para o repositório remoto.
+
+git pull
+Puxa as alterações do repositório remoto e já faz merge com seu código local.
+
+git fetch
+Puxa as alterações do repositório remoto, mas sem aplicar (sem merge).
+
+git merge <branch>
+Aplica mudanças de outra branch na branch atual.
+
+git branch
+Lista as branches locais.
+
+git branch <nome>
+Cria uma nova branch.
+
+git checkout <branch>
+Troca para outra branch existente.
+
+git checkout -b <nome>
+Cria e já troca para uma nova branch.
+
+git log
+Exibe o histórico de commits.
+
+git remote -v
+Mostra os repositórios remotos conectados.
+
+git rm --cached <arquivo>
+Remove o arquivo do Git, mas mantém no disco. Útil com .gitignore.
+
+git diff
+Mostra as diferenças entre os arquivos modificados e o último commit.
+
+git reset <arquivo>
+Remove o arquivo do staging area (desfaz um add).
