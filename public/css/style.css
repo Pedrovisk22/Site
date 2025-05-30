@@ -1086,7 +1086,7 @@ section { padding: var(--spacing-lg) 0; }
            transform: translateX(-50%) translateY(0); /* Adjust transform for centering */
        }
 }
-}
+
 .hero-text-content h1 {
    
     color: var(  --color-yellow-vibrant);

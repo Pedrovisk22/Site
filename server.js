@@ -111,7 +111,7 @@ app.get('/register', redirectIfLoggedIn, (req, res) => {
 
   res.render('register_step1', {
     title: 'Criar Conta - Etapa 1',
-    user: req.session.user, // Pode ser null se não logado
+    user: req.session.user, // Pode ser null
     errorMessage: errorMessage,
     successMessage: successMessage,
     formData: formData // Passa dados para pré-preencher o formulário
@@ -285,8 +285,6 @@ app.post('/register', redirectIfLoggedIn, async (req, res) => {
         // é melhor redirecionar para a etapa 1 para validar nome/email novamente.
         // Ou, se o erro for *após* as validações de nome/email, redirecionar para step 2.
         // Simplificação: se o erro acontecer *após* a validação da etapa 1, redireciona para etapa 2.
-        // Se o erro for na etapa 1 (duplicidade), já foi tratado acima.
-        // Para outros erros no INSERT (conexão, etc.), redirecionamos para step 2 se já passamos da step 1.
          if (req.session.registrationData) { // Se já havia dados da etapa 1 na sessão, o erro foi na etapa 2 (ou final)
              req.session.errorMessage = 'Erro ao finalizar o registro. Tente novamente mais tarde.';
              res.redirect('/register/step2');
@@ -398,9 +396,88 @@ app.get('/logout', (req, res) => {
 });
 
 
-// Exemplo de outras rotas, se existirem...
-// app.get('/ranking', (req, res) => { ... });
-// app.get('/shop', (req, res) => { ... });
+// Rota para a Página de Ranking
+app.get('/ranking', async (req, res) => {
+    const pageSize = parseInt(req.query.pageSize) || 20; // Quantidade de players por página
+    const currentPage = parseInt(req.query.page) || 1;
+    const offset = (currentPage - 1) * pageSize;
+    const search = req.query.search ? `%${req.query.search}%` : null; // Para pesquisa LIKE
+    const rankingType = req.query.type || 'level'; // 'level' ou 'resets'
+
+    let connection;
+    try {
+        connection = await db.getConnection();
+
+        let totalPlayersCount;
+        let players;
+        let queryOrder = '';
+        let queryWhere = 'WHERE deleted = 0 AND group_id < 2'; // Exclui chars deletados e GMs/Admins (group_id >= 2)
+        const queryParams = [];
+
+        // Adiciona termo de busca se existir
+        if (search) {
+            queryWhere += ' AND name LIKE ?';
+            queryParams.push(search);
+        }
+
+        // Define a ordem de acordo com o tipo de ranking
+        if (rankingType === 'level') {
+            queryOrder = 'ORDER BY level DESC, experience DESC';
+        } else if (rankingType === 'resets') {
+            // Se 'fishing' não existe, 'resets' é uma boa alternativa para outro tipo de ranking.
+            // Se você tiver uma tabela de skills, a consulta seria diferente (ex: JOIN com player_skills)
+            queryOrder = 'ORDER BY resets DESC, level DESC, experience DESC';
+            // Se você tiver um campo de "fishing_skill" ou similar, seria:
+            // queryOrder = 'ORDER BY fishing_skill DESC, level DESC';
+            // Ou se você precisar de uma tabela de skills, seria:
+            // SELECT p.name, p.level, p.experience, ps.value as fishing_skill
+            // FROM players p JOIN player_skills ps ON p.id = ps.player_id WHERE ps.skill_id = (ID_DA_SKILL_FISHING)
+            // ORDER BY fishing_skill DESC
+        } else {
+            // Padrão para ranking de nível se um tipo inválido for passado
+            queryOrder = 'ORDER BY level DESC, experience DESC';
+        }
+
+        // Consulta para o total de jogadores (para paginação)
+        const [countResult] = await connection.execute(
+            `SELECT COUNT(*) AS total FROM players ${queryWhere}`,
+            queryParams
+        );
+        totalPlayersCount = countResult[0].total;
+
+        // Consulta para os jogadores da página atual
+        const [rankingPlayers] = await connection.execute(
+            `SELECT id, name, level, vocation, experience, resets, deleted, group_id
+             FROM players
+             ${queryWhere}
+             ${queryOrder}
+             LIMIT ? OFFSET ?`,
+            [...queryParams, pageSize, offset]
+        );
+
+        players = rankingPlayers;
+
+        const totalPages = Math.ceil(totalPlayersCount / pageSize);
+
+        res.render('ranking', {
+            title: `Ranking de ${rankingType === 'level' ? 'Nível' : 'Resets'}`,
+            players: players,
+            currentPage: currentPage,
+            totalPages: totalPages,
+            pageSize: pageSize,
+            totalPlayers: totalPlayersCount,
+            search: req.query.search || '',
+            rankingType: rankingType,
+            user: req.session.user // Passa o usuário logado para o header
+        });
+
+    } catch (error) {
+        console.error('Erro ao buscar ranking:', error);
+        res.status(500).send('Erro ao carregar o ranking.');
+    } finally {
+        if (connection) connection.release();
+    }
+});
 
 
 // Rota padrão caso nenhuma rota seja encontrada (404) - Mantida

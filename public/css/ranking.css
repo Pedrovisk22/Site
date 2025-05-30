@@ -1,122 +1,250 @@
+/* public/css/ranking.css */
 
-        /* Estilos específicos para a página de Ranking */
-        .ranking-page-header {
-            text-align: center;
-            padding: 50px 0;
-            background: var(--gradient-dark-to-medium);
-            border-bottom: 2px solid var(--primary-color);
-        }
-        .ranking-page-header h1 {
-            font-size: 3em;
-            color: var(--primary-color);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .ranking-page-header p {
-            font-size: 1.2em;
-            color: var(--text-muted);
-        }
+.ranking-section {
+    padding: var(--spacing-lg) 0;
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--border-medium);
+}
 
-        .ranking-filters {
-            padding: 30px 0;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            background-color: var(--bg-medium);
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .full-ranking-table-wrapper {
-            padding: 40px 0;
-            background: var(--gradient-card);
-            border-radius: 15px;
-            margin: 40px auto;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-        }
+.ranking-section .container {
+    max-width: 1000px; /* Ajusta largura para o conteúdo do ranking */
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
 
-        .full-ranking-table-wrapper .section-title {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-         .full-ranking-table-wrapper .section-title::after{
-            left: 50%;
-            transform: translateX(-50%);
-         }
+.ranking-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    background-color: var(--bg-panel-subtle);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-subtle);
+    border: 1px solid var(--border-medium);
+}
 
+.ranking-type-selection {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
 
-        .full-ranking-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .full-ranking-table th, .full-ranking-table td {
-            padding: 18px 15px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .full-ranking-table thead tr {
-            background-color: var(--bg-light);
-        }
-        .full-ranking-table th {
-            color: var(--primary-color);
-            text-transform: uppercase;
-            font-size: 1em;
-            font-weight: 700;
-        }
-        .full-ranking-table td {
-            color: var(--text-light);
-            font-size: 1.05em;
-        }
-        .full-ranking-table tbody tr:hover {
-            background-color: var(--bg-light);
-        }
-        .full-ranking-table td.rank-position {
-            font-weight: 700;
-            font-size: 1.2em;
-            color: var(--primary-color);
-            text-align: center;
-            width: 80px;
-        }
-        .full-ranking-table td.rank-position img {
-            height: 32px;
-            width: 32px;
-            vertical-align: middle;
-        }
-        .player-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 10px;
-            border: 2px solid var(--border-color);
-        }
-        .player-name {
-            display: flex;
-            align-items: center;
-        }
-        .guild-tag {
-            background-color: var(--primary-color);
-            color: var(--bg-dark);
-            padding: 3px 8px;
-            border-radius: 5px;
-            font-size: 0.8em;
-            margin-left: 10px;
-            font-weight: bold;
-        }
-         .pagination {
-            text-align: center;
-            margin-top: 30px;
-        }
-        .pagination a, .pagination span {
-            color: var(--text-muted);
-            padding: 8px 12px;
-            margin: 0 5px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-        .pagination a:hover, .pagination span.current {
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            border-color: var(--primary-color);
-        }
+.ranking-type-selection .btn {
+    min-width: 180px; /* Garante que os botões tenham um tamanho mínimo */
+}
+
+.ranking-type-selection .btn.active {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--btn-primary-text);
+    box-shadow: var(--shadow-subtle);
+    transform: translateY(-2px); /* Pequena elevação para indicar ativo */
+}
+
+.ranking-type-selection .btn.active:hover {
+    background-color: var(--accent-color); /* Mantém a cor no hover */
+    border-color: var(--accent-color);
+    color: var(--btn-primary-text);
+}
+
+.ranking-type-selection .btn i {
+    margin-right: var(--spacing-xs);
+}
+
+.search-bar {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex-grow: 1; /* Permite que a barra de pesquisa ocupe espaço disponível */
+    max-width: 350px; /* Largura máxima para a barra de pesquisa */
+}
+
+.search-bar input[type="text"] {
+    flex-grow: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-panel);
+    color: var(--text-primary);
+    font-size: 0.95em;
+    box-shadow: var(--shadow-minimal);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.search-bar input[type="text"]::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+.search-bar input[type="text"]:focus {
+    border-color: var(--input-focus-border);
+    outline: none;
+    box-shadow: var(--shadow-subtle), 0 0 0 2px rgba(66, 165, 245, 0.3); /* Um leve brilho azul */
+}
+
+.search-bar .btn-primary {
+    padding: 0.75rem 1.2rem;
+    min-width: 50px; /* Ajuste para o botão de busca */
+}
+
+.ranking-table-container {
+    background-color: var(--bg-panel);
+    border-radius: var(--radius-lg);
+    overflow-x: auto; /* Permite rolagem horizontal em telas pequenas */
+    box-shadow: var(--shadow-panel);
+    border: 1px solid var(--border-medium);
+    margin-bottom: var(--spacing-lg);
+}
+
+.ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Garante que a tabela não fique muito estreita */
+}
+
+.ranking-table th,
+.ranking-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.ranking-table th {
+    background-color: var(--bg-panel-subtle);
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    text-transform: uppercase;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.ranking-table td {
+    color: var(--text-primary);
+    font-size: 0.95em;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+.ranking-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.ranking-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05); /* Leve destaque no hover */
+}
+
+.ranking-table td:first-child {
+    font-weight: 700;
+    color: var(--accent-color-light); /* Cor para o número do ranking */
+    text-align: center; /* Centraliza o número do ranking */
+    width: 60px; /* Largura fixa para a coluna do ranking */
+}
+
+.ranking-table td a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color var(--transition-fast);
+}
+
+.ranking-table td a:hover {
+    color: var(--accent-color-light);
+    text-decoration: underline;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.pagination-controls .pagination-info {
+    color: var(--text-secondary);
+    font-size: 0.95em;
+    font-weight: 500;
+}
+
+.pagination-controls .btn {
+    min-width: 120px;
+}
+
+.no-results {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: var(--spacing-lg);
+    background-color: var(--bg-panel);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-minimal);
+    margin-top: var(--spacing-lg);
+    font-size: 1.1em;
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    .ranking-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .ranking-type-selection {
+        justify-content: center;
+        width: 100%;
+    }
+    .ranking-type-selection .btn {
+        flex-grow: 1;
+        min-width: unset;
+    }
+    .search-bar {
+        width: 100%;
+        max-width: unset;
+    }
+    .pagination-controls {
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+    }
+    .pagination-controls .btn {
+        flex-grow: 1;
+        min-width: unset;
+    }
+    .pagination-controls .pagination-info {
+        flex-basis: 100%; /* Ocupa a largura total para ficar em sua própria linha */
+        text-align: center;
+        margin-top: var(--spacing-xs);
+    }
+}
+
+@media (max-width: 576px) {
+    .ranking-section {
+        padding: var(--spacing-md) 0;
+    }
+    .ranking-section .section-title {
+        font-size: 2em;
+    }
+    .ranking-table th,
+    .ranking-table td {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.9em;
+    }
+    .ranking-table th {
+        font-size: 0.8em;
+    }
+    .ranking-table td:first-child {
+        width: 40px;
+    }
+    .ranking-type-selection .btn {
+        font-size: 0.9em;
+        padding: 0.6rem 1rem;
+    }
+    .search-bar input[type="text"] {
+        font-size: 0.9em;
+        padding: 0.6rem 0.8rem;
+    }
+    .search-bar .btn-primary {
+        padding: 0.6rem 1rem;
+    }
+}
