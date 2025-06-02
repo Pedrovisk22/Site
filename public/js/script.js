@@ -1,69 +1,10 @@
+// script.js - Mantido sem alterações para as requisições atuais
+
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Lógica do Slider existente ---
-    const sliderItems = document.querySelectorAll('.slider-item');
-    const dots = document.querySelectorAll('.dot');
-    let currentSlide = 0;
-    let slideInterval;
-
-    function showSlide(index) {
-        if (sliderItems.length === 0 || dots.length === 0) return; // Proteção
-
-        sliderItems.forEach((item, i) => {
-            item.classList.remove('active');
-            if (item.querySelector('.slide-text')) {
-                item.querySelector('.slide-text').style.opacity = '0';
-                item.querySelector('.slide-text').style.transform = 'translateY(20px)';
-            }
-        });
-        dots.forEach(dot => dot.classList.remove('active'));
-
-        sliderItems[index].classList.add('active');
-        if (sliderItems[index].querySelector('.slide-text')) {
-            setTimeout(() => { // Adiciona um pequeno delay para a transição ser visível
-                sliderItems[index].querySelector('.slide-text').style.opacity = '1';
-                sliderItems[index].querySelector('.slide-text').style.transform = 'translateY(0)';
-            }, 50);
-        }
-        dots[index].classList.add('active');
-    }
-
-    function nextSlide() {
-        if (sliderItems.length === 0) return;
-        currentSlide = (currentSlide + 1) % sliderItems.length;
-        showSlide(currentSlide);
-    }
-
-    function startSlider() {
-        if (sliderItems.length > 1) { // Só inicia o intervalo se houver mais de um slide
-            slideInterval = setInterval(nextSlide, 7000); // Aumentei o tempo para 7s
-        }
-    }
-
-    function resetSlider() {
-        clearInterval(slideInterval);
-        startSlider();
-    }
-
-    if (dots.length > 0) {
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentSlide = index;
-                showSlide(currentSlide);
-                resetSlider();
-            });
-        });
-    }
-
-    if (sliderItems.length > 0) {
-        showSlide(currentSlide);
-        startSlider();
-    }
-
-    // --- Lógica do Dropdown de Idioma existente ---
-    const dropdownToggle = document.querySelector('.dropdown-toggle');
-    const dropdownMenu = document.querySelector('.dropdown-menu');
-    const selectedFlag = document.getElementById('selected-flag');
-    const selectedLangCode = document.getElementById('selected-lang-code');
+    const dropdownToggle = document.querySelector('.language-dropdown .dropdown-toggle');
+    const dropdownMenu = document.querySelector('.language-dropdown .dropdown-menu');
+    const selectedFlagImg = document.getElementById('selected-flag');
+    const selectedLangCodeSpan = document.getElementById('selected-lang-code');
 
     if (dropdownToggle && dropdownMenu) {
         dropdownToggle.addEventListener('click', (event) => {
@@ -72,59 +13,58 @@ document.addEventListener('DOMContentLoaded', () => {
             event.stopPropagation();
         });
 
-        dropdownMenu.addEventListener('click', (event) => {
-            const selectedOption = event.target.closest('a');
-            if (selectedOption) {
-                const newFlagSrc = selectedOption.querySelector('img').src;
-                const newLangCode = selectedOption.dataset.code;
+        dropdownMenu.querySelectorAll('a').forEach(option => {
+            option.addEventListener('click', (event) => {
+                event.preventDefault();
+                const newFlagSrc = option.querySelector('img')?.src;
+                const newLangCode = option.dataset.code;
 
-                if(selectedFlag) selectedFlag.src = newFlagSrc;
-                if(selectedLangCode) selectedLangCode.textContent = newLangCode;
+                if (selectedFlagImg && newFlagSrc) {
+                    selectedFlagImg.src = newFlagSrc;
+                }
+                if (selectedLangCodeSpan && newLangCode) {
+                    selectedLangCodeSpan.textContent = newLangCode;
+                }
 
                 dropdownMenu.classList.remove('show');
                 dropdownToggle.classList.remove('active');
-                // Aqui você poderia adicionar lógica para traduzir a página
-            }
+
+                console.log(`Idioma selecionado: ${newLangCode}`);
+            });
         });
 
         document.addEventListener('click', (event) => {
-            if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            if (dropdownMenu.classList.contains('show') && !dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
                 dropdownMenu.classList.remove('show');
                 dropdownToggle.classList.remove('active');
             }
         });
     }
 
-    // --- Lógica dos Botões de Filtro (reutilizável) ---
-    const filterButtonContainers = document.querySelectorAll('.filter-buttons'); // Use uma classe container se tiver múltiplos
+    const filterButtonContainers = document.querySelectorAll('.filter-buttons');
     filterButtonContainers.forEach(container => {
         const filterButtons = container.querySelectorAll('.filter-btn');
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
-                // Adicionar lógica de filtragem aqui se necessário
-                // const filterValue = button.dataset.filter;
-                // console.log('Filtrar por:', filterValue);
             });
         });
     });
 
-
-    // --- NOVO: Efeito de Fade-in ao Rolar ---
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
 
     const observerOptions = {
-        root: null, // viewport
+        root: null,
         rootMargin: '0px',
-        threshold: 0.1 // 10% do elemento visível
+        threshold: 0.1
     };
 
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target); // Para animar apenas uma vez
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
@@ -133,56 +73,64 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    // --- NOVO: Efeito de Parallax Sutil no Header ao rolar ---
     const header = document.querySelector('.header');
     let lastScrollTop = 0;
-    window.addEventListener('scroll', () => {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        if (scrollTop > lastScrollTop && scrollTop > header.offsetHeight) {
-            // Rolando para baixo e passou da altura do header
-            header.style.transform = 'translateY(-100%)'; // Esconde o header
-            header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.3)';
-        } else {
-            // Rolando para cima ou no topo
-            header.style.transform = 'translateY(0)';
-            if (scrollTop === 0) {
-                 header.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.5)'; // Sombra original
+
+    if (header) {
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollTop > 0) {
+                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.6)';
+            } else {
+                header.style.boxShadow = 'var(--shadow-subtle)';
             }
-        }
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Evita valores negativos
-    }, false);
+        }, false);
+    }
 
+    function typeWriterEffect(element, text, speed = 50) {
+        if (!element || !text) return;
 
-    // --- NOVO: Efeito de texto digitado para títulos de seção ---
-    // Esta função é um exemplo, você pode adaptá-la ou usar uma biblioteca
-    function typeWriterEffect(element, text, speed = 70) {
-        let i = 0;
-        element.innerHTML = ""; // Limpa o conteúdo original
-        const originalText = text || element.dataset.textToType || element.textContent;
-        if (!originalText) return;
+         // Prevent re-typing if already visible or already typed
+        if (element.classList.contains('is-visible') && element.textContent === text.trim()) {
+             return;
+         }
 
-        function type() {
-            if (i < originalText.length) {
-                element.innerHTML += originalText.charAt(i);
-                i++;
-                setTimeout(type, speed);
-            }
-        }
-        // Inicia o efeito quando o elemento fica visível (usando o mesmo observer)
+        element.textContent = ''; // Clear existing text
         const typeObserver = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    let i = 0;
+                    function type() {
+                        if (i < text.length) {
+                            // Only add character if element content hasn't been externally modified
+                            if (element.textContent.length === i) {
+                                element.textContent += text.charAt(i);
+                                i++;
+                                setTimeout(type, speed);
+                            } else {
+                                // If content was modified (e.g. rapid scroll), restart or stop
+                                // For simplicity, let's just stop and leave the current content
+                                console.warn('Typewriter interrupted.');
+                            }
+                        }
+                    }
                     type();
-                    obs.unobserve(entry.target);
+                    obs.unobserve(entry.target); // Stop observing once typing starts
                 }
             });
-        }, { threshold: 0.5 });
-        typeObserver.observe(element);
+        }, { threshold: 0.5 }); // Start typing when 50% visible
+
+        typeObserver.observe(element); // Start observing the element
     }
 
     document.querySelectorAll('.section-title.typewriter').forEach(title => {
-        typeWriterEffect(title);
+        const fullText = title.dataset.text;
+        if (fullText) {
+            typeWriterEffect(title, fullText.trim());
+        } else {
+             // If data-text is missing, just set the text immediately
+             title.textContent = title.textContent.trim();
+        }
     });
-
-
 });

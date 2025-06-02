@@ -1,0 +1,32 @@
+   <header class="header">
+        <div class="container header-content">
+            <div class="logo PokeMonster">
+                <a href="/"><img src="assets/images/flag-pkm.png" alt="PokeMonster Logo"></a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#">JOGAR</a></li>
+                    <li><a href="#">PROMOÇÕES</a></li>
+                    <li><a href="/ranking">RANKING</a></li>
+                    <li><a href="/shop">SHOP</a></li>
+                </ul>
+            </nav>
+            <div class="login-section">
+                <%# Alterado de <img> para <i> para usar FontAwesome e corrigir alinhamento %>
+                <a href="#" class="btn-login"><i class="fas fa-sign-in-alt"></i> LOGAR</a>
+                <div class="language-dropdown">
+                    <button class="dropdown-toggle">
+                        <img id="selected-flag" src="assets/images/flag-br.png" alt="Bandeira do Brasil">
+                        <span id="selected-lang-code">PT</span>
+                        <img class="dropdown-arrow" src="assets/svg/arrow-down.svg" alt="Seta para baixo">
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#" data-lang="br" data-code="PT"><img src="assets/images/flag-br.png" alt="Português"> PT</a>
+                        <a href="#" data-lang="us" data-code="EN"><img src="assets/images/flag-us.png" alt="English"> EN</a>
+                        <a href="#" data-lang="es" data-code="ES"><img src="assets/images/flag-es.png" alt="Español"> ES</a>
+                        <a href="#" data-lang="de" data-code="DE"><img src="assets/images/flag-de.png" alt="Deutsch"> DE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
