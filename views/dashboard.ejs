@@ -1,53 +1,261 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %> - PokeMonster</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/dashboard.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="/assets/svg/pokeball.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> - PokeMonster</title>
+
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
+  <link rel="icon" href="/assets/svg/pokeball.svg" type="image/svg+xml" />
 </head>
+
 <body>
+  <%- include('partials/header', { user: user }) %>
 
-<%- include('partials/header') %>
+  <div class="dashboard-wrapper container">
+    <main class="dashboard-main">
+      <div class="dashboard-content">
+        <section class="welcome-card">
+          <h1 class="dashboard-title">Bem-vindo, <%= account.name %>!</h1>
+          <p class="vip-message">
+            Você tem <span class="vip-days"><%= account.vip %></span> dias VIP
+          </p>
 
-<main class="main-content container content-container dashboard-page">
-    <section class="dashboard-content">
-        <h2 class="section-title card-title">Bem-vindo, <%= user.name %>!</h2>
+          <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+            <div class="alert alert-success mt-2">
+              <%= successMessage %>
+            </div>
+          <% } %>
 
-        <div class="dashboard-info-card">
-            <h3>Informações da Conta</h3>
-            <p><strong>ID da Conta:</strong> <%= user.id %></p>
-            <p><strong>Nome da Conta:</strong> <%= user.name %></p>
-            <p><strong>Email:</strong> <%= user.email %></p>
-            <%# Adicione outras informações do usuário se disponíveis na sessão %>
+          <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+            <div class="alert alert-danger mt-2">
+              <%= errorMessage %>
+            </div>
+          <% } %>
+        </section>
+
+        <% if (account && account.group_id >= 2) { %>
+          <div class="admin-btn-container">
+            <a href="/admin/server" class="admin-btn">
+              Painel de Administrador
+            </a>
+          </div>
+        <% } %>
+
+        <nav class="dashboard-nav">
+          <button class="nav-tab active" data-tab="characters">
+            Meu Perfil
+          </button>
+          <button class="nav-tab" data-tab="tickets">Meus Tickets</button>
+        </nav>
+
+        <div class="dashboard-tab-content">
+          <div id="characters-tab" class="tab-pane active">
+            <div class="dashboard-sections-wrapper">
+              <div class="dashboard-main-column">
+                <section class="dashboard-section">
+                  <div class="dashboard-section-container">
+                    <div class="section-header">
+                      <h2>Seus Personagens</h2>
+                    </div>
+
+                    <div class="character-grid">
+                        <% if (characters && characters.length > 0) { %>
+                            <% characters.forEach(char => { %>
+                                <div class="character-card">
+                                  <div class="character-avatar-wrapper">
+                                    <%
+                                        const sexFolder = char.sex === 1 ? 'male' : 'female';
+                                        const pictureFile = `avatar${char.picture || 1}.png`;
+                                    %>
+                                    <img src="/assets/images/profiles/<%= sexFolder %>/<%= pictureFile %>" alt="<%= char.name %>" />
+                                  </div>
+                                  <div class="info">
+                                    <h3><%= char.name %></h3>
+                                    <p>Level: <%= char.level %></p>
+                                    <p>Resets: <%= char.resets %></p>
+                                    <p>Criado em: <%= new Date(char.created * 1000).toLocaleDateString() %></p>
+                                    <p>Status: <%= char.online === 1 ? '<span class="status-online">Online</span>' : '<span class="status-offline">Offline</span>' %></p>
+                                  </div>
+                                  <div class="character-actions">
+                                       <button class="btn btn-small btn-danger data-char-delete" data-id="<%= char.id %>" data-name="<%= char.name %>">Excluir</button>
+                                  </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                           <div class="no-characters-message">
+                             <p>Você ainda não tem personagens.</p>
+                           </div>
+                        <% } %>
+                    </div>
+
+                    <div class="create-character-banner">
+                      <% if (canCreateCharacter) { %>
+                        <button class="btn btn-secondary" id="btn-open-create-modal">
+                          <span class="plus-icon">+</span> Criar Personagem
+                        </button>
+                      <% } else { %>
+                        <p class="limit-message">
+                          Você atingiu o limite de <%= maxPlayersPerAccount %> personagens.
+                        </p>
+                      <% } %>
+                    </div>
+                  </div>
+                </section>
+              </div>
+
+              <div class="dashboard-side-column">
+                <section class="dashboard-section">
+                  <div class="fancy-card">
+                    <h2 class="card-title">Sua Carteira</h2>
+                    <div class="rcoins-amount">
+                      <%= account.rcoins %> <span>RCoins</span>
+                    </div>
+                    <div class="horizontal-separator"></div>
+                    <p class="donate-message">
+                      Sua doação ajuda o servidor a se manter online e melhorar!
+                    </p>
+                    <button class="btn btn-donate" id="btn-donate">DOAR RCOINS</button>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+
+          <div id="tickets-tab" class="tab-pane">
+            <section class="dashboard-section full-width-tickets">
+              <div class="dashboard-section-container">
+                <div class="section-header">
+                  <h2>Meus Tickets</h2>
+                </div>
+                <div id="tickets-section">
+                  <p>Conteúdo da aba de tickets...</p>
+                </div>
+              </div>
+            </section>
+          </div>
         </div>
+      </div>
+    </main>
 
-        <%# Adicione outras seções do dashboard aqui %>
-        <%#
-        <div class="dashboard-section">
-            <h3>Meus Personagens</h3>
-            <p>Lista de personagens...</p>
-        </div>
+    <div id="createCharModal" class="modal">
+      <div class="modal-content">
+        <span id="btn-close-create-modal" class="close-modal">×</span>
+        <h2>Criar Novo Personagem</h2>
+        <form id="form-create-char">
+          <div class="form-group">
+            <label for="characterName">Nome do Personagem:</label>
+            <input
+              type="text"
+              id="characterName"
+              name="characterName"
+              placeholder="Digite o nome do seu personagem"
+              maxlength="20"
+              required
+            />
+            <div class="character-name-feedback"></div>
+          </div>
 
-        <div class="dashboard-section">
-            <h3>Gerenciar Conta</h3>
-            <p>Opções para mudar senha, email, etc...</p>
-        </div>
-        %>
+          <div class="form-group gender-selector">
+            <label>Sexo:</label>
+            <div class="gender-options">
+              <button
+                type="button"
+                class="gender-option-btn active"
+                data-sex="1"
+              >
+                <img
+                  src="/assets/images/icons/male.png"
+                  alt="Masculino"
+                />
+                <span>Masculino</span>
+              </button>
+              <button type="button" class="gender-option-btn" data-sex="0">
+                <img
+                  src="/assets/images/icons/female.png"
+                  alt="Feminino"
+                />
+                <span>Feminino</span>
+              </button>
+            </div>
+            <input type="hidden" id="sex" name="sex" value="1" />
+          </div>
 
-        <div class="dashboard-actions">
-            <a href="/logout" class="btn btn-secondary">Sair da Conta</a>
-            <%# <a href="/change-password" class="btn btn-secondary">Mudar Senha</a> %>
-        </div>
-    </section>
-</main>
+          <input type="hidden" id="picture" name="picture" value="1" />
 
-<%- include('partials/footer') %>
+          <div class="create-char-error alert alert-danger mt-2" style="display: none;"></div>
 
-<script src="/js/dashboard.js"></script>
+          <div class="form-actions">
+            <button type="button" id="btn-cancel-create" class="btn btn-secondary">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">Criar Personagem</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="deleteCharModal" class="modal">
+      <div class="modal-content">
+        <span id="btn-close-delete-modal" class="close-modal">×</span>
+        <h2>Excluir Personagem</h2>
+        <p>
+          Você está prestes a excluir o personagem
+          <strong id="delete-char-name"></strong>. Para confirmar, digite sua
+          senha:
+        </p>
+        <form id="form-delete-char">
+          <input
+            type="hidden"
+            id="delete-char-id"
+            name="characterId"
+            value=""
+          />
+
+          <div class="form-group">
+            <label for="delete-password">Senha da Conta:</label>
+            <input
+              type="password"
+              id="delete-password"
+              name="password"
+              placeholder="Digite sua senha"
+              required
+            />
+          </div>
+
+          <div class="delete-char-error alert alert-danger mt-2" style="display: none;"></div>
+
+          <div class="form-actions">
+            <button type="button" id="btn-cancel-delete" class="btn btn-secondary">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-danger">Excluir Personagem</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="/js/dashboard.js"></script>
+  </div>
 </body>
 </html>

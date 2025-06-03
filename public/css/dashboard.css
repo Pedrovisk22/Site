@@ -1,149 +1,889 @@
-/* public/css/dashboard.css */
+.dashboard-wrapper {
+    padding: var(--spacing-lg) var(--spacing-md); /* Ajusta padding, o container já define a largura máxima */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
 
-/* Estilos específicos para a página do dashboard */
-
-.dashboard-page {
-    /* Centraliza o conteúdo principal verticalmente e adiciona padding */
-    min-height: calc(100vh - var(--header-height, 80px) - var(--footer-height, 150px)); /* Ajuste */
-    padding: var(--spacing-lg) var(--spacing-md);
+.dashboard-main {
+    /* Flex grow para ocupar espaço, se dashboard-wrapper for flex */
+    flex-grow: 1;
 }
 
 .dashboard-content {
-    max-width: 800px; /* Limita a largura do conteúdo do dashboard */
-    margin: 0 auto; /* Centraliza o bloco de conteúdo */
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg); /* Espaço entre as seções do dashboard */
-}
-
-.dashboard-content .section-title.card-title {
-    text-align: center; /* Centraliza o título principal */
-    margin-bottom: var(--spacing-lg);
-    color: var(--accent-color-light);
-}
-
-.dashboard-content .section-title.card-title::after {
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--accent-color);
+     display: flex;
+     flex-direction: column;
+     gap: var(--spacing-lg);
 }
 
 
-/* Card de informações da conta */
-.dashboard-info-card,
-.dashboard-section { /* Use .dashboard-section para outras áreas de conteúdo */
-    background-color: var(--bg-panel);
-    border: 1px solid var(--border-medium);
-    border-radius: var(--radius-md); /* Raio menor para cards internos */
-    padding: var(--spacing-md); /* Padding menor dentro do card */
-    box-shadow: var(--shadow-subtle); /* Sombra mais suave */
-}
-
-.dashboard-info-card h3,
-.dashboard-section h3 {
+.dashboard-title {
      font-family: 'Poppins', sans-serif;
-     font-size: 1.3em; /* Tamanho do título do card */
+     font-size: 2em;
      color: var(--text-primary);
-     margin-bottom: var(--spacing-sm); /* Espaço abaixo do título */
-     padding-bottom: var(--spacing-xs);
-     border-bottom: 2px solid var(--border-soft); /* Separador sutil */
+     margin-bottom: var(--spacing-sm);
+     text-align: center; /* Centraliza o título de boas-vindas */
 }
 
-.dashboard-info-card p,
-.dashboard-section p {
-    font-size: 1em;
-    color: var(--text-secondary);
-    margin-bottom: var(--spacing-xs); /* Espaço entre parágrafos */
+.welcome-card {
+     background-color: var(--bg-panel);
+     border: 1px solid var(--border-medium);
+     border-radius: var(--radius-lg);
+     padding: var(--spacing-lg);
+     box-shadow: var(--shadow-panel);
+     text-align: center; /* Centraliza o conteúdo do card de boas-vindas */
+     margin-bottom: var(--spacing-md); /* Espaço abaixo do card */
 }
 
-.dashboard-info-card p:last-child,
-.dashboard-section p:last-child {
+.welcome-card h1 {
+     margin-bottom: var(--spacing-sm);
+     font-size: 1.8em; /* Ajusta tamanho do título dentro do card */
+     color: var(--accent-color-light);
+     text-shadow: var(--shadow-minimal);
+}
+
+.vip-message {
+     font-size: 1.1em;
+     color: var(--text-secondary);
+     margin-bottom: var(--spacing-md);
+}
+
+.vip-days {
+    font-weight: 700;
+    color: var(--warning-color); /* Amarelo para destaque VIP */
+}
+
+/* Ajuste para as mensagens de alerta dentro do welcome-card */
+.welcome-card .alert {
+    margin-top: var(--spacing-md);
     margin-bottom: 0;
-}
-
-/* Container para botões de ação */
-.dashboard-actions {
-    display: flex;
-    justify-content: center; /* Centraliza os botões */
-    gap: var(--spacing-md); /* Espaço entre os botões */
-    margin-top: var(--spacing-md); /* Espaço acima do bloco de botões */
-}
-
-/* Botões dentro das ações (reutiliza estilos de btn-secondary) */
-.dashboard-actions .btn {
-    font-size: 1em;
-    padding: var(--spacing-sm) var(--spacing-md);
+    /* Os outros estilos de .alert já estão no login.css */
 }
 
 
-/* Media Queries para responsividade */
-@media (max-width: 768px) {
-    .dashboard-page {
-        padding: var(--spacing-md) var(--spacing-md);
-    }
-    .dashboard-content {
-        gap: var(--spacing-md);
-    }
-    .dashboard-info-card,
-    .dashboard-section {
-        padding: var(--spacing-md);
-    }
-    .dashboard-info-card h3,
-    .dashboard-section h3 {
-        font-size: 1.2em;
-        margin-bottom: var(--spacing-sm);
-    }
-     .dashboard-info-card p,
-     .dashboard-section p {
-         font-size: 0.95em;
+.admin-btn-container {
+     text-align: center;
+     margin-bottom: var(--spacing-lg);
+}
+
+.admin-btn {
+     /* Estilo similar a um btn-secondary */
+     display: inline-block;
+     background-color: var(--btn-secondary-bg);
+     color: var(--btn-secondary-text);
+     padding: var(--spacing-sm) var(--spacing-md);
+     border: 1px solid var(--border-medium);
+     border-radius: var(--radius-md);
+     box-shadow: var(--shadow-minimal);
+     font-weight: 600;
+     text-decoration: none;
+     transition: all var(--transition-fast);
+}
+
+.admin-btn:hover {
+     background-color: var(--btn-secondary-hover-bg);
+     border-color: var(--accent-color-light);
+     color: var(--text-primary);
+     box-shadow: var(--shadow-subtle);
+     transform: translateY(-2px);
+}
+
+
+/* Menu de Navegação do Dashboard (Tabs) */
+.dashboard-nav {
+     display: flex;
+     gap: var(--spacing-sm);
+     margin-bottom: var(--spacing-lg);
+     border-bottom: 2px solid var(--border-medium);
+     overflow-x: auto; /* Permite scroll em telas pequenas */
+     padding-bottom: var(--spacing-xs); /* Espaço para a borda */
+     -webkit-overflow-scrolling: touch;
+}
+
+.dashboard-nav .nav-tab {
+     background-color: transparent;
+     border: none;
+     padding: var(--spacing-sm) var(--spacing-md);
+     color: var(--text-secondary);
+     font-size: 1.1em;
+     font-weight: 600;
+     cursor: pointer;
+     position: relative;
+     transition: color var(--transition-fast);
+     flex-shrink: 0; /* Evita que os botões encolham */
+}
+
+.dashboard-nav .nav-tab::after {
+     content: '';
+     position: absolute;
+     bottom: -2px; /* Alinha com a borda inferior do nav */
+     left: 0;
+     width: 0;
+     height: 3px;
+     background-color: var(--accent-color-light);
+     transition: width var(--transition-fast);
+}
+
+.dashboard-nav .nav-tab:hover {
+     color: var(--text-primary);
+}
+
+.dashboard-nav .nav-tab.active {
+     color: var(--accent-color-light);
+     font-weight: 700;
+}
+
+.dashboard-nav .nav-tab.active::after {
+     width: 100%;
+}
+
+
+/* Conteúdo das Abas */
+.dashboard-tab-content {
+     /* A transição de opacidade e display pode ser complicada.
+        Gerenciamos o display via JS (block/none). */
+}
+
+.dashboard-tab-content .tab-pane {
+     display: none; /* Escondido por padrão, JS mostra */
+     /* Opcional: transition: opacity 0.3s ease-in-out; */
+}
+
+.dashboard-tab-content .tab-pane.active {
+     display: block;
+     /* Opcional: opacity: 1; */
+}
+
+
+/* Layout de Colunas para Conteúdo do Dashboard */
+.dashboard-sections-wrapper {
+     display: flex;
+     gap: var(--spacing-lg); /* Espaço entre as colunas */
+     flex-wrap: wrap; /* Permite quebra de linha em telas menores */
+}
+
+.dashboard-main-column {
+     flex: 3; /* Coluna principal ocupa mais espaço */
+     display: flex;
+     flex-direction: column;
+     gap: var(--spacing-lg);
+     min-width: 300px; /* Largura mínima para evitar esmagamento */
+}
+
+.dashboard-side-column {
+     flex: 1.5; /* Coluna lateral ocupa menos espaço */
+     display: flex;
+     flex-direction: column;
+     gap: var(--spacing-lg);
+     min-width: 250px; /* Largura mínima */
+}
+
+/* Torna a coluna de tickets de largura total */
+.full-width-tickets {
+    width: 100%;
+}
+.tab-pane.active .full-width-tickets {
+    display: block;
+}
+.tab-pane .dashboard-sections-wrapper {
+    /* Se a aba de tickets não tiver colunas, ajustar o display aqui */
+}
+
+
+/* Seções dentro das colunas */
+.dashboard-section {
+     background-color: var(--bg-panel);
+     border: 1px solid var(--border-medium);
+     border-radius: var(--radius-lg);
+     padding: var(--spacing-lg);
+     box-shadow: var(--shadow-panel);
+     flex-grow: 1; /* Faz as seções preencherem o espaço verticalmente */
+     display: flex; /* Permite alinhar header e grid */
+     flex-direction: column;
+}
+
+.dashboard-section-container {
+    /* Opcional: div interna para padding diferente ou scroll */
+     /* padding: var(--spacing-md); */
+}
+
+
+.section-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: var(--spacing-md);
+     padding-bottom: var(--spacing-xs);
+     border-bottom: 1px solid var(--border-soft);
+}
+
+.section-header h2 {
+     font-family: 'Poppins', sans-serif;
+     font-size: 1.5em;
+     color: var(--text-primary);
+     font-weight: 700;
+}
+
+/* Grade de Personagens */
+.character-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Grade responsiva */
+     gap: var(--spacing-md); /* Espaço entre os cards */
+     flex-grow: 1; /* Ocupa espaço no dashboard-section */
+}
+
+.character-card {
+     background-color: var(--bg-primary); /* Fundo ligeiramente mais escuro que o painel */
+     border: 1px solid var(--border-soft);
+     border-radius: var(--radius-md);
+     overflow: hidden;
+     box-shadow: var(--shadow-subtle);
+     display: flex;
+     flex-direction: column;
+     transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.character-card:hover {
+     transform: translateY(-4px);
+     box-shadow: var(--shadow-panel);
+     border-color: var(--accent-color-light);
+}
+
+.character-avatar-wrapper {
+     width: 100%;
+     height: 120px; /* Altura fixa para a área do avatar */
+     overflow: hidden;
+     position: relative;
+     background-color: var(--bg-panel-subtle); /* Fundo para a área do avatar */
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     border-bottom: 1px solid var(--border-medium);
+}
+
+.character-avatar-wrapper img.avatar {
+     /* Ajustar tamanho do avatar dentro do wrapper */
+     max-height: 100%; /* Limita pela altura do wrapper */
+     width: auto; /* Mantém proporção */
+     max-width: 100%; /* Limita pela largura */
+     display: block;
+     object-fit: contain; /* Garante que a imagem inteira seja visível */
+}
+
+.character-card .info {
+     padding: var(--spacing-md);
+     display: flex;
+     flex-direction: column;
+     flex-grow: 1; /* Ocupa espaço restante */
+}
+
+.character-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: flex-start; /* Alinha topo */
+     margin-bottom: var(--spacing-sm);
+}
+
+.character-name-and-status {
+     display: flex;
+     align-items: center;
+     gap: var(--spacing-xs);
+}
+
+.character-name-and-status h3 {
+     font-family: 'Poppins', sans-serif;
+     font-size: 1.3em;
+     margin: 0;
+     font-weight: 700;
+     word-break: break-word; /* Quebra nome longo */
+}
+
+.character-name-and-status h3 a {
+     color: var(--text-primary); /* Cor do nome do personagem */
+     transition: color var(--transition-fast);
+}
+
+.character-name-and-status h3 a:hover {
+     color: var(--accent-color-light);
+     text-decoration: underline;
+}
+
+
+.status-dot {
+     display: inline-block;
+     width: 10px;
+     height: 10px;
+     border-radius: var(--radius-full);
+     background-color: var(--text-secondary); /* Cor padrão (desconhecido) */
+     flex-shrink: 0; /* Evita que o dot encolha */
+}
+
+.status-dot.on {
+     background-color: var(--success-color); /* Verde para online */
+}
+
+.status-dot.off {
+     background-color: var(--danger-color); /* Vermelho para offline */
+}
+
+
+.character-actions {
+     display: flex;
+     align-items: center;
+     gap: var(--spacing-sm); /* Espaço entre os botões de ação */
+     flex-shrink: 0; /* Evita que os botões encolham */
+}
+
+/* Estilo para o botão de exclusão */
+.btn-delete {
+     background: none;
+     border: none;
+     cursor: pointer;
+     padding: 0;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     width: 24px; /* Tamanho do botão */
+     height: 24px;
+     transition: transform var(--transition-fast);
+}
+
+.btn-delete:hover {
+     transform: scale(1.1);
+}
+
+.btn-delete img.trash-icon {
+     width: 100%;
+     height: 100%;
+     filter: invert(43%) sepia(87%) saturate(651%) hue-rotate(327deg) brightness(101%) contrast(93%); /* Cor vermelha */
+     transition: filter var(--transition-fast);
+}
+
+.btn-delete:hover img.trash-icon {
+    filter: invert(22%) sepia(98%) saturate(5201%) hue-rotate(356deg) brightness(99%) contrast(97%); /* Vermelho mais vibrante no hover */
+}
+
+
+.character-info {
+     margin-bottom: var(--spacing-md);
+     color: var(--text-secondary);
+     font-size: 0.95em;
+}
+
+.character-info p {
+     margin-bottom: var(--spacing-xs);
+}
+
+.character-info .info-label {
+     font-weight: 600;
+     color: var(--text-primary);
+}
+
+/* Estilos para a área do time (se implementada) */
+.team {
+     display: flex;
+     gap: var(--spacing-xs);
+     margin-top: auto; /* Empurra para o final do card */
+     flex-wrap: wrap;
+}
+
+.poke-slot {
+     width: 40px; /* Tamanho do slot */
+     height: 40px;
+     background-color: var(--bg-panel-subtle); /* Fundo do slot vazio */
+     border: 1px dashed var(--border-soft); /* Borda tracejada para slot vazio */
+     border-radius: var(--radius-sm);
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     overflow: hidden;
+}
+.poke-slot img {
+     max-width: 100%;
+     max-height: 100%;
+     object-fit: contain;
+}
+.poke-slot[title] { /* Estilo para slots com Pokémon */
+     border: 1px solid var(--border-medium);
+     background-color: transparent;
+}
+
+
+/* Mensagem de sem personagens */
+.no-characters-message {
+     text-align: center;
+     color: var(--text-secondary);
+     padding: var(--spacing-lg);
+     border: 1px dashed var(--border-medium);
+     border-radius: var(--radius-md);
+     margin-top: var(--spacing-md);
+}
+
+/* Banner de criar personagem */
+.create-character-banner {
+     text-align: center;
+     margin-top: var(--spacing-md);
+     padding-top: var(--spacing-md);
+     border-top: 1px solid var(--border-soft); /* Separador */
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: var(--spacing-md);
+}
+
+.create-character-banner .btn {
+     font-size: 1.2em; /* Botão maior */
+     padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.create-character-banner .plus-icon {
+     font-size: 1.5em; /* Ícone de mais */
+     margin-right: var(--spacing-xs);
+     color: var(--accent-color);
+}
+
+.create-character-banner .limit-message {
+     color: var(--text-secondary);
+     font-size: 1em;
+}
+
+
+/* Fancy Card (Sua Carteira) */
+.fancy-card {
+     background: linear-gradient(135deg, var(--bg-panel-subtle) 0%, var(--bg-panel) 100%); /* Gradiente sutil */
+     border: 1px solid var(--border-medium);
+     border-radius: var(--radius-lg);
+     padding: var(--spacing-lg);
+     box-shadow: var(--shadow-panel);
+     text-align: center;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+}
+
+.fancy-card .card-title {
+     font-family: 'Poppins', sans-serif;
+     font-size: 1.5em;
+     color: var(--accent-color-light);
+     margin-bottom: var(--spacing-md);
+     font-weight: 700;
+     text-shadow: var(--shadow-minimal);
+     /* Remover after se não quiser a linha */
+}
+
+.fancy-card .card-title::after {
+    content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+    width: var(--spacing-lg); height: 3px; background-color: var(--accent-color); border-radius: var(--radius-full);
+}
+
+
+.rcoins-amount {
+     font-family: 'Poppins', sans-serif;
+     font-size: 3em; /* Tamanho grande para a quantidade */
+     color: var(--warning-color); /* Cor de destaque para a moeda */
+     font-weight: 700;
+     margin-bottom: var(--spacing-sm);
+     line-height: 1;
+     text-shadow: var(--shadow-minimal);
+}
+
+.rcoins-amount span {
+     font-size: 0.4em; /* Tamanho menor para o texto RCoins */
+     color: var(--text-primary);
+     font-weight: 500;
+     vertical-align: super;
+     margin-left: 5px;
+}
+
+.horizontal-separator {
+     width: 80%;
+     height: 1px;
+     background-color: var(--border-medium);
+     margin: var(--spacing-md) auto;
+}
+
+.donate-message {
+     color: var(--text-secondary);
+     font-size: 1em;
+     margin-bottom: var(--spacing-md);
+     flex-grow: 1; /* Empurra o botão para baixo */
+}
+
+.btn-donate {
+     /* Estilo similar a btn-primary ou um novo */
+     background-color: var(--color-yellow-vibrant);
+     color: var(--bg-primary);
+     padding: var(--spacing-sm) var(--spacing-md);
+     border-radius: var(--radius-md);
+     font-weight: 700;
+     font-size: 1.1em;
+     box-shadow: var(--shadow-subtle);
+     transition: all var(--transition-fast);
+}
+.btn-donate:hover {
+     background-color: var(--btn-primary-hover-bg);
+     box-shadow: var(--shadow-panel);
+     transform: scale(1.05);
+}
+
+
+/* Estilos para a área de Tickets */
+#tickets-section {
+    /* Adicione estilos específicos para a lista de tickets aqui */
+    color: var(--text-primary);
+}
+
+
+/* Estilos para os Modais (baseados nos seus exemplos) */
+.modal {
+     display: none; /* Hidden by default */
+     position: fixed; /* Stay in place */
+     z-index: 10000; /* Sit on top */
+     left: 0;
+     top: 0;
+     width: 100%; /* Full width */
+     height: 100%; /* Full height */
+     overflow: auto; /* Enable scroll if needed */
+     background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+     backdrop-filter: blur(5px); /* Efeito de desfoque no fundo */
+     -webkit-backdrop-filter: blur(5px); /* Suporte Safari */
+     padding-top: 60px; /* Location of the box */
+}
+
+.modal-content {
+     background-color: var(--bg-panel);
+     border: 1px solid var(--border-medium);
+     border-radius: var(--radius-lg);
+     box-shadow: var(--shadow-modal);
+     margin: 5% auto; /* 15% from the top and centered */
+     padding: var(--spacing-lg);
+     max-width: 500px; /* Could be more or less, depending on screen size */
+     width: 90%; /* Occupy 90% width on smaller screens */
+     position: relative;
+     display: flex;
+     flex-direction: column;
+     gap: var(--spacing-md);
+     animation: animatezoom 0.6s; /* Animação simples */
+}
+
+/* Animação Zoom In */
+@keyframes animatezoom {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+
+.modal-content h2 {
+     font-family: 'Poppins', sans-serif;
+     font-size: 1.8em;
+     color: var(--text-primary);
+     margin-bottom: var(--spacing-md);
+     text-align: center;
+     font-weight: 700;
+}
+
+.modal-content .close-modal {
+     color: var(--text-secondary);
+     position: absolute;
+     top: var(--spacing-sm);
+     right: var(--spacing-sm);
+     font-size: 28px;
+     font-weight: bold;
+     cursor: pointer;
+     transition: color var(--transition-fast);
+}
+
+.modal-content .close-modal:hover,
+.modal-content .close-modal:focus {
+     color: var(--text-primary);
+}
+
+.modal-content form {
+     display: flex;
+     flex-direction: column;
+     gap: var(--spacing-md);
+}
+
+.modal-content .form-group {
+    /* Reutiliza estilos do form-group em login.css */
+    width: 100%;
+}
+
+.modal-content .form-group label {
+    /* Reutiliza estilos da label em login.css */
+}
+.modal-content .form-group input[type="text"],
+.modal-content .form-group input[type="password"],
+.modal-content .form-group input[type="email"],
+.modal-content .form-group select { /* Adicionado select para Select2 */
+    /* Reutiliza estilos do input em login.css */
+     width: 100%;
+     padding: var(--spacing-sm);
+     border: 1px solid var(--input-border);
+     border-radius: var(--radius-sm);
+     background-color: var(--bg-primary);
+     color: var(--text-primary);
+     font-size: 1em;
+     box-shadow: var(--shadow-inset);
+}
+
+/* Específico para feedback de nome de personagem no modal */
+.character-name-feedback {
+     margin-top: var(--spacing-xs);
+     font-size: 0.85em;
+     font-weight: 600;
+     text-align: left;
+     min-height: 1em;
+     transition: color var(--transition-fast);
+}
+
+/* Estilos para o seletor de gênero no modal */
+.gender-selector h3, .country-selector h3 {
+     font-family: 'Poppins', sans-serif;
+     font-size: 1.1em;
+     color: var(--text-primary);
+     margin-bottom: var(--spacing-sm);
+     font-weight: 600;
+}
+
+.gender-options {
+     display: flex;
+     gap: var(--spacing-md); /* Espaço entre as opções */
+     justify-content: center;
+}
+
+.gender-option-btn {
+     background-color: var(--bg-primary);
+     border: 1px solid var(--border-medium);
+     border-radius: var(--radius-md);
+     padding: var(--spacing-md);
+     cursor: pointer;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: var(--spacing-xs);
+     font-size: 1em;
+     color: var(--text-secondary);
+     transition: all var(--transition-fast);
+     flex: 1; /* Permite que as opções ocupem espaço igual */
+     max-width: 120px; /* Limite opcional para a largura */
+}
+
+.gender-option-btn:hover {
+     border-color: var(--accent-color-light);
+     color: var(--text-primary);
+     box-shadow: var(--shadow-subtle);
+     transform: translateY(-2px);
+}
+
+.gender-option-btn.active {
+     background-color: color-mix(in srgb, var(--accent-color) 15%, transparent);
+     border-color: var(--accent-color-light);
+     color: var(--accent-color-light);
+     box-shadow: var(--shadow-subtle), 0 0 5px rgba(66, 165, 245, 0.5);
+     transform: translateY(-2px);
+}
+
+.gender-option-btn img {
+     width: 40px; /* Tamanho dos ícones de gênero */
+     height: 40px;
+     filter: invert(50%) sepia(0%) saturate(0%) hue-rotate(149deg) brightness(107%) contrast(93%); /* Cor neutra */
+     transition: filter var(--transition-fast);
+}
+
+.gender-option-btn.active img {
+     filter: invert(36%) sepia(93%) saturate(2773%) hue-rotate(202deg) brightness(100%) contrast(101%); /* Cor de destaque */
+}
+
+/* Estilos para a área de ações do formulário no modal */
+.modal-content .form-actions {
+     display: flex;
+     justify-content: flex-end; /* Alinha botões à direita */
+     gap: var(--spacing-md);
+     margin-top: var(--spacing-md);
+     padding-top: var(--spacing-md);
+     border-top: 1px solid var(--border-soft);
+}
+
+.modal-content .form-actions .btn {
+     font-size: 1em; /* Ajusta tamanho do botão no modal */
+     padding: var(--spacing-sm) var(--spacing-md);
+     /* Reutiliza estilos de btn-primary, btn-secondary, btn-danger */
+}
+
+/* Estilos para mensagens de erro dentro dos modais */
+.modal-content .alert {
+    /* Reutiliza estilos de .alert em login.css */
+     width: 100%; /* Ocupa a largura do formulário */
+     margin-bottom: 0; /* Remove margin inferior padrão do alert */
+}
+
+
+/* --------------------------------------------- */
+/* Media Queries para responsividade do Dashboard e Modais */
+/* --------------------------------------------- */
+
+@media (max-width: 992px) {
+     .dashboard-wrapper {
+         padding: var(--spacing-md) var(--spacing-md);
      }
-    .dashboard-actions {
-        gap: var(--spacing-sm);
-         margin-top: var(--spacing-md);
-    }
-     .dashboard-actions .btn {
-         font-size: 0.95em;
-         padding: var(--spacing-sm) var(--spacing-md);
+     .dashboard-title {
+         font-size: 1.8em;
      }
+      .welcome-card { padding: var(--spacing-md); }
+      .welcome-card h1 { font-size: 1.6em; }
+      .vip-message { font-size: 1em; }
+
+     .dashboard-nav {
+         gap: var(--spacing-sm);
+         padding-bottom: var(--spacing-xs);
+     }
+     .dashboard-nav .nav-tab {
+         font-size: 1em;
+         padding: var(--spacing-sm);
+     }
+
+     .dashboard-sections-wrapper {
+         flex-direction: column; /* Empilha as colunas */
+         gap: var(--spacing-md);
+     }
+     .dashboard-main-column, .dashboard-side-column {
+         flex: none; /* Remove flex-basis */
+         width: 100%; /* Ocupa a largura total */
+         min-width: auto; /* Remove largura mínima */
+         gap: var(--spacing-md);
+     }
+
+     .dashboard-section { padding: var(--spacing-md); }
+     .section-header h2 { font-size: 1.4em; }
+
+     .character-grid {
+         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Ajusta minmax para telas menores */
+         gap: var(--spacing-md);
+     }
+     .character-card .info { padding: var(--spacing-sm); }
+     .character-name-and-status h3 { font-size: 1.2em; }
+     .character-info { font-size: 0.9em; }
+     .poke-slot { width: 35px; height: 35px; }
+
+     .create-character-banner .btn { font-size: 1.1em; padding: var(--spacing-sm) var(--spacing-md);}
+
+      .fancy-card { padding: var(--spacing-md); }
+     .fancy-card .card-title { font-size: 1.4em; }
+     .rcoins-amount { font-size: 2.5em; }
+     .donate-message { font-size: 0.9em; }
+     .btn-donate { font-size: 1em; }
+
+     /* Modal adjustments */
+     .modal-content {
+         margin: 10% auto; /* Ajusta margem superior */
+         padding: var(--spacing-md);
+     }
+     .modal-content h2 { font-size: 1.6em; }
+     .modal-content .close-modal { font-size: 24px; }
+     .modal-content form { gap: var(--spacing-md); }
+     .gender-options { gap: var(--spacing-md); }
+     .gender-option-btn { padding: var(--spacing-sm); font-size: 0.9em; max-width: 100px;}
+     .gender-option-btn img { width: 35px; height: 35px; }
+     .modal-content .form-actions { gap: var(--spacing-md); }
 }
 
 @media (max-width: 576px) {
-    .dashboard-page {
-        padding: var(--spacing-md) var(--spacing-sm);
-         min-height: calc(100vh - var(--header-height-mobile, 60px) - var(--footer-height-mobile, 100px)); /* Ajuste para mobile */
-    }
-    .dashboard-content {
-         gap: var(--spacing-md);
-    }
-    .dashboard-content .section-title.card-title {
-        font-size: 1.6em;
-        margin-bottom: var(--spacing-md);
-    }
-    .dashboard-info-card,
-    .dashboard-section {
-        padding: var(--spacing-sm);
-    }
-     .dashboard-info-card h3,
-     .dashboard-section h3 {
-         font-size: 1.1em;
-         margin-bottom: var(--spacing-sm);
+     .dashboard-wrapper {
+         padding: var(--spacing-md) var(--spacing-sm);
      }
-     .dashboard-info-card p,
-      .dashboard-section p {
-          font-size: 0.9em;
-          margin-bottom: var(--spacing-xs);
-      }
-    .dashboard-actions {
-        flex-direction: column; /* Empilha botões */
-        align-items: center; /* Centraliza botões empilhados */
-        gap: var(--spacing-sm); /* Espaço entre botões empilhados */
-        margin-top: var(--spacing-md);
-    }
-    .dashboard-actions .btn {
-        width: 100%; /* Botões ocupam largura total */
-        max-width: 250px; /* Limita largura em telas um pouco maiores */
-        font-size: 0.9em;
-         padding: var(--spacing-sm) var(--spacing-md);
-    }
-}
+      .dashboard-content { gap: var(--spacing-md); }
 
+     .dashboard-title { font-size: 1.5em; }
+      .welcome-card { padding: var(--spacing-sm); }
+     .welcome-card h1 { font-size: 1.4em; }
+     .vip-message { font-size: 0.9em; }
+
+      .admin-btn-container { margin-bottom: var(--spacing-md); }
+     .admin-btn { font-size: 0.9em; padding: var(--spacing-xs) var(--spacing-sm); }
+
+
+     .dashboard-nav {
+          gap: var(--spacing-sm);
+          padding-bottom: var(--spacing-xs);
+     }
+     .dashboard-nav .nav-tab {
+         font-size: 0.9em;
+         padding: var(--spacing-xs) var(--spacing-sm);
+     }
+
+
+     .dashboard-section { padding: var(--spacing-sm); }
+     .section-header { flex-direction: column; align-items: flex-start; gap: var(--spacing-xs); }
+     .section-header h2 { font-size: 1.2em; }
+     .section-header h2::after { content: none; /* Remover a linha abaixo do título da seção em mobile */ }
+
+
+     .character-grid {
+         grid-template-columns: 1fr; /* Uma coluna por padrão em mobile */
+         gap: var(--spacing-md);
+     }
+     .character-card {
+         flex-direction: row; /* Alinha imagem e info lado a lado */
+         align-items: flex-start;
+     }
+     .character-avatar-wrapper {
+         width: 100px; /* Largura fixa para a imagem */
+         height: auto; /* Altura automática */
+         flex-shrink: 0; /* Evita que a imagem encolha */
+         border-bottom: none;
+         border-right: 1px solid var(--border-medium); /* Borda lateral */
+         border-radius: var(--radius-md) 0 0 var(--radius-md); /* Ajusta raio */
+     }
+      .character-avatar-wrapper img.avatar {
+          width: 100%;
+          height: auto;
+      }
+
+     .character-card .info {
+         padding: var(--spacing-sm);
+         flex-grow: 1;
+     }
+      .character-header { flex-direction: column; gap: var(--spacing-xs); align-items: flex-start;}
+      .character-name-and-status h3 { font-size: 1.1em; }
+      .character-actions { gap: var(--spacing-sm); margin-top: var(--spacing-xs); }
+      .btn-delete { width: 20px; height: 20px; }
+
+     .character-info { font-size: 0.85em; margin-bottom: var(--spacing-sm); }
+     .team {
+          gap: var(--spacing-xs);
+          margin-top: var(--spacing-sm); /* Ajuste */
+     }
+     .poke-slot { width: 30px; height: 30px; }
+
+     .create-character-banner .btn { font-size: 1em; padding: var(--spacing-sm) var(--spacing-md); width: 100%;}
+     .create-character-banner .limit-message { font-size: 0.9em; }
+
+
+     .fancy-card { padding: var(--spacing-sm); }
+     .fancy-card .card-title { font-size: 1.2em; }
+      .fancy-card .card-title::after { content: none; /* Remover linha */ }
+     .rcoins-amount { font-size: 2em; }
+     .donate-message { font-size: 0.85em; }
+     .btn-donate { font-size: 0.9em; padding: var(--spacing-sm) var(--spacing-md); }
+
+     /* Modal adjustments mobile */
+     .modal-content {
+         margin: 10% auto;
+         padding: var(--spacing-md);
+         width: 95%;
+     }
+     .modal-content h2 { font-size: 1.4em; margin-bottom: var(--spacing-md);}
+     .modal-content .close-modal { font-size: 20px; top: var(--spacing-sm); right: var(--spacing-sm);}
+     .modal-content form { gap: var(--spacing-sm); }
+     .gender-options { gap: var(--spacing-sm); }
+     .gender-option-btn { padding: var(--spacing-sm); font-size: 0.85em; max-width: none; flex: 1;} /* Permitir ocupar espaço igual */
+     .gender-option-btn img { width: 30px; height: 30px; }
+     .modal-content .form-actions { gap: var(--spacing-sm); flex-direction: column-reverse; /* Coloca cancelar em cima */ align-items: stretch;}
+     .modal-content .form-actions .btn { width: 100%; justify-content: center;}
+
+     /* Select2 Mobile Adjustment (already in login.css, ensure consistency) */
+     /* .select2-container--default .select2-selection--single { ... } */
+     /* .select2-search--dropdown .select2-search__field { ... } */
+
+}
