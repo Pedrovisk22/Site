@@ -5,7 +5,7 @@ const dbConfig = {
   host: '144.91.95.247',
   user: 'helton',
   password: 'coelhovoador',
-  database: 'pokecamp',
+  database: 'pokemonster',
   port: 3306,
   waitForConnections: true,
   connectionLimit: 10,
