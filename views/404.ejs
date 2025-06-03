@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - PokeXGames</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/assets/svg/pokeball.svg" type="image/svg+xml">
+</head>
+<body class="centered-page"> <%# Adicione uma classe body para estilizar, ex: centered-page %>
+    <%- include('partials/header') %>
+    <main class="main-content container" style="text-align: center; padding: var(--spacing-xl) 0;">
+        <h1>404</h1>
+        <p>Oops! A página que você procura não foi encontrada.</p>
+        <a href="/" class="btn btn-primary" style="margin-top: var(--spacing-md);">Voltar para a Home</a>
+    </main>
+    <%- include('partials/footer') %>
+</body>
+</html>

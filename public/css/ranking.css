@@ -1,13 +1,72 @@
 /* public/css/ranking.css */
 
-.ranking-section {
+/* =======================================================================
+ *  RANKING SECTION STYLES  –  Adapted for PokeXGames theme
+ * =====================================================================*/
+
+/* ------------------------------------------------------------------
+ *  RANKING HERO SECTION (Based on index hero)
+ * ------------------------------------------------------------------*/
+/* Reusing .hero-section, .hero-background, .hero-overlay, .hero-content-wrapper,
+   .hero-text-content, .hero-text-content h1, .hero-text-content p,
+   .hero-buttons, .hero-visual-element, .hero-animated-png from style.css */
+
+.ranking-hero-section.hero-section {
+     height: 450px; /* Adjust height for ranking hero */
+     /* Ensure it uses the background image and structure from style.css */
+}
+
+.ranking-hero-section .hero-text-content {
+     max-width: 800px; /* Center and widen the text block */
+     margin: 0 auto;
+     text-align: center;
+     display: flex;
+     flex-direction: column;
+     align-items: center; /* Center content horizontally */
+     justify-content: center;
+     height: 100%;
+     padding-right: 0; /* Remove padding-right from style.css override */
+}
+
+.ranking-hero-section .hero-text-content h1 {
+    font-size: 3.5em; /* Larger title */
+    margin-bottom: var(--spacing-sm);
+     color: var(--color-yellow-vibrant); /* Use vibrant yellow for ranking title */
+}
+
+.ranking-hero-section .hero-text-content p {
+    font-size: 1.2em;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-lg);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.ranking-hero-section .hero-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+    flex-wrap: wrap;
+    justify-content: center; /* Center buttons */
+}
+
+
+.ranking-hero-section .hero-visual-element {
+    /* Hide visual element for ranking hero if not needed or adjusted */
+    display: none;
+}
+
+
+/* ------------------------------------------------------------------
+ *  MAIN RANKING CONTENT
+ * ------------------------------------------------------------------*/
+.ranking-content-section { /* New class for the section containing controls and table */
     padding: var(--spacing-lg) 0;
-    background-color: var(--bg-primary);
+    background-color: var(--bg-primary); /* Or a panel color */
     border-top: 1px solid var(--border-medium);
 }
 
-.ranking-section .container {
-    max-width: 1000px; /* Ajusta largura para o conteúdo do ranking */
+.ranking-content-section .container {
+    max-width: 1200px; /* Allow table to use more width */
     margin: 0 auto;
     padding: 0 var(--spacing-md);
 }
@@ -33,7 +92,7 @@
 }
 
 .ranking-type-selection .btn {
-    min-width: 180px; /* Garante que os botões tenham um tamanho mínimo */
+    min-width: 160px; /* Garante que os botões tenham um tamanho mínimo */
 }
 
 .ranking-type-selection .btn.active {
@@ -57,8 +116,8 @@
 .search-bar {
     display: flex;
     gap: var(--spacing-xs);
-    flex-grow: 1; /* Permite que a barra de pesquisa ocupe espaço disponível */
-    max-width: 350px; /* Largura máxima para a barra de pesquisa */
+    flex-grow: 1;
+    max-width: 400px; /* Ajusta largura máxima */
 }
 
 .search-bar input[type="text"] {
@@ -86,22 +145,44 @@
 
 .search-bar .btn-primary {
     padding: 0.75rem 1.2rem;
-    min-width: 50px; /* Ajuste para o botão de busca */
+    min-width: 50px;
+     display: flex; /* Use flex for icon centering */
+     align-items: center;
+     justify-content: center;
 }
+.search-bar .btn-primary i {
+     margin-right: 0; /* Remove default margin */
+}
+
 
 .ranking-table-container {
     background-color: var(--bg-panel);
     border-radius: var(--radius-lg);
-    overflow-x: auto; /* Permite rolagem horizontal em telas pequenas */
+    overflow: hidden; /* Hide overflow for rounded corners */
+    overflow-x: auto; /* Allows horizontal scroll for table */
     box-shadow: var(--shadow-panel);
     border: 1px solid var(--border-medium);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md); /* Adjusted margin */
+    transition: opacity var(--transition-medium), transform var(--transition-medium); /* Added for potential transition effects */
+    opacity: 1; /* Default state for transition */
+    transform: translateY(0); /* Default state for transition */
 }
+
+/* Optional: Classes for transition effect (needs JS to add/remove) */
+.ranking-table-container.fade-out {
+    opacity: 0;
+    transform: translateY(10px);
+}
+.ranking-table-container.fade-in {
+     opacity: 1;
+     transform: translateY(0);
+}
+
 
 .ranking-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 600px; /* Garante que a tabela não fique muito estreita */
+    min-width: 700px; /* Minimum width to prevent squishing columns */
 }
 
 .ranking-table th,
@@ -119,7 +200,9 @@
     font-weight: 600;
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2; /* Ensure header is above content when scrolling */
+    /* Add a subtle gradient to header */
+    background: linear-gradient(to bottom, color-mix(in srgb, var(--bg-panel-subtle) 95%, white), var(--bg-panel-subtle));
 }
 
 .ranking-table td {
@@ -133,46 +216,190 @@
     border-bottom: none;
 }
 
-.ranking-table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.05); /* Leve destaque no hover */
+.ranking-table tbody tr:hover:not(.is-logged-in):not(.top-1):not(.top-2):not(.top-3) {
+    background-color: rgba(255, 255, 255, 0.03); /* Leve destaque no hover para linhas normais */
 }
 
+
+/* --- Rank Column --- */
 .ranking-table td:first-child {
     font-weight: 700;
-    color: var(--accent-color-light); /* Cor para o número do ranking */
-    text-align: center; /* Centraliza o número do ranking */
-    width: 60px; /* Largura fixa para a coluna do ranking */
+    color: var(--text-primary); /* Default color for rank number */
+    text-align: center;
+    width: 80px; /* Wider for medals */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs); /* Space between medal/number and text if any */
 }
 
-.ranking-table td a {
+/* Medal Icons */
+.ranking-table td:first-child img {
+     width: 30px; /* Size of trophy icons */
+     height: auto;
+     vertical-align: middle;
+}
+
+
+/* --- Top 3 Row Styles --- */
+.ranking-table tbody tr.top-1 {
+    background-color: color-mix(in srgb, var(--color-yellow-vibrant) 10%, transparent); /* Subtle yellow background */
     color: var(--text-primary);
-    text-decoration: none;
     font-weight: 600;
-    transition: color var(--transition-fast);
+    border-left: 3px solid var(--color-yellow-vibrant);
+}
+.ranking-table tbody tr.top-1 td { border-bottom-color: color-mix(in srgb, var(--border-soft) 50%, var(--color-yellow-vibrant)); } /* Subtle border color */
+
+.ranking-table tbody tr.top-2 {
+    background-color: color-mix(in srgb, silver 10%, transparent); /* Subtle silver background */
+    color: var(--text-primary);
+    font-weight: 600;
+    border-left: 3px solid silver;
+}
+.ranking-table tbody tr.top-2 td { border-bottom-color: color-mix(in srgb, var(--border-soft) 50%, silver); }
+
+.ranking-table tbody tr.top-3 {
+    background-color: color-mix(in srgb, #cd7f32 10%, transparent); /* Subtle bronze background */
+    color: var(--text-primary);
+    font-weight: 600;
+    border-left: 3px solid #cd7f32;
+}
+.ranking-table tbody tr.top-3 td { border-bottom-color: color-mix(in srgb, var(--border-soft) 50%, #cd7f32); }
+
+/* Top 3 Hover Effect */
+.ranking-table tbody tr.top-1:hover,
+.ranking-table tbody tr.top-2:hover,
+.ranking-table tbody tr.top-3:hover {
+    background-color: color-mix(in srgb, var(--color-yellow-vibrant) 15%, transparent) !important; /* Stronger background on hover */
+    box-shadow: 0 0 8px rgba(var(--danger-color-rgb), 0.3); /* Subtle glow, color depends on rank */
+    border-color: var(--color-yellow-vibrant);
+}
+.ranking-table tbody tr.top-2:hover { box-shadow: 0 0 8px rgba(192,192,192, 0.3); border-color: silver; }
+.ranking-table tbody tr.top-3:hover { box-shadow: 0 0 8px rgba(205,127,50, 0.3); border-color: #cd7f32; }
+
+
+/* --- Avatar Placeholder --- */
+.player-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; /* Size of the avatar */
+    height: 30px;
+    border-radius: var(--radius-sm); /* Slightly rounded corners */
+    background-color: var(--accent-color); /* Background color */
+    color: var(--bg-primary); /* Text color */
+    font-size: 0.9em;
+    font-weight: 700;
+    margin-right: var(--spacing-sm); /* Space between avatar and name */
+    flex-shrink: 0; /* Prevent shrinking */
+    overflow: hidden; /* Hide potential overflowing text */
+    box-shadow: var(--shadow-minimal);
 }
 
-.ranking-table td a:hover {
-    color: var(--accent-color-light);
-    text-decoration: underline;
+.player-avatar img { /* Style for actual avatar images if added later */
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
 }
 
+
+/* --- Logged-in Player Highlight --- */
+.ranking-table tbody tr.is-logged-in {
+     background-color: color-mix(in srgb, var(--accent-color-light) 15%, transparent); /* Subtle blue background */
+     border: 2px solid var(--accent-color);
+     box-shadow: 0 0 10px rgba(66, 165, 245, 0.5);
+     color: var(--text-primary);
+     font-weight: 700;
+     animation: pulse-row 2s infinite ease-in-out; /* Add subtle pulse animation */
+}
+
+@keyframes pulse-row {
+    0% { transform: scale(1.0); box-shadow: 0 0 10px rgba(66, 165, 245, 0.5); }
+    50% { transform: scale(1.005); box-shadow: 0 0 15px rgba(66, 165, 245, 0.7); }
+    100% { transform: scale(1.0); box-shadow: 0 0 10px rgba(66, 165, 245, 0.5); }
+}
+
+.ranking-table tbody tr.is-logged-in:hover {
+     background-color: color-mix(in srgb, var(--accent-color-light) 20%, transparent) !important; /* Stronger blue on hover */
+     box-shadow: 0 0 15px rgba(66, 165, 245, 0.7);
+}
+
+.ranking-table tbody tr.is-logged-in td {
+     border-bottom-color: color-mix(in srgb, var(--border-soft) 50%, var(--accent-color-light)); /* Subtle border color */
+     color: var(--text-primary); /* Ensure text is primary */
+}
+.ranking-table tbody tr.is-logged-in td a {
+     color: var(--text-primary); /* Link color inside highlighted row */
+}
+
+
+/* --- Pagination Controls --- */
 .pagination-controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: var(--spacing-xs); /* Reduced gap */
     margin-top: var(--spacing-lg);
+    flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 .pagination-controls .pagination-info {
     color: var(--text-secondary);
     font-size: 0.95em;
     font-weight: 500;
+    padding: 0 var(--spacing-sm); /* Add padding around text info */
 }
 
 .pagination-controls .btn {
-    min-width: 120px;
+    min-width: unset; /* Allow buttons to be small */
+    padding: 0.6rem 1rem; /* Adjusted padding for pagination buttons */
+    font-size: 0.9em;
+     display: flex; /* For icon + text */
+     align-items: center;
+     gap: var(--spacing-xs);
 }
+.pagination-controls .btn i {
+     margin-right: 0; /* Remove default margin */
+}
+
+.pagination-controls .page-number {
+     display: inline-flex; /* Use flex for aligning number */
+     align-items: center;
+     justify-content: center;
+     width: 35px; /* Fixed width for circle/box */
+     height: 35px; /* Fixed height */
+     border-radius: var(--radius-sm); /* Slight rounding */
+     border: 1px solid var(--border-medium);
+     background-color: var(--bg-panel-subtle);
+     color: var(--text-primary);
+     font-size: 0.9em;
+     font-weight: 600;
+     text-decoration: none;
+     transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+     margin: 0 2px; /* Small space between numbers */
+}
+
+.pagination-controls .page-number:hover {
+     background-color: var(--bg-panel);
+     border-color: var(--accent-color-light);
+     transform: translateY(-1px);
+}
+
+.pagination-controls .page-number.active {
+     background-color: var(--accent-color); /* Accent color for active page */
+     border-color: var(--accent-color);
+     color: var(--btn-primary-text);
+     font-weight: 700;
+     box-shadow: var(--shadow-minimal);
+     transform: translateY(0); /* No elevation for active */
+}
+
+.pagination-controls .page-number.active:hover {
+     background-color: var(--accent-color); /* Keep color on hover */
+     border-color: var(--accent-color);
+     transform: translateY(0);
+}
+
 
 .no-results {
     text-align: center;
@@ -183,9 +410,34 @@
     box-shadow: var(--shadow-minimal);
     margin-top: var(--spacing-lg);
     font-size: 1.1em;
+    border: 1px solid var(--border-medium);
 }
 
-/* Media Queries para responsividade */
+/* --- Table Footer Info --- */
+.ranking-footer-info {
+    text-align: center;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px dashed var(--border-soft);
+}
+
+@media (max-width: 992px) {
+     .ranking-hero-section.hero-section { height: 400px; }
+     .ranking-hero-section .hero-text-content h1 { font-size: 3em; }
+     .ranking-hero-section .hero-text-content p { font-size: 1.1em; margin-bottom: var(--spacing-md); }
+     .ranking-content-section .container { padding: 0 var(--spacing-md); }
+     .ranking-controls { gap: var(--spacing-sm); padding: var(--spacing-sm); }
+     .ranking-type-selection .btn { min-width: 140px; }
+      .ranking-table th, .ranking-table td { padding: var(--spacing-sm); }
+      .ranking-table td:first-child { width: 70px; }
+       .player-avatar { width: 28px; height: 28px; font-size: 0.85em; }
+        .pagination-controls { gap: var(--spacing-xs); }
+        .pagination-controls .btn { padding: 0.5rem 0.8rem; font-size: 0.85em; }
+         .pagination-controls .page-number { width: 30px; height: 30px; font-size: 0.85em;}
+}
+
 @media (max-width: 768px) {
     .ranking-controls {
         flex-direction: column;
@@ -203,6 +455,18 @@
         width: 100%;
         max-width: unset;
     }
+    .ranking-table th,
+    .ranking-table td {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.9em;
+    }
+    .ranking-table th {
+        font-size: 0.8em;
+    }
+    .ranking-table td:first-child {
+        width: 60px;
+    }
+     .player-avatar { width: 25px; height: 25px; font-size: 0.8em; margin-right: var(--spacing-xs);}
     .pagination-controls {
         flex-wrap: wrap;
         gap: var(--spacing-sm);
@@ -215,36 +479,41 @@
         flex-basis: 100%; /* Ocupa a largura total para ficar em sua própria linha */
         text-align: center;
         margin-top: var(--spacing-xs);
+        font-size: 0.9em;
     }
+    .pagination-controls .page-number { font-size: 0.85em; }
 }
 
 @media (max-width: 576px) {
-    .ranking-section {
-        padding: var(--spacing-md) 0;
+     .ranking-hero-section.hero-section { height: 350px; }
+      .ranking-hero-section .hero-text-content h1 { font-size: 2.2em; }
+       .ranking-hero-section .hero-text-content p { font-size: 1em; margin-bottom: var(--spacing-md); }
+    .ranking-content-section {
+        padding: var(--spacing-lg) 0;
     }
-    .ranking-section .section-title {
-        font-size: 2em;
+    .ranking-section .section-title { /* Adjusting global section title for mobile */
+        font-size: 1.8em;
     }
+     .ranking-controls { padding: var(--spacing-sm); gap: var(--spacing-sm);}
+      .ranking-type-selection { gap: var(--spacing-xs); }
+     .ranking-type-selection .btn { font-size: 0.85em; padding: 0.5rem 1rem; }
+     .search-bar input[type="text"] { font-size: 0.85em; padding: 0.5rem 0.8rem; }
+      .search-bar .btn-primary { padding: 0.5rem 0.8rem; }
+
     .ranking-table th,
     .ranking-table td {
-        padding: var(--spacing-xs) var(--spacing-sm);
-        font-size: 0.9em;
+        padding: var(--spacing-xs);
+        font-size: 0.85em;
     }
-    .ranking-table th {
-        font-size: 0.8em;
-    }
-    .ranking-table td:first-child {
-        width: 40px;
-    }
-    .ranking-type-selection .btn {
-        font-size: 0.9em;
-        padding: 0.6rem 1rem;
-    }
-    .search-bar input[type="text"] {
-        font-size: 0.9em;
-        padding: 0.6rem 0.8rem;
-    }
-    .search-bar .btn-primary {
-        padding: 0.6rem 1rem;
-    }
+     .ranking-table th { font-size: 0.75em; }
+     .ranking-table td:first-child { width: 50px; }
+      .ranking-table td:first-child img { width: 25px;}
+       .player-avatar { width: 22px; height: 22px; font-size: 0.75em; margin-right: var(--spacing-xs);}
+
+    .pagination-controls { gap: var(--spacing-xs); }
+     .pagination-controls .btn { font-size: 0.8em; padding: 0.5rem 0.8rem; gap: 2px;}
+      .pagination-controls .page-number { width: 28px; height: 28px; font-size: 0.8em; margin: 0 1px;}
+       .pagination-controls .pagination-info { font-size: 0.8em; }
+
+     .ranking-footer-info { font-size: 0.8em; }
 }
