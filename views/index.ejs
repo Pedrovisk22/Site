@@ -17,7 +17,7 @@
     <%- include('partials/header') %>
     <main class="main-content">
         <section class="hero-section hero-single-slide animate-on-scroll" id="hero-section">
-            <div class="hero-background" style="background-image: url('assets/images/background.png');"></div>
+            <div class="hero-background" style="background-image: url('assets/images/background-4.png');"></div>
             <div class="hero-overlay"></div>
             <div class="container hero-content-wrapper">
                 <div class="hero-text-content">
@@ -99,7 +99,22 @@
             </div>
         </section>
 
+        <!-- NOVA SEÇÃO DO TRAILER AQUI -->
+        <section class="trailer-section card-like-section animate-on-scroll" id="trailer-section">
+            <div class="container">
+                <h2 class="section-title typewriter" data-text="Assista ao Trailer">Assista ao Trailer</h2>
+                <div class="video-container">
+                    <%# Coloque aqui o código embed do YouTube. Exemplo: %>
+                    <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <%# ^^^ SUBSTITUA "YOUR_VIDEO_ID" PELO ID REAL DO SEU VÍDEO DO YOUTUBE ^^^ %>
+                    <%# Adicionado ?rel=0 para não mostrar vídeos relacionados ao final %>
+                </div>
+            </div>
+        </section>
+        <!-- FIM DA NOVA SEÇÃO DO TRAILER -->
+
         <section class="news-community-section" id="news-community-section">
+             <%# O bloco do trailer que estava aqui foi movido para a nova seção acima. %>
             <div class="container">
                 <div class="news-main-column animate-on-scroll">
                     <div class="news-card-wrapper">
@@ -155,6 +170,7 @@
                             </div>
                         </div>
                         <a href="/news" class="btn btn-secondary view-full-ranking" style="margin-top: var(--spacing-md); align-self: center;">Ver Todas as Notícias</a>
+                        
                     </div>
                 </div>
                 <aside class="community-sidebar">
@@ -164,17 +180,17 @@
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td><img src="assets/svg/trophy.svg" alt="1st place trophy"> 1</td>
+                                        <td><img src="/assets/images/flag-tro.png" alt="1st place trophy"> 1</td>
                                         <td>Tumi Frutti</td>
                                         <td>898</td>
                                     </tr>
                                     <tr>
-                                        <td><img src="assets/svg/trophy.svg" alt="2nd place trophy"> 2</td>
+                                        <td><img src="assets/images/flag-tro.png" alt="2nd place trophy"> 2</td>
                                         <td>Whitenomore</td>
                                         <td>807</td>
                                     </tr>
                                     <tr>
-                                        <td><img src="assets/svg/trophy.svg" alt="3rd place trophy"> 3</td>
+                                        <td><img src="assets/images/flag-tro.png" alt="3rd place trophy"> 3</td>
                                         <td>Lucas</td>
                                         <td>750</td>
                                     </tr>
@@ -219,37 +235,9 @@
                             </table>
                         </div>
                     </div>
-                    <div class="online-players-wrapper animate-on-scroll" style="animation-delay: 0.9s;">
-                        <h3 class="section-title card-title typewriter" data-text="Jogadores Online">Jogadores Online</h3>
-                        <%# Conteúdo modificado para um único card centralizado %>
-                        <div class="online-players-card">
-                             <div class="player-status-total">
-                                <div class="status-count">
-                                    <span class="player-count-number">1590</span> <%# Total (1250 + 340) %>
-                                    <span class="status-indicator online" title="Online"></span> <%# Status geral %>
-                                </div>
-                                <span class="status-label">Jogadores Online Agora</span>
-                            </div>
-                            <%# Removido os itens individuais de servidor Evento e Principal %>
-                        </div>
-                    </div>
                 </aside>
             </div>
         </section>
-
-        <%# NOVA SEÇÃO PARA O TRAILER %>
-        <section class="trailer-section animate-on-scroll" id="trailer-section">
-            <div class="container">
-                <h2 class="section-title typewriter" data-text="Assista ao Trailer">Assista ao Trailer</h2>
-                 <div class="video-container">
-                    <%# Coloque aqui o código embed do YouTube. Exemplo: %>
-                    <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    <%# ^^^ SUBSTITUA "YOUR_VIDEO_ID" PELO ID REAL DO SEU VÍDEO DO YOUTUBE ^^^ %>
-                    <%# Adicionado ?rel=0 para não mostrar vídeos relacionados ao final %>
-                </div>
-            </div>
-        </section>
-
 
     </main>
 

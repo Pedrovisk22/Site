@@ -2,53 +2,39 @@
 
 /* ... (código existente de variáveis, reset, base, utilities, buttons - mantido) ... */
 
-/* Importa fontes - Usaremos Poppins para títulos e Inter para texto geral */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700;700&display=swap');
 
-/* Variáveis de Design - Nova Paleta Cartoon Flat e Estrutura do Updater (Mantido) */
 :root {
-    /* Nova Paleta */
-    --color-blue-dark: #1A2333; /* Fundo principal escuro */
-    --color-white-broken: #F0F2F5; /* Texto principal claro / Fundo elementos claros */
-    --color-yellow-vibrant: #FFD700; /* Amarelo Vibrante - Usado para destaque/ação primária */
-    --color-purple-neon: #AB47BC; /* Roxo Neon - Usado para tipo Psíquico ou destaque secundário */
-    --color-grey-blue: #B0B8C6; /* Cinza Azulado - Texto secundário/detalhes */
-    --color-panel-dark: #283141; /* Fundo de cards/painéis escuro */
-    --color-panel-dark-subtle: #333D50; /* Fundo de cards/painéis ligeiramente mais claro */
-
-
-    /* Mapeamento para Variáveis do Updater */
-    --bg-primary: var(--color-blue-dark); /* Fundo principal */
-    --bg-panel: var(--color-panel-dark); /* Fundo de cards/painéis */
-    --bg-panel-subtle: var(--color-panel-dark-subtle); /* Fundo de cards/painéis mais claro */
-    --text-primary: var(--color-white-broken); /* Texto principal */
-    --text-secondary: var(--color-grey-blue); /* Texto secundário/detalhes */
-
-    /* Botões (Baseados no padrão do updater, cores da nova paleta) */
-    --btn-primary-bg: var(--color-yellow-vibrant); /* Botão Primário com cor vibrante */
-    --btn-primary-hover-bg: #FFA000; /* Amarelo mais escuro no hover */
-    --btn-primary-text: var(--bg-primary); /* Texto escuro no botão claro */
-
-    --btn-secondary-bg: var(--bg-panel-subtle); /* Botão Secundário com fundo sutil */
-    --btn-secondary-hover-bg: var(--bg-panel); /* Fundo ligeiramente mais escuro no hover */
-    --btn-secondary-text: var(--text-primary); /* Texto primário no botão secundário */
-
-    /* Bordas e Separadores */
-    --input-border: #4a4a61; /* Borda para inputs no dark mode */
+    --color-blue-dark: #1A2333;
+    --color-white-broken: #F0F2F5;
+    --color-yellow-vibrant: #FFD700;
+    --color-purple-neon: #AB47BC;
+    --color-grey-blue: #B0B8C6;
+    --color-panel-dark: #283141;
+    --color-panel-dark-subtle: #333D50;
+    --bg-primary: var(--color-blue-dark);
+    --bg-panel: var(--color-panel-dark);
+    --bg-panel-subtle: var(--color-panel-dark-subtle);
+    --text-primary: var(--color-white-broken);
+    --text-secondary: var(--color-grey-blue);
+    --btn-primary-bg: var(--color-yellow-vibrant);
+    --btn-primary-hover-bg: #FFA000;
+    --btn-primary-text: var(--bg-primary);
+    --btn-secondary-bg: var(--bg-panel-subtle);
+    --btn-secondary-hover-bg: var(--bg-panel);
+    --btn-secondary-text: var(--text-primary);
+    --input-border: #4a4a61;
     --input-focus-border: var(--accent-color-light);
-    --border-soft: var(--color-panel-dark-subtle); /* Borda escura suave */
-    --border-medium: var(--color-panel-dark); /* Borda escura média */
-
-    /* Cores de Destaque e Feedback */
-    --accent-color: #42A5F5; /* Azul Limpo como destaque geral */
-    --accent-color-light: #64B5F6; /* Azul Limpo mais claro */
-    --danger-color: #ea4335; /* Vermelho */
+    --border-soft: var(--color-panel-dark-subtle);
+    --border-medium: var(--color-panel-dark);
+    --accent-color: #42A5F5;
+    --accent-color-light: #64B5F6;
+    --hero-title: #FAFAFA;
+    --danger-color: #ea4335;
     --danger-color-rgb: 234, 67, 53;
-    --success-color: #34a853; /* Verde */
-    --warning-color: var(--color-yellow-vibrant); /* Amarelo vibrante para warning */
-    --info-color: #4285f4; /* Azul */
-
-     /* Cores Específicas de Tipos de Pokémon */
+    --success-color: #34a853;
+    --warning-color: var(--color-yellow-vibrant);
+    --info-color: #4285f4;
     --type-fire: var(--danger-color);
     --type-water: var(--info-color);
     --type-grass: var(--success-color);
@@ -58,78 +44,61 @@
     --type-poison: #A33EA1;
     --type-flying: #A890F0;
     --type-dragon: #6F35FC;
-
-    /* Overlay de Fundo do Corpo */
-    --body-bg-overlay: rgba(26, 35, 51, 0.85); /* Usando RGB de --bg-primary */
-
-    /* Sombras (Baseado no dark mode do updater) */
+    --body-bg-overlay: rgba(26, 35, 51, 0.85);
     --shadow-minimal: 0 1px 3px rgba(0, 0, 0, 0.2);
     --shadow-subtle: 0 2px 6px rgba(0, 0, 0, 0.3);
     --shadow-panel: 0 4px 12px rgba(0, 0, 0, 0.4);
     --shadow-modal: 0 8px 24px rgba(0, 0, 0, 0.6);
     --shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.15);
-
-    /* Transições (Do updater) */
     --transition-fast: 0.2s ease-out;
     --transition-medium: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 0.6s ease-out;
-
-    /* Raio das Bordas (Do updater) */
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 16px;
     --radius-full: 9999px;
-
-    /* Espaçamento (Do updater) */
     --spacing-xs: 6px;
     --spacing-sm: 12px;
     --spacing-md: 20px;
     --spacing-lg: 32px;
     --spacing-xl: 40px;
-
-    /* Variável de fundo de corpo (Imagem) */
-    --body-background-image: url('../assets/images/background-3.png');
+    --body-background-image: url('../assets/images/background-4.png');
 }
 
-
-/* Reset e Base (Mantido) */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* Aplica a transição rápida padrão a todos os elementos */
     transition: background-color var(--transition-fast),
                 color var(--transition-fast),
                 border-color var(--transition-fast),
                 box-shadow var(--transition-fast),
                 transform var(--transition-fast),
                 opacity var(--transition-fast),
-                outline var(--transition-fast); /* Adicionado outline para o hover glow */
+                outline var(--transition-fast);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 html {
     font-size: 16px;
-    scroll-behavior: smooth; /* Rolagem suave para links de navegação */
+    scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'Inter', sans-serif; /* Usa Inter para texto geral */
+    font-family: 'Inter', sans-serif;
     color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
     margin: 0;
     padding: 0;
     user-select: none;
-    overflow-x: hidden; /* Impede scroll horizontal */
-
-    /* Fundo com imagem e overlay */
-    background-image: var(--body-background-image); /* Usando a variável de imagem */
+    overflow-x: hidden;
+    background-image: var(--body-background-image);
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    background-repeat: no-repeat; /* Garantir que a imagem não se repita */
+    background-repeat: no-repeat;
     position: relative;
 }
 
@@ -144,8 +113,6 @@ body::before {
     z-index: -1;
 }
 
-
-/* Scrollbar Styles (Copiado do updater - Mantido) */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-md); }
 ::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.15); border-radius: var(--radius-md); border: 3px solid var(--bg-primary); }
@@ -153,11 +120,9 @@ body::before {
 .scrollable-container { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.05); }
 .scrollable-container { padding-right: calc(var(--spacing-sm) + 10px); }
 
-
-/* Utilities (Mantido) */
 .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-md); }
 a { text-decoration: none; color: var(--accent-color-light); }
-a:hover { color: var(--accent-color); }
+a:hover { color: var(--color-blue-dark); }
 ul { list-style: none; }
 img { max-width: 100%; display: block; }
 section { padding: var(--spacing-lg) 0; }
@@ -184,7 +149,6 @@ section { padding: var(--spacing-lg) 0; }
 }
 .section-title.card-title::after { left: 0; transform: translateX(0); width: var(--spacing-lg); height: 3px; background-color: var(--accent-color); }
 
-/* Media Queries for Base (Mantido) */
 @media (max-width: 992px) {
     section { padding: var(--spacing-xl) 0; } .container { padding: 0 var(--spacing-md); }
     .section-title { font-size: 2em; margin-bottom: var(--spacing-md); padding-bottom: var(--spacing-sm); }
@@ -199,20 +163,16 @@ section { padding: var(--spacing-lg) 0; }
     .section-title.card-title { font-size: 1.2em;}
 }
 
-
-/* Buttons (Baseado no .btn do updater - Modificado para hover) */
 .btn {
     display: inline-flex; align-items: center; justify-content: center; cursor: pointer; border: none;
-    /* Transição global já aplicada */
     text-decoration: none; box-shadow: var(--shadow-minimal); font-weight: 500; letter-spacing: 0;
     padding: 0.75rem 1.5rem; border-radius: var(--radius-md); position: relative; overflow: hidden; gap: 0.5em;
     font-family: 'Inter', sans-serif; font-size: 0.95rem; text-align: center;
 }
 
-/* Default hover for buttons EXCEPT primary and login */
 .btn:hover:not(:disabled):not(.btn-primary):not(.btn-login):not(.action-btn) {
     box-shadow: var(--shadow-subtle);
-    transform: translateY(-1px); /* Default subtle lift */
+    transform: translateY(-1px);
 }
 
 .btn:active:not(:disabled) {
@@ -231,21 +191,17 @@ section { padding: var(--spacing-lg) 0; }
 }
 
 .btn-primary:hover:not(:disabled) {
-    /* Override default btn hover */
-    background-color: var(--btn-primary-hover-bg);
-    background: linear-gradient(45deg, var(--btn-primary-hover-bg) 0%, color-mix(in srgb, var(--btn-primary-hover-bg) 80%, white) 100%);
-    box-shadow: var(--shadow-panel); /* Sombra mais forte */
-    transform: scale(1.03); /* Escala sutil */
-    outline: 2px solid var(--accent-color-light); /* Lateral glow effect */
-    outline-offset: 2px;
+    background: linear-gradient(45deg, var(--btn-primary-bg) 0%, color-mix(in srgb, var(--btn-primary-bg) 80%, white) 100%);
+    box-shadow: var(--shadow-minimal);
+    transform: none;
+    outline: none;
 }
 
 .btn-primary:active:not(:disabled) {
-    transform: scale(1); /* Reset scale on active */
-    outline: none; /* Remove outline on active */
-    box-shadow: var(--shadow-inset); /* Keep active shadow */
-    background-color: color-mix(in srgb, var(--btn-primary-hover-bg) 90%, black);
-    background: color-mix(in srgb, var(--btn-primary-hover-bg) 90%, black);
+    transform: none;
+    outline: none;
+    background: linear-gradient(45deg, var(--btn-primary-bg) 0%, color-mix(in srgb, var(--btn-primary-bg) 80%, white) 100%);
+    box-shadow: var(--shadow-minimal);
 }
 
 .btn-secondary {
@@ -255,7 +211,6 @@ section { padding: var(--spacing-lg) 0; }
 }
 
 .btn-secondary:hover:not(:disabled) {
-     /* Uses default btn hover transform: translateY(-1px) */
     background-color: var(--btn-secondary-hover-bg);
     border-color: var(--border-medium); color: var(--text-primary);
     box-shadow: var(--shadow-subtle);
@@ -279,49 +234,43 @@ section { padding: var(--spacing-lg) 0; }
 .btn-tertiary:active { transform: translateY(0px); color: var(--accent-color-light); }
 
 .btn-login {
-    background-color: var(--btn-primary-bg); color: var(--btn-primary-text);
-    padding: 0.7rem 1.4rem; /* Aumentado padding */
-    font-weight: 700; box-shadow: var(--shadow-minimal); font-size: 1em;
-     background: linear-gradient(45deg, var(--btn-primary-bg) 0%, color-mix(in srgb, var(--btn-primary-bg) 80%, white) 100%);
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    padding: 0.7rem 1.4rem;
+    font-weight: 700;
+    box-shadow: var(--shadow-minimal);
+    font-size: 1em;
+    background: linear-gradient(45deg, var(--btn-primary-bg) 0%, color-mix(in srgb, var(--btn-primary-bg) 80%, white) 100%);
+    border-radius: 0.6rem;
 }
-/* Estilo para o ícone dentro do botão login (agora FontAwesome <i>) */
 .btn-login i {
     font-size: 1.2em;
-    /* gap handles spacing, no margin needed unless specific alignment issues arise */
 }
 
 .btn-login:hover:not(:disabled) {
-    /* Override default btn hover */
-    background-color: var(--btn-primary-hover-bg);
-    transform: scale(1.03); /* Escala sutil */
-    box-shadow: var(--shadow-panel); /* Sombra mais forte */
-    background: linear-gradient(45deg, var(--btn-primary-hover-bg) 0%, color-mix(in srgb, var(--btn-primary-hover-bg) 80%, white) 100%);
-     outline: 2px solid var(--accent-color-light); /* Lateral glow effect */
-    outline-offset: 2px;
+    background: linear-gradient(45deg, var(--btn-primary-bg) 0%, color-mix(in srgb, var(--btn-primary-bg) 80%, white) 100%);
+    transform: none;
+    box-shadow: var(--shadow-minimal);
+    outline: none;
 }
 .btn-login:active:not(:disabled) {
-    transform: scale(1); /* Reset scale on active */
-     outline: none; /* Remove outline on active */
+    transform: none;
+    outline: none;
     box-shadow: var(--shadow-minimal);
-    background-color: color-mix(in srgb, var(--btn-primary-hover-bg) 90%, black);
-    background: color-mix(in srgb, var(--btn-primary-hover-bg) 90%, black);
+    background: linear-gradient(45deg, var(--btn-primary-bg) 0%, color-mix(in srgb, var(--btn-primary-bg) 80%, white) 100%);
 }
-
 
 .btn-small { padding: 0.6rem 1.2rem; font-size: 0.9em; }
 
-/* Media Queries for Buttons (Mantido, ajustado login padding) */
 @media (max-width: 576px) {
     .btn { padding: 0.6rem 1.2rem; font-size: 0.9em; }
     .btn-primary.hero-cta { font-size: 1em; padding: 0.75rem 1.5rem; }
-    .btn-login { padding: 0.6rem 1.2rem; font-size: 0.9em; } /* Ajuste para mobile */
+    .btn-login { padding: 0.6rem 1.2rem; font-size: 0.9em; }
     .btn-secondary { padding: 0.6rem 1.2rem; font-size: 0.9em; }
     .btn-small { padding: 0.5rem 1rem; font-size: 0.8em; }
     .btn-tertiary { font-size: 0.85em; margin-top: var(--spacing-xs);}
 }
 
-
-/* Header (Modificado logo size) */
 .header {
     background-color: var(--bg-primary);
     padding: var(--spacing-sm) 0;
@@ -337,7 +286,6 @@ section { padding: var(--spacing-lg) 0; }
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md);
 }
 
-/* AUMENTAR TAMANHO DA LOGO */
 .logo img {
     height: 70px; 
 }
@@ -356,7 +304,6 @@ section { padding: var(--spacing-lg) 0; }
 
 .header-icons { display: flex; align-items: center; gap: var(--spacing-md); }
 
-/* Language Dropdown (Baseado no language-selector do updater - Mantido) */
 .language-dropdown { position: relative; display: inline-block; }
 .language-dropdown .dropdown-toggle {
     background-color: var(--bg-panel-subtle); color: var(--text-secondary);
@@ -381,17 +328,14 @@ section { padding: var(--spacing-lg) 0; }
 .language-dropdown .dropdown-menu a img { height: 20px; width: 20px; border-radius: var(--radius-sm); object-fit: cover; box-shadow: var(--shadow-minimal); }
 .language-dropdown .dropdown-menu a:hover { background-color: var(--bg-panel-subtle); color: var(--text-primary); }
 
-/* Media Queries for Header (Ajustado logo size) */
 @media (max-width: 992px) {
     .header-content { flex-direction: column; gap: var(--spacing-sm); }
-    /* AJUSTE TAMANHO LOGO TABLET */
     .logo img { height: 60px; }
     .main-nav ul { flex-wrap: wrap; justify-content: center; gap: var(--spacing-md); }
     .header-icons { gap: var(--spacing-sm); }
 }
 
 @media (max-width: 576px) {
-     /* AJUSTE TAMANHO LOGO MOBILE */
     .logo img { height: 55px; }
     .main-nav ul { flex-direction: column; align-items: center; gap: var(--spacing-xs); }
     .main-nav a { font-size: 0.9em; padding: 2px 0; }
@@ -400,8 +344,6 @@ section { padding: var(--spacing-lg) 0; }
     .btn-login { width: 100%; justify-content: center; font-size: 0.9em; }
 }
 
-
-/* Footer (Adaptado para a nova paleta e espaçamento - Mantido) */
 .footer {
     background-color: var(--bg-primary); color: var(--text-secondary);
     padding: var(--spacing-lg) 0; border-top: 1px solid var(--border-medium); box-shadow: var(--shadow-subtle);
@@ -421,21 +363,14 @@ section { padding: var(--spacing-lg) 0; }
 .social-icons a:active { color: var(--accent-color); transform: translateY(0px); }
 .footer-contact p { font-size: 0.9em; color: var(--text-secondary); margin-bottom: var(--spacing-xs); }
 
-/* Media Queries for Footer (Mantido) */
 @media (max-width: 768px) { .footer-content { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--spacing-md); } }
 @media (max-width: 576px) {
     .footer-content { text-align: center; grid-template-columns: 1fr; gap: var(--spacing-lg);}
     .footer-logo img { margin: 0 auto var(--spacing-sm) auto; }
     .footer-nav ul { padding-left: 0; }
-    .footer-social .social-icons { justify-content: center; }
+    .social-icons { justify-content: center; }
 }
 
-
-/*------------------------------------*/
-/* NOVOS ESTILOS ADICIONADOS/MODIFICADOS */
-/*------------------------------------*/
-
-/* Server Status Bar Section (Mantido) */
 .server-status-bar {
     background-color: var(--bg-panel); padding: var(--spacing-md) 0;
     border-bottom: 1px solid var(--border-medium); box-shadow: var(--shadow-subtle); color: var(--text-primary);
@@ -451,7 +386,6 @@ section { padding: var(--spacing-lg) 0; }
 }
 .server-status-bar .status-icon svg {
      width: 100%; height: 100%; fill: currentColor; color: var(--accent-color-light);
-     /* filter: invert(36%) sepia(93%) saturate(2773%) hue-rotate(202deg) brightness(100%) contrast(101%); */
 }
 .server-status-bar .status-value {
     font-family: 'Poppins', sans-serif; font-size: 1.8em; font-weight: 700; color: var(--text-primary); line-height: 1.2;
@@ -462,7 +396,6 @@ section { padding: var(--spacing-lg) 0; }
 .server-status-bar .status-value.is-online { color: var(--success-color); }
 .server-status-bar .status-value.is-offline { color: var(--danger-color); }
 
-/* Media Queries for Server Status Bar (Mantido) */
 @media (max-width: 768px) {
     .server-status-bar .status-items { justify-content: center; gap: var(--spacing-lg); }
     .server-status-bar .status-item { min-width: 100px; }
@@ -480,8 +413,6 @@ section { padding: var(--spacing-lg) 0; }
         .server-status-bar .status-item .status-label { font-size: 0.8em; text-align: right;}
 }
 
-
-/* Hero Section - Single Slide Version (Modification of existing styles) */
 .hero-section {
     padding: 0; position: relative; width: 100%; height: 550px; overflow: hidden;
     display: flex; justify-content: center; align-items: center;
@@ -506,18 +437,16 @@ section { padding: var(--spacing-lg) 0; }
     justify-content: center; height: 100%;
 }
 
-/* Ajustar tamanho da fonte no slide */
 .hero-text-content h1 {
     font-family: 'Poppins', sans-serif;
-    font-size: 3em; /* Reduzido ligeiramente */
-    color: var(--accent-color-light);
+    font-size: 3em;
+    color: var(--hero-title);
     margin-bottom: var(--spacing-sm); line-height: 1.1; text-transform: uppercase;
     font-weight: 700; text-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
 
-/* Ajustar tamanho da fonte no slide */
 .hero-text-content p {
-    font-size: 1.1em; /* Reduzido ligeiramente */
+    font-size: 1.1em;
     color: var(--text-primary); margin-bottom: var(--spacing-md);
     text-shadow: 0 2px 4px rgba(0,0,0,0.5); max-width: 600px; text-align: left;
 }
@@ -535,21 +464,18 @@ section { padding: var(--spacing-lg) 0; }
     animation: float 3s ease-in-out infinite;
 }
 
-/* Keyframe animation for floating effect (Mantido) */
 @keyframes float {
     0% { transform: translateX(-50%) translateY(0px); }
     50% { transform: translateX(-50%) translateY(-15px); }
     100% { transform: translateX(-50%) translateY(0px); }
 }
 
-
-/* Media Queries for Single Slide Hero Section (Mantido, ajustado font size) */
 @media (max-width: 992px) {
     .hero-section { height: 500px; }
     .hero-content-wrapper { flex-direction: column; text-align: center; justify-content: center; padding: var(--spacing-md); gap: var(--spacing-md);}
     .hero-text-content { max-width: 100%; padding-right: 0; text-align: center; height: auto; }
-    .hero-text-content h1 { font-size: 2.8em; text-align: center; } /* Ajustado */
-    .hero-text-content p { font-size: 1.1em; text-align: center; } /* Ajustado */
+    .hero-text-content h1 { font-size: 2.8em; text-align: center; }
+    .hero-text-content p { font-size: 1.1em; text-align: center; }
     .hero-buttons { justify-content: center; }
     .hero-visual-element { height: 250px; padding-bottom: var(--spacing-xs);}
     .hero-animated-png { bottom: 40px; max-height: 180px; }
@@ -558,8 +484,8 @@ section { padding: var(--spacing-lg) 0; }
 @media (max-width: 576px) {
     .hero-section { height: 400px; }
     .hero-content-wrapper { padding: var(--spacing-sm); gap: var(--spacing-sm); }
-    .hero-text-content h1 { font-size: 2em; margin-bottom: var(--spacing-xs);} /* Ajustado */
-    .hero-text-content p { font-size: 0.9em; margin-bottom: var(--spacing-md); } /* Ajustado */
+    .hero-text-content h1 { font-size: 2em; margin-bottom: var(--spacing-xs);}
+    .hero-text-content p { font-size: 0.9em; margin-bottom: var(--spacing-md); }
     .hero-buttons { flex-direction: column; align-items: center; gap: var(--spacing-sm); }
     .hero-buttons .btn { width: 100%; max-width: 250px; }
     .hero-visual-element { height: 180px; padding-bottom: 0;}
@@ -567,8 +493,6 @@ section { padding: var(--spacing-lg) 0; }
     @keyframes float { 0% { transform: translateX(-50%) translateY(0px); } 50% { transform: translateX(-50%) translateY(-8px); } 100% { transform: translateX(-50%) translateY(0px); } }
 }
 
-
-/* Quick Actions Section (Mantido) */
 .quick-actions-section { padding: var(--spacing-lg) 0; }
 .action-buttons { display: flex; justify-content: space-between; gap: var(--spacing-lg); }
 .action-btn {
@@ -592,7 +516,6 @@ section { padding: var(--spacing-lg) 0; }
 .action-btn .btn-title { font-family: 'Poppins', sans-serif; font-size: 1.4em; font-weight: 700; color: var(--text-primary); text-transform: uppercase; margin-bottom: var(--spacing-xs); }
 .action-btn .btn-subtitle { font-size: 0.9em; color: var(--text-secondary); margin-top: 0; }
 
-/* Media Queries for Quick Actions (Mantido) */
 @media (max-width: 992px) {
     .action-buttons { flex-direction: column; gap: var(--spacing-md); }
     .action-btn { min-width: auto; padding: var(--spacing-md) var(--spacing-md); }
@@ -604,8 +527,6 @@ section { padding: var(--spacing-lg) 0; }
     .action-btn { padding: var(--spacing-sm) var(--spacing-sm); }
 }
 
-
-/* Featured Monsters Section (Mantido) */
 .master-pokemon-section { padding: var(--spacing-lg) 0; background-color: var(--bg-panel-subtle); border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); }
 .master-pokemon-section .section-title { margin-bottom: var(--spacing-md); }
 .filter-buttons { display: flex; justify-content: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); flex-wrap: wrap;}
@@ -633,7 +554,6 @@ section { padding: var(--spacing-lg) 0; }
     font-size: 0.8em; font-weight: 700; text-transform: uppercase; z-index: 2; box-shadow: var(--shadow-minimal);
     border: 1px solid rgba(255,255,255,0.1);
 }
-/* Type-based colors mapping to new palette (Mantido) */
 .pokemon-status.fogo { background-color: var(--type-fire); border-color: color-mix(in srgb, var(--type-fire) 50%, transparent);}
 .pokemon-status.agua { background-color: var(--type-water); border-color: color-mix(in srgb, var(--type-water) 50%, transparent);}
 .pokemon-status.grama { background-color: var(--type-grass); border-color: color-mix(in srgb, var(--type-grass) 50%, transparent);}
@@ -660,7 +580,6 @@ section { padding: var(--spacing-lg) 0; }
 }
 .pokemon-info-overlay p { font-size: 0.85em; margin-bottom: var(--spacing-sm); color: var(--text-secondary); flex-grow: 1; }
 
-/* Media Queries for Pokemon Section (Mantido) */
 @media (max-width: 992px) {
     .featured-pokemon-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--spacing-md); }
     .pokemon-card { min-height: 260px; }
@@ -679,14 +598,11 @@ section { padding: var(--spacing-lg) 0; }
     .filter-btn { font-size: 0.85em; padding: 0.5rem 1rem;}
 }
 
-
-/* News & Community Section (Mantido, com ajustes em sidebar) */
 .news-community-section { padding: var(--spacing-lg) 0; }
 .news-community-section > .container { display: flex; gap: var(--spacing-lg); }
 .news-main-column { flex: 3; display: flex; flex-direction: column; gap: var(--spacing-lg); }
 .community-sidebar { flex: 1.5; display: flex; flex-direction: column; gap: var(--spacing-lg); }
 
-/* Card Styles (News Wrapper, Ranking, Last Catch, Online Players - Mantido, com ajustes em hover) */
 .news-card-wrapper,
 .top-level-ranking-wrapper,
 .ultima-captura-card,
@@ -695,24 +611,21 @@ section { padding: var(--spacing-lg) 0; }
     box-shadow: var(--shadow-panel); border: 1px solid var(--border-medium);
     transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
-/* Micro interação de hover */
 .news-card-wrapper:hover,
 .top-level-ranking-wrapper:hover,
 .ultima-captura-card:hover,
 .online-players-wrapper:hover {
-    transform: translateY(-4px); /* Elevação sutil conforme sugestão */
+    transform: translateY(-4px);
     box-shadow: var(--shadow-panel), 0 0 0 1px var(--accent-color-light);
     border-color: var(--accent-color-light);
 }
-
 
 .main-news-card {
     background-color: var(--bg-panel); border-radius: var(--radius-md); display: flex;
     overflow: hidden; box-shadow: var(--shadow-subtle); border: 1px solid var(--border-soft);
     margin-bottom: var(--spacing-md);
-     transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast); /* Adicionado transição para hover */
+     transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
-/* Micro interação de hover */
 .main-news-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-panel), 0 0 0 1px var(--accent-color-light);
@@ -734,15 +647,13 @@ section { padding: var(--spacing-lg) 0; }
 }
 .main-news-card .news-meta i { color: var(--text-secondary); }
 
-
 .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--spacing-md); }
 .news-grid .news-card {
     background-color: var(--bg-panel); border-radius: var(--radius-md); display: flex;
     flex-direction: column; overflow: hidden; box-shadow: var(--shadow-subtle);
     border: 1px solid var(--border-soft);
-     transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast); /* Adicionado transição para hover */
+     transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
-/* Micro interação de hover */
 .news-grid .news-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-panel), 0 0 0 1px var(--accent-color-light);
@@ -761,7 +672,6 @@ section { padding: var(--spacing-lg) 0; }
 }
 .news-grid .news-card .news-meta i { color: var(--text-secondary); }
 
-/* Ranking Table (Adaptado - Mantido) */
 .top-level-ranking table { width: 100%; border-collapse: collapse; }
 .top-level-ranking th, .top-level-ranking td { padding: var(--spacing-xs) 0; text-align: left; border-bottom: 1px solid var(--border-soft); }
 .top-level-ranking th { color: var(--text-secondary); text-transform: uppercase; font-size: 0.9em; font-weight: 600; }
@@ -771,26 +681,21 @@ section { padding: var(--spacing-lg) 0; }
 .top-level-ranking td:first-child img { height: 18px; width: auto; filter: invert(36%) sepia(93%) saturate(2773%) hue-rotate(202deg) brightness(100%) contrast(101%); }
 .view-full-ranking { display: block; text-align: center; margin-top: var(--spacing-md); }
 
-
-/* Última Captura (Adaptado - Modificado tamanho Pokémon) */
 .ultima-captura-content { display: flex; flex-direction: column; align-items: center; background-color: transparent; padding: 0; }
 .ultima-captura-image-wrapper { position: relative; width: 150px; height: 110px; margin: 0 auto var(--spacing-sm) auto; overflow: hidden; }
-/* AJUSTAR TAMANHO DO POKEMON */
 .pokemon-sprite {
     position: absolute;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    /* REMOVIDO: width: 80px; */
     height: auto;
-    max-height: 100px; /* Aplicado max-height */
+    max-height: 100px;
     z-index: 2;
-    /* Adicionado animação sutil de flutuar */
     animation: float-sprite 2s ease-in-out infinite;
 }
 @keyframes float-sprite {
     0%, 100% { transform: translateX(-50%) translateY(0px); }
-    50% { transform: translateX(-50%) translateY(-5px); } /* Flutuação menor */
+    50% { transform: translateX(-50%) translateY(-5px); }
 }
 
 .grass-base { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 150px; height: auto; z-index: 1; }
@@ -803,109 +708,94 @@ section { padding: var(--spacing-lg) 0; }
 .trainer-name { color: var(--accent-color-light); font-weight: 700; }
 .trainer-name i { margin-right: var(--spacing-xs); color: var(--text-secondary); }
 
-/* Online Players (Adaptado - Modificado para um único card centralizado) */
 .online-players-card {
      background-color: transparent;
      display: flex;
-     flex-direction: column; /* Mantido flex-direction para centralizar */
-     gap: var(--spacing-sm); /* Removido gap */
-     align-items: center; /* Centraliza conteúdo horizontalmente */
-     justify-content: center; /* Centraliza conteúdo verticalmente */
-     text-align: center; /* Centraliza texto */
-     height: 100%; /* Permite ocupar a altura do wrapper se necessário */
+     flex-direction: column;
+     gap: var(--spacing-sm);
+     align-items: center;
+     justify-content: center;
+     text-align: center;
+     height: 100%;
 }
 
-/* Nova classe para o item que mostra o total de jogadores */
 .player-status-total {
     display: flex;
-    flex-direction: column; /* Número e label empilhados */
-    align-items: center; /* Centraliza conteúdo */
-    gap: var(--spacing-xs); /* Espaço entre valor/indicador e label */
-    padding: 0; /* Remove padding padrão de item */
-     border-bottom: none; /* Remove border-bottom */
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: 0;
+     border-bottom: none;
 }
 
 .player-status-total .status-count {
     display: flex;
-    align-items: center; /* Alinha número e indicador na linha */
-    gap: var(--spacing-xs); /* Espaço entre número e indicador */
+    align-items: center;
+    gap: var(--spacing-xs);
 }
 
-.game-name { /* Mantido mas não usado no novo layout */ }
-
 .player-count-number {
-    /* Usa estilos existentes, aumenta tamanho para proeminência */
-    color: var(--success-color); /* Usa cor verde para online */
-    font-size: 2.5em; /* Aumentado bastante */
+    color: var(--success-color);
+    font-size: 2.5em;
     font-weight: 700;
     line-height: 1;
-    /* Adiciona animação sutil */
      animation: pulse-online 2s infinite ease-in-out;
 }
 
-/* Animação de pulso para o número de jogadores online */
 @keyframes pulse-online {
     0% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.05); opacity: 0.9; }
     100% { transform: scale(1); opacity: 1; }
 }
 
-
 .status-indicator {
-    width: 14px; /* Indicador maior */
-    height: 14px; /* Indicador maior */
+    width: 14px;
+    height: 14px;
     border-radius: var(--radius-full);
     display: inline-block;
-     flex-shrink: 0; /* Previne encolhimento em layouts flex */
+     flex-shrink: 0;
 }
 .status-indicator.online { background-color: var(--success-color); }
-/* .status-indicator.players-online { background-color: var(--warning-color); } Não usado no layout condensado */
-
 
 .status-label {
     font-size: 0.9em;
     color: var(--text-secondary);
-    text-transform: none; /* Remove uppercase */
-     margin-top: 0; /* Reset margin */
+    text-transform: none;
+     margin-top: 0;
 }
 
-/* Media Queries for Online Players (Adaptado para o novo layout) */
 @media (max-width: 992px) {
-    /* No big changes needed for the single item layout */
-     .player-count-number { font-size: 2.2em; } /* Ajuste */
+     .player-count-number { font-size: 2.2em; }
 }
 
 @media (max-width: 576px) {
-    .online-players-card { padding: var(--spacing-sm) 0; } /* Ajuste padding */
-    .player-status-total { gap: var(--spacing-xs); } /* Ajuste gap */
-    .player-status-total .status-count { gap: var(--spacing-xs); } /* Ajuste gap */
-    .player-count-number { font-size: 2em; } /* Ajuste */
-    .status-indicator { width: 12px; height: 12px; } /* Ajuste */
-    .status-label { font-size: 0.85em; } /* Ajuste */
+    .online-players-card { padding: var(--spacing-sm) 0; }
+    .player-status-total { gap: var(--spacing-xs); }
+    .player-status-total .status-count { gap: var(--spacing-xs); }
+    .player-count-number { font-size: 2em; }
+    .status-indicator { width: 12px; height: 12px; }
+    .status-label { font-size: 0.85em; }
 }
 
-
-/* Trailer Section (Novo) */
 .trailer-section {
     padding: var(--spacing-lg) 0;
-    background-color: var(--bg-primary); /* Fundo escuro principal */
-    border-top: 1px solid var(--border-medium); /* Borda */
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--border-medium);
 }
 .trailer-section .section-title {
      margin-bottom: var(--spacing-lg);
 }
 
-/* Wrapper para Aspect Ratio do vídeo */
 .video-container {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9; /* Conforme sugestão */
+    aspect-ratio: 16 / 9;
     overflow: hidden;
-    background-color: var(--bg-panel); /* Fundo do painel */
+    background-color: var(--bg-panel);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-panel);
-    margin: 0 auto; /* Centraliza o contêiner de vídeo */
-    max-width: 900px; /* Largura máxima opcional */
+    margin: 0 auto;
+    max-width: 900px;
 }
 
 .video-container iframe {
@@ -915,10 +805,9 @@ section { padding: var(--spacing-lg) 0; }
     border: none;
 }
 
-/* Fallback para navegadores sem suporte a aspect-ratio */
 @supports not (aspect-ratio: 16 / 9) {
      .video-container {
-         padding-bottom: 56.25%; /* 16:9 aspect ratio */
+         padding-bottom: 56.25%;
          height: 0;
      }
      .video-container iframe {
@@ -928,8 +817,6 @@ section { padding: var(--spacing-lg) 0; }
      }
 }
 
-
-/* Media Queries for Trailer Section */
 @media (max-width: 992px) {
     .trailer-section { padding: var(--spacing-xl) 0; }
      .video-container { max-width: 700px; border-radius: var(--radius-md); }
@@ -940,42 +827,32 @@ section { padding: var(--spacing-lg) 0; }
      .trailer-section .section-title { font-size: 1.6em; margin-bottom: var(--spacing-md); }
 }
 
-/* FIXAR BOTÃO BAIXAR AGORA EM MOBILE */
 @media (max-width: 576px) {
      body {
-         /* Adiciona padding na parte inferior do corpo para que o botão fixo não cubra o conteúdo */
-         padding-bottom: calc(var(--spacing-xl) + 20px); /* Ajuste conforme a altura final do botão + margin */
+         padding-bottom: calc(var(--spacing-xl) + 20px);
      }
 
      #baixar {
          position: fixed;
-         bottom: 20px; /* Espaço da parte inferior */
-         left: 50%; /* Centraliza horizontalmente */
-         transform: translateX(-50%); /* Ajusta a posição para centralizar */
-         width: calc(100% - 40px); /* Ocupa a largura com padding de 20px de cada lado */
-         max-width: 350px; /* Opcional: Limita a largura em telas maiores dentro do mobile */
-         z-index: 1001; /* Garante que fique acima da maioria dos outros elementos */
-         text-align: center; /* Centraliza o texto e ícone dentro do botão */
-         /* Mantém os paddings e font-size definidos na media query de botões, ou ajusta se necessário */
-         /* padding: 0.75rem 1.5rem; font-size: 1em; */
-         box-shadow: var(--shadow-panel); /* Sombra mais forte para destacar */
+         bottom: 20px;
+         left: 50%;
+         transform: translateX(-50%);
+         width: calc(100% - 40px);
+         max-width: 350px;
+         z-index: 1001;
+         text-align: center;
+         box-shadow: var(--shadow-panel);
      }
-      /* Remove hover transform for fixed button on mobile if desired,
-         as fixed elements can behave unexpectedly with scale/translate */
-     #baixar:hover {
-         transform: translateX(-50%) scale(1.03); /* Keep scale, adjust origin */
-         outline: 2px solid var(--accent-color-light);
-         outline-offset: 2px;
+      #baixar:hover {
+         transform: translateX(-50%);
+         outline: none;
      }
       #baixar:active {
-          transform: translateX(-50%) scale(1); /* Keep active reset, adjust origin */
+          transform: translateX(-50%);
           outline: none;
       }
 }
 
-
-/* Animations (Adaptado do updater - Mantido, added pulse animations) */
-/* animate-on-scroll (Mantido) */
 .animate-on-scroll {
     opacity: 0;
     transform: translateY(var(--spacing-sm));
@@ -986,11 +863,6 @@ section { padding: var(--spacing-lg) 0; }
     transform: translateY(0);
 }
 
-/* Typewriter Effect (Mantido - JS handles) */
-/* Note: CSS only controls appearance, JS handles the typing */
-
-
-/* Media Queries for News & Community (Mantido) */
 @media (max-width: 992px) {
     .news-community-section > .container { flex-direction: column; gap: var(--spacing-md); }
     .news-main-column { gap: var(--spacing-md);}
@@ -1003,7 +875,6 @@ section { padding: var(--spacing-lg) 0; }
     .news-grid .news-card img { height: 160px; }
     .top-level-ranking th, .top-level-ranking td { padding: var(--spacing-xs) 0;}
     .ultima-captura-table td { padding: var(--spacing-xs) 0;}
-    /* No specific adjustments needed for online players card here due to new single layout */
 }
 @media (max-width: 576px) {
     .news-card-wrapper, .top-level-ranking-wrapper, .ultima-captura-card, .online-players-wrapper { padding: var(--spacing-sm); }
@@ -1015,7 +886,7 @@ section { padding: var(--spacing-lg) 0; }
     .news-grid .news-card .news-content h4 { font-size: 1.15em; }
     .top-level-ranking th, .top-level-ranking td { font-size: 0.9em; padding: 6px 0;}
     .ultima-captura-table td { font-size: 0.9em; padding: 6px 0;}
-    /* No specific adjustments needed for online players card here due to new single layout */
+
 }
 .header {
     background-color: var(--bg-primary);
@@ -1214,4 +1085,10 @@ section { padding: var(--spacing-lg) 0; }
        .language-dropdown .dropdown-menu.show {
            transform: translateX(-50%) translateY(0); /* Adjust transform for centering */
        }
+}
+}
+.hero-text-content h1 {
+   
+    color: var(  --color-yellow-vibrant);
+   
 }
