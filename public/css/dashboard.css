@@ -1,0 +1,149 @@
+/* public/css/dashboard.css */
+
+/* Estilos específicos para a página do dashboard */
+
+.dashboard-page {
+    /* Centraliza o conteúdo principal verticalmente e adiciona padding */
+    min-height: calc(100vh - var(--header-height, 80px) - var(--footer-height, 150px)); /* Ajuste */
+    padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.dashboard-content {
+    max-width: 800px; /* Limita a largura do conteúdo do dashboard */
+    margin: 0 auto; /* Centraliza o bloco de conteúdo */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg); /* Espaço entre as seções do dashboard */
+}
+
+.dashboard-content .section-title.card-title {
+    text-align: center; /* Centraliza o título principal */
+    margin-bottom: var(--spacing-lg);
+    color: var(--accent-color-light);
+}
+
+.dashboard-content .section-title.card-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--accent-color);
+}
+
+
+/* Card de informações da conta */
+.dashboard-info-card,
+.dashboard-section { /* Use .dashboard-section para outras áreas de conteúdo */
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md); /* Raio menor para cards internos */
+    padding: var(--spacing-md); /* Padding menor dentro do card */
+    box-shadow: var(--shadow-subtle); /* Sombra mais suave */
+}
+
+.dashboard-info-card h3,
+.dashboard-section h3 {
+     font-family: 'Poppins', sans-serif;
+     font-size: 1.3em; /* Tamanho do título do card */
+     color: var(--text-primary);
+     margin-bottom: var(--spacing-sm); /* Espaço abaixo do título */
+     padding-bottom: var(--spacing-xs);
+     border-bottom: 2px solid var(--border-soft); /* Separador sutil */
+}
+
+.dashboard-info-card p,
+.dashboard-section p {
+    font-size: 1em;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs); /* Espaço entre parágrafos */
+}
+
+.dashboard-info-card p:last-child,
+.dashboard-section p:last-child {
+    margin-bottom: 0;
+}
+
+/* Container para botões de ação */
+.dashboard-actions {
+    display: flex;
+    justify-content: center; /* Centraliza os botões */
+    gap: var(--spacing-md); /* Espaço entre os botões */
+    margin-top: var(--spacing-md); /* Espaço acima do bloco de botões */
+}
+
+/* Botões dentro das ações (reutiliza estilos de btn-secondary) */
+.dashboard-actions .btn {
+    font-size: 1em;
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    .dashboard-page {
+        padding: var(--spacing-md) var(--spacing-md);
+    }
+    .dashboard-content {
+        gap: var(--spacing-md);
+    }
+    .dashboard-info-card,
+    .dashboard-section {
+        padding: var(--spacing-md);
+    }
+    .dashboard-info-card h3,
+    .dashboard-section h3 {
+        font-size: 1.2em;
+        margin-bottom: var(--spacing-sm);
+    }
+     .dashboard-info-card p,
+     .dashboard-section p {
+         font-size: 0.95em;
+     }
+    .dashboard-actions {
+        gap: var(--spacing-sm);
+         margin-top: var(--spacing-md);
+    }
+     .dashboard-actions .btn {
+         font-size: 0.95em;
+         padding: var(--spacing-sm) var(--spacing-md);
+     }
+}
+
+@media (max-width: 576px) {
+    .dashboard-page {
+        padding: var(--spacing-md) var(--spacing-sm);
+         min-height: calc(100vh - var(--header-height-mobile, 60px) - var(--footer-height-mobile, 100px)); /* Ajuste para mobile */
+    }
+    .dashboard-content {
+         gap: var(--spacing-md);
+    }
+    .dashboard-content .section-title.card-title {
+        font-size: 1.6em;
+        margin-bottom: var(--spacing-md);
+    }
+    .dashboard-info-card,
+    .dashboard-section {
+        padding: var(--spacing-sm);
+    }
+     .dashboard-info-card h3,
+     .dashboard-section h3 {
+         font-size: 1.1em;
+         margin-bottom: var(--spacing-sm);
+     }
+     .dashboard-info-card p,
+      .dashboard-section p {
+          font-size: 0.9em;
+          margin-bottom: var(--spacing-xs);
+      }
+    .dashboard-actions {
+        flex-direction: column; /* Empilha botões */
+        align-items: center; /* Centraliza botões empilhados */
+        gap: var(--spacing-sm); /* Espaço entre botões empilhados */
+        margin-top: var(--spacing-md);
+    }
+    .dashboard-actions .btn {
+        width: 100%; /* Botões ocupam largura total */
+        max-width: 250px; /* Limita largura em telas um pouco maiores */
+        font-size: 0.9em;
+         padding: var(--spacing-sm) var(--spacing-md);
+    }
+}
+

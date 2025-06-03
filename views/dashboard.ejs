@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - PokeMonster</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/assets/svg/pokeball.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<%- include('partials/header') %>
+
+<main class="main-content container content-container dashboard-page">
+    <section class="dashboard-content">
+        <h2 class="section-title card-title">Bem-vindo, <%= user.name %>!</h2>
+
+        <div class="dashboard-info-card">
+            <h3>Informações da Conta</h3>
+            <p><strong>ID da Conta:</strong> <%= user.id %></p>
+            <p><strong>Nome da Conta:</strong> <%= user.name %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <%# Adicione outras informações do usuário se disponíveis na sessão %>
+        </div>
+
+        <%# Adicione outras seções do dashboard aqui %>
+        <%#
+        <div class="dashboard-section">
+            <h3>Meus Personagens</h3>
+            <p>Lista de personagens...</p>
+        </div>
+
+        <div class="dashboard-section">
+            <h3>Gerenciar Conta</h3>
+            <p>Opções para mudar senha, email, etc...</p>
+        </div>
+        %>
+
+        <div class="dashboard-actions">
+            <a href="/logout" class="btn btn-secondary">Sair da Conta</a>
+            <%# <a href="/change-password" class="btn btn-secondary">Mudar Senha</a> %>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>
+
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

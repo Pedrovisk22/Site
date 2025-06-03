@@ -1,0 +1,442 @@
+/* public/css/login.css */
+
+/* Estilos específicos para as páginas de formulário (Login e Register) */
+
+/* Container principal para páginas de formulário */
+.form-page {
+    display: flex;
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: center; /* Centraliza o conteúdo verticalmente */
+    min-height: calc(100vh - var(--header-height, 80px) - var(--footer-height, 150px)); /* Ajuste conforme a altura real do seu header/footer */
+    padding: var(--spacing-lg) var(--spacing-md); /* Padding responsivo */
+}
+
+/* Card que envolve o formulário */
+.form-card {
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-panel);
+    max-width: 400px; /* Limita a largura máxima do card */
+    width: 100%; /* Ocupa a largura total disponível até o max-width */
+    text-align: center; /* Centraliza títulos e links dentro do card */
+    /* Para o registro de 2 passos, ajustamos a flex direction para melhor layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza itens verticalmente dentro do card */
+}
+
+.form-card .section-title.card-title {
+    text-align: center; /* Centraliza o título do card */
+    margin-bottom: var(--spacing-sm); /* Ajustado para dar espaço à descrição */
+    color: var(--accent-color-light); /* Cor de destaque para o título principal do card */
+}
+
+.form-card .section-title.card-title::after {
+    left: 50%; /* Centraliza a linha de destaque */
+    transform: translateX(-50%);
+    background-color: var(--accent-color);
+    /* Remover a linha de destaque se quiser um visual mais clean com os novos elementos visuais */
+    /* content: none; */
+}
+
+
+/* Estilos para o formulário em si */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md); /* Espaçamento entre os grupos de formulário */
+    margin-bottom: var(--spacing-md);
+    width: 100%; /* Garante que o formulário ocupe a largura do card */
+}
+
+/* Grupo de label e input */
+.form-group {
+    text-align: left; /* Alinha label e input à esquerda */
+    width: 100%; /* Garante que o grupo ocupe a largura do formulário */
+}
+
+.form-group label {
+    display: block; /* Label em sua própria linha */
+    margin-bottom: var(--spacing-xs); /* Espaço entre label e input */
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"] { /* Adicionado text para campo name/loginIdentifier */
+    width: 100%; /* Input ocupa a largura total do grupo */
+    padding: var(--spacing-sm);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-primary); /* Fundo escuro */
+    color: var(--text-primary); /* Texto claro */
+    font-size: 1em;
+    box-shadow: var(--shadow-inset); /* Sombra interna */
+}
+
+.form-group input[type="email"]::placeholder,
+.form-group input[type="password"]::placeholder,
+.form-group input[type="text"]::placeholder {
+    color: var(--text-secondary); /* Cor do placeholder */
+    opacity: 0.7;
+}
+
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="text"]:focus {
+    outline: none; /* Remove outline padrão */
+    border-color: var(--accent-color-light); /* Borda de foco */
+    box-shadow: var(--shadow-inset), 0 0 0 3px rgba(66, 165, 245, 0.3); /* Glow de foco */
+}
+
+/* Botão de submit */
+.auth-form .btn-primary {
+    width: 100%; /* Botão ocupa a largura total */
+    margin-top: var(--spacing-sm); /* Espaço acima do botão */
+    font-size: 1.1em; /* Tamanho um pouco maior */
+    padding: var(--spacing-sm) var(--spacing-md); /* Padding ajustado */
+}
+
+/* Links adicionais (Registro, Esqueceu Senha, etc.) */
+.form-links {
+    margin-top: var(--spacing-md);
+    font-size: 0.95em;
+    color: var(--text-secondary);
+}
+
+.form-links a {
+    /* Usa os estilos do btn-tertiary definidos no style.css */
+    font-size: 1em; /* Ajusta o tamanho para o parágrafo */
+}
+
+
+/* Mensagens de alerta */
+.alert {
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.95em;
+    text-align: left;
+    border: 1px solid transparent; /* Base para borda */
+    width: 100%; /* Garante que a mensagem ocupe a largura do card */
+}
+
+.alert-danger {
+    background-color: color-mix(in srgb, var(--danger-color) 15%, transparent); /* Fundo sutil */
+    color: var(--danger-color); /* Cor do texto */
+    border-color: color-mix(in srgb, var(--danger-color) 50%, transparent); /* Cor da borda */
+}
+
+.alert-success {
+     background-color: color-mix(in srgb, var(--success-color) 15%, transparent);
+    color: var(--success-color);
+     border-color: color-mix(in srgb, var(--success-color) 50%, transparent);
+}
+
+/* --------------------------------------------- */
+/* NOVOS ESTILOS PARA REGISTRO MULTI-STEP E FEEDBACK DE SENHA */
+/* --------------------------------------------- */
+
+/* Estilos para cards de formulário de registro com múltiplos passos */
+.form-card.register-card {
+     /* Pode adicionar estilos específicos se necessário, como um background diferente */
+     /* Remove alinhamento central dos itens para permitir a organização dos passos/ícones */
+    align-items: stretch;
+}
+
+/* Container dos ícones acima do formulário */
+.form-icons {
+    text-align: center;
+    margin-bottom: var(--spacing-md); /* Espaço abaixo dos ícones */
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg); /* Espaço entre múltiplos ícones (Etapa 2) */
+}
+
+.form-icon {
+    font-size: 3em; /* Tamanho padrão do ícone */
+    color: var(--accent-color-light); /* Cor do ícone */
+    opacity: 0.8;
+}
+
+.form-icon.large {
+     font-size: 4em; /* Ícone maior */
+}
+
+
+/* Indicadores de etapa */
+.register-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg); /* Espaço abaixo dos indicadores */
+    gap: var(--spacing-xs); /* Espaço entre o passo e a linha */
+}
+
+.register-steps .step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; /* Tamanho do círculo */
+    height: 30px;
+    border-radius: var(--radius-full);
+    background-color: var(--bg-panel-subtle); /* Fundo do círculo inativo */
+    border: 2px solid var(--border-medium); /* Borda do círculo inativo */
+    color: var(--text-secondary); /* Cor do número inativo */
+    font-weight: 600;
+    font-size: 0.9em;
+     transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.register-steps .step.active {
+    background-color: var(--accent-color-light); /* Fundo do círculo ativo */
+    border-color: var(--accent-color); /* Borda do círculo ativo */
+    color: var(--bg-primary); /* Cor do número/ícone ativo */
+}
+
+.register-steps .step.complete {
+    background-color: var(--success-color); /* Fundo do círculo completo */
+    border-color: color-mix(in srgb, var(--success-color) 50%, black);
+    color: var(--bg-primary); /* Cor do ícone de check */
+    font-size: 1.1em; /* Tamanho do ícone de check */
+}
+.register-steps .step.complete i {
+     color: var(--bg-primary); /* Garante que o ícone FontAwesome tenha a cor correta */
+}
+
+
+.register-steps .step-line {
+    width: 40px; /* Comprimento da linha entre os passos */
+    height: 3px; /* Espessura da linha */
+    background-color: var(--border-medium); /* Cor da linha inativa */
+    border-radius: var(--radius-full);
+    transition: background-color var(--transition-fast);
+}
+
+.register-steps .step-line.complete {
+    background-color: var(--success-color); /* Cor da linha completa */
+}
+
+/* Descrição abaixo do título */
+.form-description {
+     text-align: center;
+     color: var(--text-secondary);
+     margin-bottom: var(--spacing-lg);
+     font-size: 1em;
+     width: 100%; /* Garante que ocupe a largura do card */
+}
+
+
+/* Container da barra de força da senha */
+.password-strength-meter {
+    width: 100%;
+    height: 8px; /* Altura da barra */
+    background-color: var(--bg-panel-subtle); /* Fundo da barra */
+    border-radius: var(--radius-full); /* Bordas arredondadas */
+    overflow: hidden; /* Garante que a barra interna não transborde */
+    margin-top: var(--spacing-xs);
+    border: 1px solid var(--border-medium); /* Borda sutil */
+}
+
+/* A barra de progresso interna */
+.password-strength-bar {
+    height: 100%;
+    width: 0%; /* Começa com 0% de largura */
+    background-color: transparent; /* Cor inicial transparente */
+    transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out; /* Animação */
+}
+
+/* Estilos para feedbacks de senha (mantido, agora específico para texto) */
+.password-strength-text {
+    margin-top: var(--spacing-xs);
+    font-size: 0.85em;
+    font-weight: 600;
+    text-align: left; /* Alinha com a label */
+    min-height: 1em; /* Reserva espaço para evitar layout shift */
+    transition: color var(--transition-fast);
+}
+
+.password-match {
+     margin-top: var(--spacing-xs);
+     font-size: 0.85em;
+     font-weight: 600;
+     text-align: left; /* Alinha com a label */
+     min-height: 1em; /* Reserva espaço */
+     transition: color var(--transition-fast);
+}
+
+
+/* --------------------------------------------- */
+/* ESTILOS DO SELECT2 (DROPDOWN DE PAÍS) */
+/* --------------------------------------------- */
+
+/* Ajusta o Select2 para combinar com o tema escuro */
+.select2-container--default .select2-selection--single {
+    background-color: var(--bg-primary) !important; /* Fundo escuro */
+    border: 1px solid var(--input-border) !important; /* Borda */
+    border-radius: var(--radius-sm) !important; /* Raio da borda */
+    height: auto !important; /* Altura automática, ajusta com padding */
+    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-sm) !important; /* Padding */
+    color: var(--text-primary) !important; /* Cor do texto */
+    box-shadow: var(--shadow-inset) !important; /* Sombra interna */
+    /* Garante que o Select2 ocupe a largura total no grupo de formulário */
+     width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: var(--text-primary) !important; /* Cor do texto selecionado */
+    padding: 0 !important; /* Remove padding extra do rendered */
+    line-height: normal !important; /* Reseta line-height */
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+     height: 100% !important; /* Ocupa a altura para centralizar a seta */
+     right: var(--spacing-xs) !important; /* Posição da seta */
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: var(--text-secondary) transparent transparent transparent !important; /* Cor da seta para baixo */
+    border-width: 6px 4px 0 4px !important; /* Ajusta o tamanho da seta */
+    margin-top: 4px !important; /* Ajusta a posição vertical da seta */
+}
+
+/* Estilo do dropdown aberto/resultados */
+.select2-container--open .select2-dropdown {
+    background-color: var(--bg-panel) !important; /* Fundo escuro do dropdown */
+    border: 1px solid var(--border-medium) !important; /* Borda do dropdown */
+    border-radius: var(--radius-md) !important; /* Raio da borda */
+    box-shadow: var(--shadow-panel) !important; /* Sombra */
+    overflow: hidden; /* Garante que as bordas arredondadas funcionem */
+    margin-top: var(--spacing-xs); /* Espaço entre o input e o dropdown */
+}
+
+/* Input de pesquisa dentro do dropdown */
+.select2-search--dropdown .select2-search__field {
+    background-color: var(--bg-primary) !important; /* Fundo do input de pesquisa */
+    border: 1px solid var(--input-border) !important; /* Borda do input de pesquisa */
+    color: var(--text-primary) !important; /* Cor do texto do input de pesquisa */
+    padding: var(--spacing-xs) !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: var(--shadow-inset) !important;
+    margin: var(--spacing-xs);
+    width: calc(100% - var(--spacing-md)) !important; /* Ajusta a largura considerando o margin */
+}
+
+/* Estilo das opções na lista de resultados */
+.select2-container--default .select2-results__option {
+    padding: var(--spacing-xs) var(--spacing-sm) !important; /* Padding das opções */
+    color: var(--text-primary) !important; /* Cor do texto das opções */
+}
+
+/* Estilo da opção destacada (hover/selecionada pelo teclado) */
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: var(--accent-color) !important; /* Fundo da opção destacada */
+    color: var(--bg-primary) !important; /* Cor do texto da opção destacada */
+}
+
+/* Estilo da opção selecionada (se estiver visível no dropdown) */
+.select2-container--default .select2-results__option--selected {
+     background-color: var(--bg-panel-subtle) !important; /* Fundo da opção selecionada */
+     color: var(--text-secondary) !important; /* Cor do texto da opção selecionada */
+}
+
+/* Placeholder no input */
+.select2-container--default .select2-selection--single .select2-selection__rendered::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+
+/* --------------------------------------------- */
+/* Media Queries para responsividade */
+/* --------------------------------------------- */
+
+@media (max-width: 576px) {
+    .form-page {
+        padding: var(--spacing-md) var(--spacing-sm);
+         min-height: calc(100vh - var(--header-height-mobile, 60px) - var(--footer-height-mobile, 100px)); /* Ajuste para mobile */
+    }
+    .form-card {
+        padding: var(--spacing-md);
+    }
+    .form-card .section-title.card-title {
+        font-size: 1.4em;
+         margin-bottom: var(--spacing-md);
+    }
+    .form-group label {
+        font-size: 0.9em;
+         margin-bottom: var(--spacing-xs);
+    }
+     .form-group input[type="email"],
+     .form-group input[type="password"],
+     .form-group input[type="text"] {
+         padding: var(--spacing-xs);
+         font-size: 0.95em;
+     }
+    .auth-form .btn-primary {
+        font-size: 1em;
+         padding: var(--spacing-sm) var(--spacing-md);
+         margin-top: var(--spacing-xs);
+    }
+    .form-links {
+        font-size: 0.9em;
+         margin-top: var(--spacing-sm);
+    }
+     .alert {
+         padding: var(--spacing-xs);
+         font-size: 0.9em;
+     }
+
+     /* Ajustes Mobile para elementos multi-step */
+    .form-icons {
+        gap: var(--spacing-md); /* Reduz espaço entre ícones no mobile */
+        margin-bottom: var(--spacing-md);
+    }
+    .form-icon {
+        font-size: 2em; /* Reduz tamanho do ícone */
+    }
+     .form-icon.large {
+         font-size: 3em; /* Reduz tamanho do ícone grande */
+     }
+
+    .register-steps {
+        margin-bottom: var(--spacing-md);
+        gap: var(--spacing-xs);
+    }
+    .register-steps .step {
+        width: 25px; /* Reduz tamanho do círculo no mobile */
+        height: 25px;
+        font-size: 0.8em;
+    }
+     .register-steps .step.complete {
+         font-size: 1em; /* Ajusta ícone de check */
+     }
+
+    .register-steps .step-line {
+        width: 30px; /* Reduz comprimento da linha no mobile */
+        height: 2px;
+    }
+     .form-description {
+         font-size: 0.9em;
+         margin-bottom: var(--spacing-md);
+     }
+
+     /* Ajuste no gap dos botões em mobile */
+     .auth-form {
+         gap: var(--spacing-sm);
+     }
+
+     /* Ajustes Mobile para Select2 */
+    .select2-container--default .select2-selection--single {
+        padding: var(--spacing-xs) var(--spacing-md) var(--spacing-xs) var(--spacing-xs) !important; /* Ajusta padding para mobile */
+    }
+    .select2-search--dropdown .select2-search__field {
+         margin: var(--spacing-xs); /* Ajusta margin para mobile */
+         width: calc(100% - var(--spacing-md)) !important; /* Ajusta largura */
+         padding: var(--spacing-xs) !important; /* Ajusta padding */
+    }
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - PokeMonster</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/assets/svg/pokeball.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<%- include('partials/header', { user: user }) %>
+
+<main class="main-content container content-container form-page">
+    <section class="form-card register-card">
+        <div class="form-icons">
+            <i class="fas fa-user-check form-icon large"></i>
+        </div>
+         <div class="register-steps">
+            <span class="step active">1</span>
+            <span class="step-line"></span>
+            <span class="step">2</span>
+        </div>
+        <h2 class="section-title card-title">Crie sua Conta</h2>
+        <p class="form-description">Informe seus dados básicos para começar.</p>
+
+
+        <% if (errorMessage) { %>
+            <div class="alert alert-danger"><%= errorMessage %></div>
+        <% } %>
+        <% if (successMessage) { %>
+            <div class="alert alert-success"><%= successMessage %></div>
+        <% } %>
+
+        <!-- Action agora aponta para /register e será processado no server.js -->
+        <form action="/register" method="POST" class="auth-form" id="registerStep1Form">
+             <!-- Campo escondido para identificar a etapa no servidor -->
+            <input type="hidden" name="step" value="1">
+
+            <div class="form-group">
+                <label for="name">Nome de Conta:</label>
+                <input type="text" id="name" name="name" required autocomplete="username" value="<%= typeof formData !== 'undefined' ? formData.name : '' %>">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required autocomplete="email" value="<%= typeof formData !== 'undefined' ? formData.email : '' %>">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Próximo</button>
+        </form>
+
+        <p class="form-links">Já tem uma conta? <a href="/login" class="btn-tertiary">Faça Login aqui</a></p>
+    </section>
+</main>
+
+<%- include('partials/footer') %>
+
+<script src="/js/register_step1.js"></script>
+</body>
+</html>

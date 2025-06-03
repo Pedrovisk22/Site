@@ -886,6 +886,206 @@ section { padding: var(--spacing-lg) 0; }
     .news-grid .news-card .news-content h4 { font-size: 1.15em; }
     .top-level-ranking th, .top-level-ranking td { font-size: 0.9em; padding: 6px 0;}
     .ultima-captura-table td { font-size: 0.9em; padding: 6px 0;}
+
+}
+.header {
+    background-color: var(--bg-primary);
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--border-medium);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-subtle);
+    transition: transform var(--transition-fast) ease-in-out, box-shadow var(--transition-fast) ease-in-out;
+}
+
+.header-content {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md);
+}
+
+/* AUMENTAR TAMANHO DA LOGO */
+.logo img {
+    height: 70px;
+}
+
+.main-nav ul { display: flex; gap: var(--spacing-lg); }
+.main-nav a {
+    color: var(--text-secondary); font-weight: 600; text-transform: uppercase; font-size: 0.95em;
+    position: relative; padding: var(--spacing-xs) 0; transition: color var(--transition-fast);
+}
+.main-nav a::after {
+    content: ''; position: absolute; width: 0; height: 3px; bottom: -5px; left: 50%; transform: translateX(-50%);
+    background-color: var(--accent-color-light); transition: width var(--transition-fast);
+}
+.main-nav a:hover::after { width: 100%; }
+.main-nav a:hover { color: var(--text-primary); }
+
+.login-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md); /* Espaço entre os elementos na seção de login (Conta e Idioma) */
+}
+
+/* Novo: Account Dropdown */
+.account-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.account-dropdown .dropdown-toggle {
+    background-color: var(--btn-secondary-bg); /* Cor de fundo similar aos botões secundários */
+    color: var(--btn-secondary-text); /* Cor do texto similar aos botões secundários */
+    padding: var(--spacing-xs) var(--spacing-sm); /* Padding */
+    border: 1px solid var(--border-medium); /* Borda */
+    border-radius: var(--radius-md); /* Raio da borda */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs); /* Espaço entre ícone/texto e seta */
+    font-size: 0.95em; /* Tamanho da fonte */
+    font-weight: 600;
+    box-shadow: var(--shadow-minimal);
+    transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.account-dropdown .dropdown-toggle:hover {
+     background-color: var(--btn-secondary-hover-bg);
+     border-color: var(--border-medium);
+     color: var(--text-primary);
+     box-shadow: var(--shadow-subtle);
+     transform: translateY(-1px); /* Pequena elevação */
+}
+
+.account-dropdown .dropdown-toggle:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-inset);
+    background-color: color-mix(in srgb, var(--btn-secondary-hover-bg) 90%, black);
+}
+
+.account-dropdown .dropdown-toggle i {
+    font-size: 1em; /* Ajusta o tamanho dos ícones Font Awesome */
+    color: var(--text-secondary); /* Cor padrão dos ícones */
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.account-dropdown .dropdown-toggle:hover i {
+     color: var(--text-primary); /* Cor dos ícones no hover */
+}
+
+
+.account-dropdown .dropdown-menu {
+    display: none; /* Escondido por padrão */
+    position: absolute;
+    top: 100%; /* Posiciona abaixo do toggle */
+    right: 0; /* Alinha à direita */
+    background-color: var(--bg-panel); /* Fundo do painel */
+    min-width: 150px; /* Largura mínima */
+    box-shadow: var(--shadow-panel); /* Sombra */
+    z-index: 100; /* Acima de outros elementos */
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-top: var(--spacing-xs); /* Espaço entre o toggle e o menu */
+    border: 1px solid var(--border-medium);
+    opacity: 0; /* Inicia transparente */
+    transform: translateY(var(--spacing-xs)); /* Inicia ligeiramente para cima */
+    transition: opacity var(--transition-fast) ease-out, transform var(--transition-fast) ease-out;
+    pointer-events: none; /* Não interativo quando escondido */
+}
+
+.account-dropdown .dropdown-menu.show {
+    display: block; /* Mostra o menu */
+    opacity: 1; /* Torna visível */
+    transform: translateY(0); /* Move para a posição final */
+    pointer-events: auto; /* Torna interativo */
+}
+
+.account-dropdown .dropdown-menu a {
+    color: var(--text-secondary); /* Cor padrão dos links */
+    padding: var(--spacing-xs) var(--spacing-sm);
+    text-decoration: none;
+    display: block; /* Cada link em uma linha */
+    font-size: 0.9em;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.account-dropdown .dropdown-menu a:hover {
+    background-color: var(--bg-panel-subtle); /* Fundo no hover */
+    color: var(--text-primary); /* Cor do texto no hover */
+}
+
+/* Língua Dropdown (Mantido, movido para dentro .login-section) */
+.language-dropdown { position: relative; display: inline-block; } /* Mantido inline-block */
+.language-dropdown .dropdown-toggle {
+    background-color: var(--bg-panel-subtle); color: var(--text-secondary);
+    padding: var(--spacing-xs) var(--spacing-sm); border: 1px solid var(--border-soft);
+    border-radius: var(--radius-md); cursor: pointer; display: flex; align-items: center;
+    gap: var(--spacing-xs); font-size: 0.9em; font-weight: 600; box-shadow: var(--shadow-minimal);
+}
+.language-dropdown .dropdown-toggle img { height: 20px; width: 20px; border-radius: var(--radius-sm); object-fit: cover; box-shadow: var(--shadow-minimal); }
+.language-dropdown .dropdown-toggle .dropdown-arrow {
+     width: 20px; height: 20px; fill: currentColor; transition: transform var(--transition-fast);
+}
+.language-dropdown .dropdown-toggle.active .dropdown-arrow { transform: rotate(180deg); }
+.language-dropdown .dropdown-toggle:hover { background-color: var(--bg-panel); border-color: var(--border-medium); color: var(--text-primary); box-shadow: var(--shadow-subtle); transform: translateY(-1px);} /* Added transform */
+.language-dropdown .dropdown-menu {
+    display: none; position: absolute; background-color: var(--bg-panel); min-width: 120px;
+    box-shadow: var(--shadow-panel); z-index: 1; border-radius: var(--radius-md); overflow: hidden;
+    margin-top: var(--spacing-xs); right: 0; /* Alinha à direita */ border: 1px solid var(--border-medium);
+    opacity: 0; transform: translateY(var(--spacing-xs)); transition: opacity var(--transition-fast) ease-out, transform var(--transition-fast) ease-out; pointer-events: none;
+}
+.language-dropdown .dropdown-menu.show { display: block; opacity: 1; transform: translateY(0); pointer-events: auto;}
+.language-dropdown .dropdown-menu a {
+    color: var(--text-secondary); padding: var(--spacing-xs) var(--spacing-sm); text-decoration: none;
+    display: flex; align-items: center; gap: var(--spacing-xs); font-size: 0.9em;
+}
+.language-dropdown .dropdown-menu a img { height: 20px; width: 20px; border-radius: var(--radius-sm); object-fit: cover; box-shadow: var(--shadow-minimal); }
+.language-dropdown .dropdown-menu a:hover { background-color: var(--bg-panel-subtle); color: var(--text-primary); }
+
+
+/* Media Queries for Header (Ajustado logo size, login section layout) */
+@media (max-width: 992px) {
+    .header-content { flex-direction: column; gap: var(--spacing-sm); }
+    /* AJUSTE TAMANHO LOGO TABLET */
+    .logo img { height: 60px; }
+    .main-nav ul { flex-wrap: wrap; justify-content: center; gap: var(--spacing-md); }
+    .login-section { gap: var(--spacing-sm); } /* Ajuste gap */
+}
+
+@media (max-width: 576px) {
+     /* AJUSTE TAMANHO LOGO MOBILE */
+    .logo img { height: 55px; }
+    .main-nav ul { flex-direction: column; align-items: center; gap: var(--spacing-xs); }
+    .main-nav a { font-size: 0.9em; padding: 2px 0; }
+    .login-section { flex-direction: column; gap: var(--spacing-xs); align-items: stretch;} /* Stack items */
+     .account-dropdown, .language-dropdown {
+         width: 100%; /* Make dropdowns fill width */
+     }
+     .account-dropdown .dropdown-toggle,
+     .language-dropdown .dropdown-toggle {
+         width: 100%; /* Make buttons fill width */
+         justify-content: center; /* Center content in buttons */
+         font-size: 0.9em; /* Adjust font size */
+         padding: 0.6rem 1.2rem; /* Adjust padding */
+     }
+     .account-dropdown .dropdown-menu {
+         right: auto; /* Remove right alignment */
+         left: 50%; /* Center alignment */
+         transform: translateX(-50%) translateY(var(--spacing-xs)); /* Adjust transform for centering */
+         min-width: 180px; /* Ensure minimum width */
+     }
+     .account-dropdown .dropdown-menu.show {
+          transform: translateX(-50%) translateY(0); /* Adjust transform for centering */
+     }
+      .language-dropdown .dropdown-menu {
+          right: auto; /* Remove right alignment */
+          left: 50%; /* Center alignment */
+          transform: translateX(-50%) translateY(var(--spacing-xs)); /* Adjust transform for centering */
+          min-width: 150px;
+      }
+       .language-dropdown .dropdown-menu.show {
+           transform: translateX(-50%) translateY(0); /* Adjust transform for centering */
+       }
+}
 }
 .hero-text-content h1 {
    

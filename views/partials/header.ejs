@@ -1,7 +1,7 @@
    <header class="header">
         <div class="container header-content">
             <div class="logo PokeMonster">
-                <a href="/"><img src="assets/images/flag-pkm.png" alt="PokeMonster Logo"></a>
+                <a href="/"><img src="/assets/images/flag-pkm.png" alt="PokeMonster Logo"></a>
             </div>
             <nav class="main-nav">
                 <ul>
@@ -12,21 +12,42 @@
                 </ul>
             </nav>
             <div class="login-section">
-                <%# Alterado de <img> para <i> para usar FontAwesome e corrigir alinhamento %>
-                <a href="#" class="btn-login"><i class="fas fa-sign-in-alt"></i> LOGAR</a>
-                <div class="language-dropdown">
-                    <button class="dropdown-toggle">
-                        <img id="selected-flag" src="assets/images/flag-br.png" alt="Bandeira do Brasil">
-                        <span id="selected-lang-code">PT</span>
-                        <img class="dropdown-arrow" src="assets/svg/arrow-down.svg" alt="Seta para baixo">
+                <!-- Novo Dropdown de Conta -->
+                <div class="account-dropdown">
+                    <button class="dropdown-toggle" aria-label="Menu da Conta">
+                         <i class="fas fa-user-circle"></i> <!-- Ícone de usuário -->
+                         Conta <i class="fas fa-chevron-down dropdown-arrow"></i> <!-- Seta para baixo -->
                     </button>
                     <div class="dropdown-menu">
-                        <a href="#" data-lang="br" data-code="PT"><img src="assets/images/flag-br.png" alt="Português"> PT</a>
-                        <a href="#" data-lang="us" data-code="EN"><img src="assets/images/flag-us.png" alt="English"> EN</a>
-                        <a href="#" data-lang="es" data-code="ES"><img src="assets/images/flag-es.png" alt="Español"> ES</a>
-                        <a href="#" data-lang="de" data-code="DE"><img src="assets/images/flag-de.png" alt="Deutsch"> DE</a>
+                        <% if (user) { %>
+                            <!-- Se logado: Nome do usuário e Sair -->
+                            <a href="/dashboard" class="dropdown-item"><%= user.name %></a>
+                            <a href="/logout" class="dropdown-item">Sair</a>
+                        <% } else { %>
+                            <!-- Se não logado: Login e Criar Conta -->
+                            <a href="/login" class="dropdown-item">Login</a>
+                            <a href="/register" class="dropdown-item">Criar Conta</a>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Language Dropdown (Mantido) -->
+                <div class="language-dropdown">
+                    <button class="dropdown-toggle" aria-label="Selecionar idioma">
+                        <img id="selected-flag" src="/assets/images/flag-br.png" alt="Bandeira do Brasil">
+                        <span id="selected-lang-code">PT</span>
+                        <img class="dropdown-arrow" src="/assets/svg/arrow-down.svg" alt="Seta para baixo">
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#" data-lang="br" data-code="PT"><img src="/assets/images/flag-br.png" alt="Português"> PT</a>
+                        <a href="#" data-lang="us" data-code="EN"><img src="/assets/images/flag-us.png" alt="English"> EN</a>
+                        <a href="#" data-lang="es" data-code="ES"><img src="/assets/images/flag-es.png" alt="Español"> ES</a>
+                        <a href="#" data-lang="de" data-code="DE"><img src="/assets/images/flag-de.png" alt="Deutsch"> DE</a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
+
+    <!-- Script para o Dropdown do Header -->
+    <script src="/js/header.js"></script>
