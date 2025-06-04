@@ -5,8 +5,11 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
 
+// --- Importações Existentes ---
 const { db, promiseDb } = require('./db');
 const accountController = require('./accountController'); // Certifique-se que accountController está definido/importado corretamente
+const avatarRoutes = require('./routes/avatar');
+
 
 const app = express();
 const port = 3000;
@@ -259,13 +262,11 @@ app.get('/dashboard', requireLogin, async (req, res) => {
     }
     const account = accountRows[0];
      // Map database names to potentially different display names if necessary
-     // account.vip = account.premdays; // Example if you want to rename
-     // account.rcoins = account.shop_points; // Example if you want to rename
+      account.vip = account.premdays; // Example mapping as used in EJS
+      account.rcoins = account.shop_points; // Example mapping as used in EJS
 
-
-    // Fetch characters belonging to this account
     const [characterRows] = await connection.query(
-        'SELECT id, name, sex, picture, level, online, created, resets FROM players WHERE account_id = ? AND deleted = 0',
+        'SELECT id, name, sex, picture, level, online, created, resets, looktype, lookhead, lookbody, looklegs, lookfeet FROM players WHERE account_id = ? AND deleted = 0',
         [accountId]
     );
 
@@ -352,7 +353,8 @@ app.get('/ranking', async (req, res) => {
 
         // Fetch players for the current page and ranking type
         const [rankingPlayers] = await connection.execute(
-            `SELECT id, account_id, name, level, vocation, experience, resets, deleted, group_id
+            `SELECT id, account_id, name, level, vocation, experience, resets, deleted, group_id, looktype, lookhead, lookbody, looklegs, lookfeet, sex
+
              FROM players
              ${queryWhere}
              ${queryOrder}
@@ -421,7 +423,7 @@ app.get('/character/:name', async (req, res) => {
 
             res.render('character', {
                 title: player.name,
-                player: player,
+                player: player, // Pass the full player object including look data
                 user: req.session.user // Pass user for header/footer
             });
         } else {
@@ -436,6 +438,10 @@ app.get('/character/:name', async (req, res) => {
 });
 
 
+// --- Usar a nova rota de avatar ---
+app.use('/', avatarRoutes);
+
+
 // Catch-all for 404 pages
 app.use((req, res) => {
     res.status(404).render('404', { title: 'Página Não Encontrada' });
@@ -446,6 +452,20 @@ app.use((err, req, res, next) => {
     console.error('Global Error Handler:', err.stack);
     res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.' });
 });
+
+=======
+// Catch-all for 404 pages
+app.use((req, res) => {
+    res.status(404).render('404', { title: 'Página Não Encontrada' });
+});
+
+// Global error handler (optional but recommended)
+app.use((err, req, res, next) => {
+    console.error('Global Error Handler:', err.stack);
+    res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.' });
+});
+
+
 
 
 app.listen(port, () => {
