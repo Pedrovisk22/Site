@@ -453,7 +453,6 @@ app.use((err, req, res, next) => {
     res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.' });
 });
 
-=======
 // Catch-all for 404 pages
 app.use((req, res) => {
     res.status(404).render('404', { title: 'Página Não Encontrada' });
