@@ -1,96 +1,99 @@
 // public/js/ranking.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    const rankingTypeButtons = document.querySelectorAll('.ranking-type-selection .btn');
+    const rankingTypeSelection = document.getElementById('ranking-type-selection');
     const searchInput = document.getElementById('rankingSearchInput');
     const searchBtn = document.getElementById('rankingSearchBtn');
     const prevPageBtn = document.getElementById('prevPageBtn');
     const nextPageBtn = document.getElementById('nextPageBtn');
+    const paginationControls = document.querySelector('.pagination-controls'); // Select the container
 
-    // Função para atualizar a URL e redirecionar
-    function updateRanking() {
+    // Function to update URL and reload page
+    const updateRanking = (type, search, page) => {
         const currentUrl = new URL(window.location.href);
-        const params = currentUrl.searchParams;
+        currentUrl.searchParams.set('type', type);
+        currentUrl.searchParams.set('search', search);
+        currentUrl.searchParams.set('page', page);
+        currentUrl.searchParams.set('pageSize', <%= pageSize %>); // Use EJS variable for page size
 
-        // Tipo de ranking (level ou resets)
-        const selectedType = document.querySelector('.ranking-type-selection .btn.active')?.dataset.rankingType || 'level';
-        params.set('type', selectedType);
-
-        // Termo de pesquisa
-        const searchTerm = searchInput.value.trim();
-        if (searchTerm) {
-            params.set('search', searchTerm);
+        // Add a class for potential CSS transition before navigating
+        const tableContainer = document.getElementById('ranking-table-container');
+        if (tableContainer) {
+             tableContainer.classList.add('fade-out');
+             // Add a small delay before navigation to allow transition to start
+             setTimeout(() => {
+                  window.location.href = currentUrl.toString();
+             }, 200); // 200ms delay for fade-out transition
         } else {
-            params.delete('search');
+            // If container not found, navigate immediately
+             window.location.href = currentUrl.toString();
         }
+    };
 
-        // Tamanho da página (manter o mesmo ou definir um padrão)
-        // params.set('pageSize', 20); // Você pode fixar isso aqui ou tornar configurável na UI
-
-        // Redireciona para a nova URL
-        window.location.href = `${currentUrl.origin}${currentUrl.pathname}?${params.toString()}`;
+    // Handle Ranking Type Selection
+    if (rankingTypeSelection) {
+        rankingTypeSelection.addEventListener('click', (event) => {
+            const button = event.target.closest('.btn');
+            if (button && !button.classList.contains('active')) {
+                const newType = button.dataset.rankingType;
+                const currentSearch = searchInput ? searchInput.value : '';
+                // Reset to page 1 when changing ranking type
+                updateRanking(newType, currentSearch, 1);
+            }
+        });
     }
 
-    // Lógica para mudar o tipo de ranking
-    rankingTypeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove a classe 'active' de todos os botões
-            rankingTypeButtons.forEach(btn => btn.classList.remove('active'));
-            // Adiciona a classe 'active' ao botão clicado
-            button.classList.add('active');
-            // Reseta a página para 1 ao mudar o tipo de ranking ou search
-            const currentUrl = new URL(window.location.href);
-            currentUrl.searchParams.set('page', 1); // Volta para a primeira página
-            window.history.pushState({}, '', currentUrl.toString()); // Atualiza URL sem recarregar
-            updateRanking();
+    // Handle Search
+    if (searchBtn && searchInput) {
+        searchBtn.addEventListener('click', () => {
+            const currentType = document.querySelector('.ranking-type-selection .btn.active').dataset.rankingType;
+            const newSearch = searchInput.value;
+             // Reset to page 1 when performing a new search
+            updateRanking(currentType, newSearch, 1);
         });
-    });
 
-    // Lógica para pesquisa
-    searchBtn.addEventListener('click', () => {
-        const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set('page', 1); // Volta para a primeira página
-        window.history.pushState({}, '', currentUrl.toString()); // Atualiza URL sem recarregar
-        updateRanking();
-    });
+         // Allow search on Enter key press in the input field
+        searchInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission if input is part of a form
+                searchBtn.click(); // Trigger the search button click handler
+            }
+        });
+    }
 
-    searchInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            searchBtn.click(); // Simula o clique no botão de busca
-        }
-    });
+    // Handle Pagination (Previous/Next buttons and Page Numbers)
+    if (paginationControls) {
+        paginationControls.addEventListener('click', (event) => {
+            const target = event.target;
+            const currentType = document.querySelector('.ranking-type-selection .btn.active').dataset.rankingType;
+            const currentSearch = searchInput ? searchInput.value : '';
+            const currentPage = <%= currentPage %>; // Use EJS variable
+            const totalPages = <%= totalPages %>; // Use EJS variable
+            const pageSize = <%= pageSize %>; // Use EJS variable
 
-    // Lógica de paginação
-    prevPageBtn.addEventListener('click', () => {
-        const currentUrl = new URL(window.location.href);
-        let currentPage = parseInt(currentUrl.searchParams.get('page')) || 1;
-        if (currentPage > 1) {
-            currentUrl.searchParams.set('page', currentPage - 1);
-            window.location.href = currentUrl.toString();
-        }
-    });
+            if (target.id === 'prevPageBtn' && currentPage > 1) {
+                 updateRanking(currentType, currentSearch, currentPage - 1);
+            } else if (target.id === 'nextPageBtn' && currentPage < totalPages) {
+                 updateRanking(currentType, currentSearch, currentPage + 1);
+            } else if (target.classList.contains('page-number') && !target.classList.contains('active')) {
+                 const newPage = parseInt(target.textContent);
+                 if (!isNaN(newPage)) { // Ensure it's a number (excludes '...')
+                     updateRanking(currentType, currentSearch, newPage);
+                 }
+            }
+        });
+    }
 
-    nextPageBtn.addEventListener('click', () => {
-        const currentUrl = new URL(window.location.href);
-        let currentPage = parseInt(currentUrl.searchParams.get('page')) || 1;
-        // Não é estritamente necessário verificar totalPages aqui, o servidor já trata o limite
-        // Mas podemos adicionar uma verificação de `totalPages` se passada para o JS para evitar requisições desnecessárias.
-        // Por enquanto, o botão estará desabilitado via EJS, então o clique não ocorrerá.
-        currentUrl.searchParams.set('page', currentPage + 1);
-        window.location.href = currentUrl.toString();
-    });
+    // Update "Last Updated" time placeholder (Client-side approach)
+     const lastUpdatedSpan = document.getElementById('last-updated-time');
+     if(lastUpdatedSpan) {
+         const now = new Date();
+         const hours = String(now.getHours()).padStart(2, '0');
+         const minutes = String(now.getMinutes()).padStart(2, '0');
+         const day = String(now.getDate()).padStart(2, '0');
+         const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+         const year = now.getFullYear();
+         lastUpdatedSpan.textContent = `${day}/${month}/${year} às ${hours}:${minutes}`;
+     }
 
-    // Manter o campo de busca preenchido e o botão de tipo de ranking ativo na recarga
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialSearch = urlParams.get('search') || '';
-    const initialRankingType = urlParams.get('type') || 'level';
-
-    searchInput.value = initialSearch;
-    rankingTypeButtons.forEach(button => {
-        if (button.dataset.rankingType === initialRankingType) {
-            button.classList.add('active');
-        } else {
-            button.classList.remove('active');
-        }
-    });
 });

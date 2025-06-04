@@ -1,53 +1,62 @@
-   <header class="header">
-        <div class="container header-content">
-            <div class="logo PokeMonster">
-                <a href="/"><img src="/assets/images/flag-pkm.png" alt="PokeMonster Logo"></a>
-            </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#">JOGAR</a></li>
-                    <li><a href="#">PROMOÇÕES</a></li>
-                    <li><a href="/ranking">RANKING</a></li>
-                    <li><a href="/shop">SHOP</a></li>
-                </ul>
-            </nav>
-            <div class="login-section">
-                <!-- Novo Dropdown de Conta -->
-                <div class="account-dropdown">
-                    <button class="dropdown-toggle" aria-label="Menu da Conta">
-                         <i class="fas fa-user-circle"></i> <!-- Ícone de usuário -->
-                         Conta <i class="fas fa-chevron-down dropdown-arrow"></i> <!-- Seta para baixo -->
-                    </button>
-                    <div class="dropdown-menu">
-                        <% if (user) { %>
-                            <!-- Se logado: Nome do usuário e Sair -->
-                            <a href="/dashboard" class="dropdown-item"><%= user.name %></a>
-                            <a href="/logout" class="dropdown-item">Sair</a>
-                        <% } else { %>
-                            <!-- Se não logado: Login e Criar Conta -->
-                            <a href="/login" class="dropdown-item">Login</a>
-                            <a href="/register" class="dropdown-item">Criar Conta</a>
-                        <% } %>
-                    </div>
+<header class="header">
+    <div class="container header-content">
+        <div class="logo PokeMonster">
+            <a href="/"><img src="/assets/images/flag-pkm.png" alt="PokeMonster Logo"></a>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                 <%# Link para a Home %>
+                <li><a href="/">HOME</a></li>
+                 <%# Link para a página de Download %>
+                <li><a href="/download">DOWNLOAD</a></li>
+                 <%# Link para a página Wiki %>
+                <li><a href="/wiki">WIKI</a></li>
+                 <%# Link para a página de Ranking %>
+                <li><a href="/ranking">RANKING</a></li>
+                 <%# Link para a página Shop (se existir) %>
+                 <%# <li><a href="/shop">SHOP</a></li> %>
+                <%# Links para páginas de conteúdo que você pode ter %>
+                 <%# <li><a href="/news">NOTÍCIAS</a></li> %>
+                 <%# <li><a href="/community">COMUNIDADE</a></li> %>
+            </ul>
+        </nav>
+        <div class="login-section">
+            <!-- Novo Dropdown de Conta -->
+            <div class="account-dropdown">
+                <button class="dropdown-toggle" aria-label="Menu da Conta">
+                     <i class="fas fa-user-circle"></i> <!-- Ícone de usuário -->
+                     Conta <i class="fas fa-chevron-down dropdown-arrow"></i> <!-- Seta para baixo -->
+                </button>
+                <div class="dropdown-menu">
+                    <% if (user) { %>
+                        <!-- Se logado: Dashboard e Sair -->
+                        <a href="/dashboard" class="dropdown-item">Dashboard</a> <%# Link para a Dashboard %>
+                        <a href="/logout" class="dropdown-item">Sair</a> <%# Link para Logout %>
+                    <% } else { %>
+                        <!-- Se não logado: Login e Criar Conta -->
+                        <a href="/login" class="dropdown-item">Login</a> <%# Link para Login %>
+                        <a href="/register" class="dropdown-item">Criar Conta</a> <%# Link para Registro %>
+                    <% } %>
                 </div>
+            </div>
 
-                <!-- Language Dropdown (Mantido) -->
-                <div class="language-dropdown">
-                    <button class="dropdown-toggle" aria-label="Selecionar idioma">
-                        <img id="selected-flag" src="/assets/images/flag-br.png" alt="Bandeira do Brasil">
-                        <span id="selected-lang-code">PT</span>
-                        <img class="dropdown-arrow" src="/assets/svg/arrow-down.svg" alt="Seta para baixo">
-                    </button>
-                    <div class="dropdown-menu">
-                        <a href="#" data-lang="br" data-code="PT"><img src="/assets/images/flag-br.png" alt="Português"> PT</a>
-                        <a href="#" data-lang="us" data-code="EN"><img src="/assets/images/flag-us.png" alt="English"> EN</a>
-                        <a href="#" data-lang="es" data-code="ES"><img src="/assets/images/flag-es.png" alt="Español"> ES</a>
-                        <a href="#" data-lang="de" data-code="DE"><img src="/assets/images/flag-de.png" alt="Deutsch"> DE</a>
-                    </div>
+            <!-- Language Dropdown (Mantido) -->
+            <div class="language-dropdown">
+                <button class="dropdown-toggle" aria-label="Selecionar idioma">
+                    <img id="selected-flag" src="/assets/images/flag-br.png" alt="Bandeira do Brasil">
+                    <span id="selected-lang-code">PT</span>
+                    <img class="dropdown-arrow" src="/assets/svg/arrow-down.svg" alt="Seta para baixo">
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" data-lang="br" data-code="PT"><img src="/assets/images/flag-br.png" alt="Português"> PT</a>
+                    <a href="#" data-lang="us" data-code="EN"><img src="/assets/images/flag-us.png" alt="English"> EN</a>
+                    <a href="#" data-lang="es" data-code="ES"><img src="/assets/images/flag-es.png" alt="Español"> ES</a>
+                    <a href="#" data-lang="de" data-code="DE"><img src="/assets/images/flag-de.png" alt="Deutsch"> DE</a>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Script para o Dropdown do Header -->
-    <script src="/js/header.js"></script>
+<!-- Script para o Dropdown do Header -->
+<script src="/js/header.js"></script>

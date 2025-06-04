@@ -8,9 +8,8 @@ const path = require('path');
 // --- Importações Existentes ---
 const { db, promiseDb } = require('./db');
 const accountController = require('./accountController'); // Certifique-se que accountController está definido/importado corretamente
-
-// --- Nova Importação ---
 const avatarRoutes = require('./routes/avatar');
+
 
 const app = express();
 const port = 3000;
@@ -266,8 +265,6 @@ app.get('/dashboard', requireLogin, async (req, res) => {
       account.vip = account.premdays; // Example mapping as used in EJS
       account.rcoins = account.shop_points; // Example mapping as used in EJS
 
-
-    // Fetch characters belonging to this account, including look attributes
     const [characterRows] = await connection.query(
         'SELECT id, name, sex, picture, level, online, created, resets, looktype, lookhead, lookbody, looklegs, lookfeet FROM players WHERE account_id = ? AND deleted = 0',
         [accountId]
@@ -357,6 +354,7 @@ app.get('/ranking', async (req, res) => {
         // Fetch players for the current page and ranking type
         const [rankingPlayers] = await connection.execute(
             `SELECT id, account_id, name, level, vocation, experience, resets, deleted, group_id, looktype, lookhead, lookbody, looklegs, lookfeet, sex
+
              FROM players
              ${queryWhere}
              ${queryOrder}
@@ -410,7 +408,7 @@ app.get('/character/:name', async (req, res) => {
     try {
         connection = await promiseDb.getConnection();
         const [playerRows] = await connection.execute(
-            'SELECT *, looktype, lookhead, lookbody, looklegs, lookfeet FROM players WHERE name = ? AND deleted = 0', // Select look fields here too
+            'SELECT * FROM players WHERE name = ? AND deleted = 0',
             [charName]
         );
         if (playerRows.length > 0) {
@@ -454,6 +452,20 @@ app.use((err, req, res, next) => {
     console.error('Global Error Handler:', err.stack);
     res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.' });
 });
+
+=======
+// Catch-all for 404 pages
+app.use((req, res) => {
+    res.status(404).render('404', { title: 'Página Não Encontrada' });
+});
+
+// Global error handler (optional but recommended)
+app.use((err, req, res, next) => {
+    console.error('Global Error Handler:', err.stack);
+    res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.' });
+});
+
+
 
 
 app.listen(port, () => {

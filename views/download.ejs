@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - PokeXGames</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/download.css"> <!-- Link para o CSS específico -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/svg/pokeball.svg" type="image/svg+xml">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+
+    <%- include('partials/header') %>
+
+    <main class="main-content">
+        <!-- 1. Hero Visual - Baseado na estrutura da index -->
+        <section class="hero-section download-hero-section hero-single-slide animate-on-scroll" id="download-hero-section">
+            <div class="hero-background" style="background-image: url('assets/images/background-4.png');"></div> <!-- Fundo igual da index -->
+            <div class="hero-overlay"></div>
+            <div class="container hero-content-wrapper">
+                <div class="hero-text-content">
+                    <h1 class="typewriter" data-text="Baixe e Comece a Jogar!">Baixe e Comece a Jogar!</h1> <!-- Título grande -->
+                    <p>Prepare-se para a aventura! Baixe nosso cliente para Windows e entre agora mesmo no mundo de PokeXGames.</p> <!-- Texto ajustado -->
+                    <div class="hero-buttons">
+                        <!-- Botão principal com animação hover/pulse - direcionado para a seção de download -->
+                        <a href="#download-options-section" class="btn btn-primary hero-cta btn-pulse">
+                            <i class="fas fa-download"></i> BAIXAR AGORA
+                        </a>
+                        <!-- Botão secundário - Link para o trailer (seção abaixo) -->
+                         <a href="#trailer-section" class="btn btn-secondary hero-cta-secondary">
+                            <i class="fas fa-play-circle"></i> Assistir ao Trailer
+                        </a>
+                    </div>
+                </div>
+                 <!-- Mascote ou PNG animado à direita -->
+                <div class="hero-visual-element">
+                    <img src="assets/images/charizard.png" alt="Charizard Flutuando" class="hero-animated-png">
+                </div>
+            </div>
+        </section>
+
+        <!-- Removida a seção Server Status Bar -->
+
+        <!-- 3. Card de Plataforma - Apenas Windows, personalizado -->
+        <section id="download-options-section" class="download-options-section animate-on-scroll" style="animation-delay: 0.2s;"> <!-- Delay ajustado -->
+            <div class="container">
+                <h2 class="section-title card-title centered typewriter" data-text="Download para Windows">Download para Windows</h2> <!-- Título ajustado -->
+                <div class="download-cards">
+                    <!-- Card ÚNICO para Windows - Estilizado para destaque -->
+                    <div class="download-card animate-on-scroll" style="animation-delay: 0.1s;">
+                        <img src="assets/svg/windows.svg" alt="Windows Logo">
+                         <span class="badge recommended">Recomendado</span>
+                        <h3>Cliente Oficial</h3>
+                        <span class="version">Versão Mais Recente: v1.5.0</span> <!-- Versão fictícia -->
+                        <p>Baixe a versão mais recente do cliente de PokeXGames para sistemas operacionais Windows (7, 8, 10, 11) 64-bit.</p>
+                        <!-- Link de download real -->
+                        <a href="LINK_PARA_DOWNLOAD_WINDOWS_64BIT" class="btn btn-primary"><i class="fas fa-download"></i> Download (380 MB)</a> <!-- Botão maior e info no texto -->
+                         <!-- Removida a span .file-info pois o tamanho está no botão -->
+                    </div>
+                    <!-- Removidos cards de Android e Linux -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Requisitos do Sistema - Seção mais visual -->
+        <section class="system-requirements-section animate-on-scroll" style="animation-delay: 0.4s;"> <!-- Delay ajustado -->
+            <div class="container">
+                <h2 class="section-title card-title centered typewriter" data-text="Requisitos do Sistema">Requisitos do Sistema</h2>
+                <div class="requirements-grid">
+                    <div class="requirement-card animate-on-scroll" style="animation-delay: 0.1s;"> <!-- Delay ajustado -->
+                        <h3>Requisitos Mínimos</h3>
+                        <ul>
+                            <li>
+                                <i class="fab fa-windows"></i> <span>Sistema Operacional:</span>
+                                <span class="spec">Windows 7 / 8 / 10 / 11</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-microchip"></i> <span>Processador:</span>
+                                <span class="spec">Intel Core i3 ou AMD equivalente</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-memory"></i> <span>Memória RAM:</span>
+                                <span class="spec">4 GB</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-desktop"></i> <span>Placa de Vídeo:</span>
+                                <span class="spec">Compatível com DirectX 9</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-hdd"></i> <span>Armazenamento:</span>
+                                <span class="spec">1.5 GB de espaço livre</span> <!-- Ajustado valor fictício -->
+                            </li>
+                             <li>
+                                <i class="fas fa-wifi"></i> <span>Internet:</span>
+                                <span class="spec">Conexão estável</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="requirement-card animate-on-scroll" style="animation-delay: 0.2s;"> <!-- Delay ajustado -->
+                        <h3>Requisitos Recomendados</h3>
+                        <ul>
+                            <li>
+                                <i class="fab fa-windows"></i> <span>Sistema Operacional:</span>
+                                <span class="spec">Windows 10 / 11 (64-bit)</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-microchip"></i> <span>Processador:</span>
+                                <span class="spec">Intel Core i5 ou AMD Ryzen 5</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-memory"></i> <span>Memória RAM:</span>
+                                <span class="spec">8 GB ou mais</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-desktop"></i> <span>Placa de Vídeo:</span>
+                                <span class="spec">NVIDIA GeForce GTX 960 / AMD R9 280 ou superior</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-hdd"></i> <span>Armazenamento:</span>
+                                <span class="spec">2 GB de espaço livre (SSD recomendado)</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-wifi"></i> <span>Internet:</span>
+                                <span class="spec">Conexão de alta velocidade</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Ações Rápidas - Igual index -->
+        <section class="quick-actions-section animate-on-scroll" style="animation-delay: 0.6s;"> <!-- Delay ajustado -->
+            <div class="container action-buttons">
+                 <!-- Conteúdo copiado da index.ejs -->
+                <a href="#download-options-section" class="action-btn animate-on-scroll" style="animation-delay: 0.1s;"> <!-- Link para a seção de download -->
+                    <img src="assets/svg/download.svg" alt="Ícone Download">
+                    <span class="btn-title">BAIXAR JOGO</span>
+                    <span class="btn-subtitle">PokeMonster Client</span>
+                </a>
+                <a href="/register" class="action-btn animate-on-scroll" style="animation-delay: 0.2s;"> <!-- Link correto para Register page -->
+                    <img src="assets/svg/register.svg" alt="Ícone Registrar">
+                    <span class="btn-title">CRIAR CONTA</span>
+                    <span class="btn-subtitle">Junte-se à Aventura</span>
+                </a>
+                <a href="LINK_DO_SEU_DISCORD" target="_blank" class="action-btn animate-on-scroll" style="animation-delay: 0.3s;"> <!-- Link correto para Discord -->
+                    <img src="assets/images/flag-discord.png" alt="Ícone Discord">
+                    <span class="btn-title">NOSSO DISCORD</span>
+                    <span class="btn-subtitle">Comunidade Ativa</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 6. Trailer/Vídeo - Igual index -->
+        <section class="trailer-section animate-on-scroll" id="trailer-section" style="animation-delay: 0.8s;"> <!-- Delay ajustado -->
+            <div class="container">
+                <h2 class="section-title centered typewriter" data-text="Assista ao Trailer">Assista ao Trailer</h2>
+                <div class="video-container">
+                    <!-- Coloque aqui o código embed do YouTube. Exemplo: -->
+                    <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <!-- ^^^ SUBSTITUA "YOUR_VIDEO_ID" PELO ID REAL DO SEU VÍDEO DO YOUTUBE ^^^ -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. FAQ - Melhorado visualmente -->
+        <section class="download-faq-section animate-on-scroll" style="animation-delay: 1.0s;"> <!-- Delay ajustado -->
+            <div class="container faq-container">
+                <h2 class="section-title card-title centered typewriter" data-text="Perguntas Frequentes">Perguntas Frequentes</h2>
+
+                <div class="faq-item animate-on-scroll" style="animation-delay: 0.1s;">
+                    <div class="faq-question">
+                         <i class="fas fa-question-circle question-icon"></i>
+                         <span class="faq-question-text">Como instalar o jogo no Windows?</span> <!-- Pergunta ajustada -->
+                         <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Execute o arquivo <code>.exe</code> baixado e siga as instruções do instalador. É recomendado desativar temporariamente seu antivírus durante a instalação, pois ele pode detectar o cliente como uma ameaça devido à natureza de jogos MMORPG privados. Após a instalação, adicione a pasta do jogo às exceções do seu antivírus para evitar problemas futuros.</p> <!-- Resposta mais detalhada -->
+                    </div>
+                </div>
+
+                <div class="faq-item animate-on-scroll" style="animation-delay: 0.2s;">
+                     <div class="faq-question">
+                         <i class="fas fa-user-plus question-icon"></i>
+                         <span class="faq-question-text">Preciso criar uma conta para jogar?</span>
+                          <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sim, é necessário criar uma conta para jogar online e salvar seu progresso. Você pode criar sua conta <a href="/register">clicando aqui</a> ou através do cliente do jogo após a instalação.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item animate-on-scroll" style="animation-delay: 0.3s;">
+                    <div class="faq-question">
+                         <i class="fas fa-sync-alt question-icon"></i>
+                         <span class="faq-question-text">Como saber se minha versão está atualizada?</span> <!-- Pergunta extra -->
+                         <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>O cliente do jogo possui um sistema de auto-atualização. Ao iniciar o cliente, ele verificará automaticamente se há novas versões e fará o download. Mantenha seu cliente sempre atualizado para garantir a melhor experiência de jogo.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item animate-on-scroll" style="animation-delay: 0.4s;">
+                     <div class="faq-question">
+                         <i class="fas fa-gamepad question-icon"></i>
+                         <span class="faq-question-text">O jogo é gratuito?</span>
+                         <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sim, PokeXGames é um MMORPG totalmente gratuito para jogar. Oferecemos itens cosméticos opcionais na loja do jogo que não afetam a jogabilidade principal ou dão vantagens competitivas.</p>
+                    </div>
+                </div>
+
+                 <div class="faq-item animate-on-scroll" style="animation-delay: 0.5s;"> <!-- Delay ajustado -->
+                    <div class="faq-question">
+                         <i class="fas fa-wrench question-icon"></i>
+                         <span class="faq-question-text">Não consigo iniciar o jogo. O que fazer?</span>
+                          <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Verifique se seu computador atende aos <a href="#system-requirements-section">requisitos do sistema</a>. Tente executar o cliente como administrador. Certifique-se de que seu antivírus não está bloqueando o jogo. Se o problema persistir, entre em contato com nossa equipe de suporte em nosso Discord para obter ajuda.</p>
+                    </div>
+                </div>
+
+                <!-- Pergunta sobre outras plataformas removida -->
+
+            </div>
+        </section>
+
+        <!-- 9. Ainda com dúvidas? - Seção final de CTA -->
+        <section class="still-have-questions-section animate-on-scroll" style="animation-delay: 1.2s;"> <!-- Delay ajustado -->
+             <div class="container">
+                <h3>Ainda com Dúvidas?</h3>
+                <p>Não se preocupe! Nossa comunidade e equipe de suporte estão prontas para te ajudar.</p>
+                <div class="still-have-questions-buttons">
+                    <!-- Link para suporte (se tiver uma página) ou FAQ -->
+                    <a href="#download-faq-section" class="btn btn-secondary"><i class="fas fa-question-circle"></i> Ver FAQ</a>
+                    <!-- Link para o Discord -->
+                     <a href="LINK_DO_SEU_DISCORD" target="_blank" class="btn btn-secondary"><i class="fab fa-discord"></i> Entrar no Discord</a>
+                    <!-- Link para a Wiki -->
+                    <a href="/wiki" class="btn btn-secondary"><i class="fas fa-book"></i> Acessar Wiki</a>
+                </div>
+             </div>
+        </section>
+
+
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <script src="js/script.js"></script> <!-- Mantém script principal para animate-on-scroll etc. -->
+    <script src="js/download.js"></script> <!-- Script para funcionalidades específicas de download -->
+
+</body>
+
+</html>

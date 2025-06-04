@@ -1,0 +1,547 @@
+/* public/css/download.css */
+
+/* =======================================================================
+ *  DOWNLOAD SECTION STYLES  –  Adapted for PokeXGames theme
+ * =====================================================================*/
+
+/* ------------------------------------------------------------------
+ *  DOWNLOAD HERO SECTION (Based on index hero)
+ * ------------------------------------------------------------------*/
+/* Reusing .hero-section, .hero-background, .hero-overlay, .hero-content-wrapper,
+   .hero-text-content, .hero-text-content h1, .hero-text-content p,
+   .hero-buttons, .hero-visual-element, .hero-animated-png from style.css */
+
+/* Specific adjustments for Download page Hero if needed */
+.download-hero-section.hero-section {
+    /* Uses style.css properties */
+}
+
+
+/* ------------------------------------------------------------------
+ *  QUICK ACTIONS (Reused from index)
+ * ------------------------------------------------------------------*/
+/* Reusing .quick-actions-section, .action-buttons, .action-btn and its children styles from style.css */
+
+
+/* ------------------------------------------------------------------
+ *  TRAILER SECTION (Reused from index)
+ * ------------------------------------------------------------------*/
+/* Reusing .trailer-section and its children styles from style.css */
+
+
+/* ------------------------------------------------------------------
+ *  DOWNLOAD OPTIONS (Single Platform Card)
+ * ------------------------------------------------------------------*/
+.download-options-section {
+    padding: var(--spacing-lg) 0;
+    background-color: var(--bg-panel-subtle); /* Panel background */
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.download-cards {
+    display: flex;
+    flex-wrap: wrap; /* Important for centering a single item */
+    justify-content: center; /* Center the single card horizontally */
+    gap: var(--spacing-lg); /* Kept gap for potential future additions */
+    margin-top: var(--spacing-lg);
+    max-width: 1200px; /* Container max width */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Styles specifically for the single Windows card */
+.download-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-panel);
+    width: 100%;
+    max-width: 400px; /* Make the single card wider */
+    padding: var(--spacing-lg) var(--spacing-md);
+    text-align: center;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 380px; /* Make the single card a bit taller */
+    position: relative;
+    /* Add a subtle persistent glow for prominence */
+    box-shadow: var(--shadow-panel), 0 0 15px rgba(66, 165, 245, 0.4); /* Using accent color light with transparency */
+}
+
+.download-card:hover {
+    transform: translateY(-8px); /* Increased lift on hover */
+    box-shadow: var(--shadow-panel), 0 0 20px rgba(66, 165, 245, 0.6); /* More prominent glow on hover */
+    border-color: var(--accent-color-light);
+}
+
+.download-card img {
+    width: 90px; /* Larger icon */
+    height: 90px;
+    margin-bottom: var(--spacing-md);
+    object-fit: contain;
+    filter: invert(36%) sepia(93%) saturate(2773%) hue-rotate(202deg) brightness(100%) contrast(101%); /* Apply theme color filter */
+    transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.download-card:hover img {
+    transform: scale(1.1); /* Slightly enlarge icon on hover */
+    /* filter color is kept the same on hover */
+}
+
+.download-card h3 {
+    font-size: 1.8em; /* Larger title */
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-xs);
+    font-family: 'Poppins', sans-serif;
+}
+
+.download-card .version {
+    display: inline-block;
+    font-size: 1.1em; /* Slightly larger version */
+    color: var(--accent-color-light);
+    letter-spacing: .5px;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+}
+
+.download-card p {
+    font-size: 1.05em; /* Slightly larger paragraph text */
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    flex-grow: 1;
+}
+
+.download-card .btn {
+    margin-top: auto; /* Push button to bottom */
+    width: 100%; /* Make button full width */
+    max-width: 250px; /* Limit button width */
+    font-size: 1.1em; /* Larger button text */
+    padding: 1rem 2rem; /* Larger button padding */
+    text-transform: uppercase;
+    font-weight: 700;
+    box-shadow: var(--shadow-subtle);
+}
+
+.download-card .btn:hover {
+    box-shadow: var(--shadow-panel); /* More prominent shadow on button hover */
+}
+
+.file-info {
+    display: block;
+    margin-top: var(--spacing-xs);
+    font-size: 0.9em; /* Slightly larger file info */
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Badges / Labels - Ensure they work on the single card */
+.download-card .badge {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.8em; /* Slightly larger badge */
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: var(--shadow-minimal);
+    z-index: 1; /* Ensure badge is above card content */
+}
+
+.download-card .badge.recommended {
+    background-color: var(--success-color); /* Green for recommended */
+    color: var(--bg-primary);
+}
+
+.download-card .badge.most-used {
+    background-color: var(--accent-color-light); /* Blue for most used */
+    color: var(--bg-primary);
+}
+
+/* ------------------------------------------------------------------
+ *  SYSTEM REQUIREMENTS
+ * ------------------------------------------------------------------*/
+.system-requirements-section {
+    background-color: color-mix(in srgb, var(--bg-primary) 80%, black); /* Darker background */
+    padding: var(--spacing-lg) 0;
+    border-bottom: 1px solid var(--border-medium);
+    box-shadow: var(--shadow-inset);
+}
+
+.requirements-grid {
+    display: grid;
+    gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Adjusted min width */
+    max-width: 1000px;
+    margin: var(--spacing-lg) auto 0 auto;
+}
+
+.requirement-card {
+    background: var(--bg-panel);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-panel);
+    padding: var(--spacing-md);
+    font-family: 'Inter', sans-serif;
+    border: 1px solid var(--border-medium);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.requirement-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-panel), 0 0 0 1px var(--accent-color-light);
+    border-color: var(--accent-color-light);
+}
+
+.requirement-card h3 {
+    font-size: 1.3em; /* Slightly larger */
+    font-weight: 700;
+    color: var(--accent-color-light);
+    margin: 0 0 var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid var(--border-soft);
+    font-family: 'Poppins', sans-serif;
+}
+
+.requirement-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.requirement-card li {
+    display: flex;
+    align-items: center; /* Align icon and text */
+    padding: var(--spacing-xs) 0;
+    font-size: 0.95em;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-soft);
+}
+.requirement-card li:last-child {
+    border-bottom: none;
+}
+
+.requirement-card li i {
+     margin-right: var(--spacing-xs); /* Space between icon and text */
+     color: var(--text-secondary); /* Icon color */
+     font-size: 1.1em; /* Icon size */
+     width: 20px; /* Fixed width to align text */
+     text-align: center;
+}
+
+.requirement-card li span {
+     flex-grow: 1; /* Allow label to grow */
+}
+
+.requirement-card .spec {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-left: var(--spacing-sm);
+    text-align: right;
+     flex-grow: 0; /* Prevent spec from growing */
+}
+
+
+/* ------------------------------------------------------------------
+ *  FAQ
+ * ------------------------------------------------------------------*/
+.download-faq-section {
+    padding: var(--spacing-lg) 0;
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--border-medium);
+}
+
+.faq-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: var(--bg-panel);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-sm);
+    overflow: hidden;
+    transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+    border: 1px solid var(--border-medium);
+}
+
+.faq-item.active {
+    box-shadow: var(--shadow-panel), 0 0 0 2px var(--accent-color); /* More prominent outline */
+    border-color: var(--accent-color);
+}
+
+.faq-question {
+    padding: var(--spacing-md);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.1em;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-primary);
+    transition: background-color var(--transition-fast);
+}
+
+.faq-item:not(.active) .faq-question:hover {
+    background-color: var(--bg-panel-subtle);
+}
+
+.faq-question i {
+    font-size: 1em;
+    color: var(--accent-color-light);
+    transition: transform var(--transition-fast);
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+    color: var(--accent-color);
+}
+
+/* Added icon for question text itself */
+.faq-question .question-icon {
+     margin-right: var(--spacing-sm);
+     color: var(--accent-color-light);
+     font-size: 1.2em;
+}
+.faq-item.active .faq-question .question-icon {
+     color: var(--accent-color); /* Change color when active */
+}
+
+.faq-question-text {
+     flex-grow: 1;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, padding 0.3s ease-in-out;
+}
+
+.faq-item.active .faq-answer {
+    padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
+    max-height: 500px; /* Sufficient height */
+}
+
+.faq-answer p {
+    margin: 0;
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+}
+
+.faq-answer p a {
+    color: var(--accent-color-light);
+    text-decoration: underline; /* Underline links in answer */
+     transition: color var(--transition-fast);
+}
+.faq-answer p a:hover {
+     color: var(--accent-color);
+}
+
+/* ------------------------------------------------------------------
+ *  STILL HAVE QUESTIONS? SECTION
+ * ------------------------------------------------------------------*/
+.still-have-questions-section {
+    padding: var(--spacing-lg) 0;
+    background-color: var(--bg-panel-dark); /* Darker panel background */
+    border-top: 1px solid var(--border-medium);
+    text-align: center; /* Center content */
+}
+
+.still-have-questions-section .container {
+    max-width: 800px; /* Limit width */
+    background: var(--bg-panel-subtle); /* Lighter panel for the block */
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-panel);
+    border: 1px solid var(--border-medium);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.still-have-questions-section h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.still-have-questions-section p {
+    font-size: 1.1em;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 600px;
+}
+
+.still-have-questions-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+    justify-content: center; /* Center buttons */
+}
+
+.still-have-questions-buttons .btn {
+     font-size: 1em;
+     padding: 0.8rem 1.6rem;
+}
+
+
+/* ------------------------------------------------------------------
+ *  ANIMATIONS (Button Pulse)
+ * ------------------------------------------------------------------*/
+@keyframes pulse-btn {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.5); /* Start with accent color shadow */
+    }
+    70% {
+        transform: scale(1.03);
+        box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); /* Expand shadow and fade */
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
+}
+
+/* Apply pulse to the primary hero download button */
+.hero-buttons .btn-primary.btn-pulse {
+     animation: pulse-btn 2s infinite;
+}
+
+
+/* ------------------------------------------------------------------
+ *  MEDIA QUERIES (Adjustments for smaller screens)
+ * ------------------------------------------------------------------*/
+@media(max-width:992px){
+    .download-options-section, .system-requirements-section, .download-faq-section, .still-have-questions-section {
+        padding: var(--spacing-xl) 0;
+    }
+    .download-cards { gap: var(--spacing-md); } /* Kept gap for consistency */
+    .download-card { max-width: 350px; min-height: 350px; padding: var(--spacing-md); } /* Adjusted width/height */
+    .download-card img { width: 80px; height: 80px; }
+    .download-card h3 { font-size: 1.6em; }
+    .download-card .version { font-size: 1em; }
+    .download-card p { font-size: 1em; }
+    .download-card .btn { max-width: 220px; font-size: 1.05em; padding: 0.9rem 1.8rem;}
+
+    .requirements-grid { gap: var(--spacing-md); }
+    .requirement-card { padding: var(--spacing-md); }
+    .requirement-card h3 { font-size: 1.2em; }
+    .requirement-card li { font-size: 0.9em; }
+
+    .faq-question { font-size: 1.05em; padding: var(--spacing-md); }
+    .faq-item.active .faq-answer { padding: 0 var(--spacing-md) var(--spacing-md); }
+    .faq-answer p { font-size: 0.9em; }
+    .faq-question .question-icon { font-size: 1.1em; }
+
+    .still-have-questions-section .container { padding: var(--spacing-md); }
+    .still-have-questions-section h3 { font-size: 1.6em; }
+    .still-have-questions-section p { font-size: 1em; }
+    .still-have-questions-buttons { gap: var(--spacing-md); }
+     .still-have-questions-buttons .btn { font-size: 0.95em; padding: 0.7rem 1.4rem; }
+}
+
+@media(max-width:768px){
+     .download-card { max-width: 320px; min-height: 320px; padding: var(--spacing-md) var(--spacing-sm); } /* Adjusted width/height */
+      .download-card img { width: 70px; height: 70px; }
+     .download-card h3 { font-size: 1.4em; }
+      .download-card .version { font-size: 0.95em; }
+      .download-card p { font-size: 0.95em; }
+     .download-card .btn { max-width: 200px; font-size: 1em; padding: 0.8rem 1.6rem;}
+
+     .requirement-card h3 { font-size: 1.1em; }
+     .requirement-card li { font-size: 0.9em; }
+
+     .faq-question { font-size: 1em; padding: var(--spacing-sm); }
+     .faq-item.active .faq-answer { padding: 0 var(--spacing-sm) var(--spacing-sm); }
+     .faq-answer p { font-size: 0.9em; }
+      .faq-question .question-icon { font-size: 1em; }
+
+     .still-have-questions-section .container { padding: var(--spacing-md); gap: var(--spacing-md);}
+     .still-have-questions-section h3 { font-size: 1.4em; }
+     .still-have-questions-section p { font-size: 0.95em; }
+      .still-have-questions-buttons { gap: var(--spacing-sm); }
+      .still-have-questions-buttons .btn { font-size: 0.9em; padding: 0.6rem 1.2rem; }
+}
+
+@media(max-width:576px){
+    .download-hero-section { padding: var(--spacing-lg) 0; height: 400px; /* Adjusted height */ }
+    .download-hero-section .hero-text-content h1 { font-size: 2em; margin-bottom: var(--spacing-xs); }
+    .download-hero-section .hero-text-content p { font-size: 0.9em; margin-bottom: var(--spacing-md); }
+    .download-hero-section .hero-buttons { flex-direction: column; align-items: center; gap: var(--spacing-sm); }
+    .download-hero-section .hero-buttons .btn { width: 100%; max-width: 250px; }
+     .download-hero-section .hero-visual-element { height: 180px; padding-bottom: 0;}
+     .download-hero-section .hero-animated-png { bottom: 30px; max-height: 120px; }
+      /* Keep float keyframes from style.css or redefine if needed */
+
+
+    .download-options-section, .system-requirements-section, .download-faq-section, .still-have-questions-section {
+        padding: var(--spacing-lg) 0;
+    }
+    .section-title.card-title.centered { font-size: 1.6em; margin-bottom: var(--spacing-md); }
+    .section-title.card-title.centered::after { width: var(--spacing-xl); }
+
+    /* Single card specific adjustments for mobile */
+    .download-card { max-width: 90%; min-height: auto; padding: var(--spacing-md); }
+     .download-card img { width: 60px; height: 60px; margin-bottom: var(--spacing-sm); }
+     .download-card h3 { font-size: 1.4em; margin-bottom: var(--spacing-xs); }
+      .download-card .version { font-size: 0.9em; margin-bottom: var(--spacing-sm); }
+      .download-card p { font-size: 0.9em; margin-bottom: var(--spacing-md); }
+     .download-card .btn { max-width: 200px; font-size: 0.9em; padding: 0.6rem 1.2rem;}
+     .download-card .badge { font-size: 0.7em; padding: 3px 8px; top: var(--spacing-xs); right: var(--spacing-xs);}
+     .file-info { font-size: 0.8em; margin-top: var(--spacing-xs); }
+
+
+    .requirements-grid { grid-template-columns: 1fr; gap: var(--spacing-md); }
+    .requirement-card { padding: var(--spacing-md); }
+    .requirement-card h3 { font-size: 1.1em; margin-bottom: var(--spacing-sm); }
+    .requirement-card li { font-size: 0.9em; padding: var(--spacing-xs) 0; }
+     .requirement-card li i { font-size: 1em; width: 18px; }
+    .requirement-card .spec { margin-left: var(--spacing-xs); }
+
+
+    .faq-question { font-size: 0.95em; padding: var(--spacing-sm); }
+    .faq-item.active .faq-answer { padding: 0 var(--spacing-sm) var(--spacing-sm); }
+    .faq-answer p { font-size: 0.85em; }
+     .faq-question .question-icon { font-size: 1em; margin-right: var(--spacing-xs); }
+
+
+    .still-have-questions-section .container { padding: var(--spacing-sm); gap: var(--spacing-sm);}
+     .still-have-questions-section h3 { font-size: 1.2em; }
+     .still-have-questions-section p { font-size: 0.9em; }
+      .still-have-questions-buttons { flex-direction: column; align-items: center; gap: var(--spacing-sm);}
+       .still-have-questions-buttons .btn { width: 100%; max-width: 200px; font-size: 0.85em; padding: 0.5rem 1rem; }
+}
+
+/* Helper class for centering card titles */
+/* This is already in style.css, adding here for completeness/reference */
+.section-title.card-title.centered {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.section-title.card-title.centered::after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Ensure animate-on-scroll works for new sections */
+.download-options-section,
+.system-requirements-section,
+.download-faq-section,
+.still-have-questions-section {
+    /* opacity and transform handled by .animate-on-scroll in style.css */
+}
