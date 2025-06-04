@@ -55,11 +55,103 @@ function redirectIfLoggedIn(req, res, next) {
     next(); // Não logado, continua
 }
 
-// --- Rotas Existentes ---
+// --- Rotas Principais ---
 app.get('/', (req, res) => {
     res.render('index', { title: 'Home' });
 });
 
+app.get('/download', (req, res) => {
+    res.render('download', { title: 'Download' });
+});
+
+app.get('/wiki', (req, res) => {
+    res.render('wiki', { title: 'Wiki - Held Items' });
+});
+
+// --- Rota do MAPA (ADICIONADA AQUI) ---
+app.get('/mapa', (req, res) => {
+    res.render('mapa', { title: 'Mapa do Mundo' });
+});
+
+app.get('/ranking', async (req, res) => {
+    const pageSize = parseInt(req.query.pageSize) || 50; // Default to 50 players per page
+    const currentPage = parseInt(req.query.page) || 1;
+    const offset = (currentPage - 1) * pageSize;
+    // Sanitize search input to prevent SQL injection if not using prepared statements securely (promiseDb does this)
+    const search = req.query.search ? req.query.search.trim() : ''; // Trim whitespace
+    const searchQuery = search ? `%${search}%` : null; // Use for LIKE clause
+    const rankingType = req.query.type || 'level'; // Default to level ranking
+
+    let connection;
+
+    try {
+        connection = await promiseDb.getConnection();
+
+        let totalPlayersCount;
+        let players;
+        let queryOrder = '';
+        // Base WHERE clause: not deleted, group_id less than 2 (assuming group_id 1 = player)
+        let queryWhere = 'WHERE deleted = 0 AND group_id < 2';
+        const queryParams = [];
+
+        if (searchQuery) {
+            queryWhere += ' AND name LIKE ?';
+            queryParams.push(searchQuery);
+        }
+
+        if (rankingType === 'level') {
+            queryOrder = 'ORDER BY level DESC, experience DESC';
+        } else if (rankingType === 'resets') {
+            queryOrder = 'ORDER BY resets DESC, level DESC, experience DESC'; // Order by resets first
+        } else {
+            // Default or invalid type
+            queryOrder = 'ORDER BY level DESC, experience DESC';
+        }
+
+        // Count total players matching criteria
+        const [countResult] = await connection.execute(
+            `SELECT COUNT(*) AS total FROM players ${queryWhere}`,
+            queryParams
+        );
+        totalPlayersCount = countResult[0].total;
+
+        // Fetch players for the current page and ranking type
+        const [rankingPlayers] = await connection.execute(
+            `SELECT id, account_id, name, level, vocation, experience, resets, deleted, group_id
+             FROM players
+             ${queryWhere}
+             ${queryOrder}
+             LIMIT ? OFFSET ?`,
+            [...queryParams, pageSize, offset] // Append limit and offset parameters
+        );
+
+        players = rankingPlayers; // Array of player objects
+
+        const totalPages = Math.ceil(totalPlayersCount / pageSize);
+
+        res.render('ranking', {
+            title: `Ranking de ${rankingType === 'level' ? 'Nível' : 'Resets'}`,
+            players: players, // Pass players data
+            currentPage: currentPage,
+            totalPages: totalPages,
+            pageSize: pageSize, // Pass pageSize back for frontend JS
+            totalPlayers: totalPlayersCount,
+            search: search, // Pass actual search term back
+            rankingType: rankingType, // Pass ranking type back
+            user: req.session.user // Pass logged-in user object for highlight
+        });
+
+    } catch (error) {
+        console.error('Erro ao buscar ranking:', error);
+        req.session.errorMessage = 'Erro ao carregar o ranking. Por favor, tente novamente mais tarde.';
+        return res.redirect('/'); // Redirect to home on error
+    } finally {
+        if (connection) connection.release(); // Release connection
+    }
+});
+
+
+// --- Rotas de Autenticação e Dashboard ---
 app.get('/register', redirectIfLoggedIn, (req, res) => {
   const formData = req.session.formDataStep1;
   delete req.session.formDataStep1;
@@ -308,96 +400,11 @@ app.get('/logout', (req, res) => {
   });
 });
 
-app.get('/ranking', async (req, res) => {
-    const pageSize = parseInt(req.query.pageSize) || 50; // Default to 50 players per page
-    const currentPage = parseInt(req.query.page) || 1;
-    const offset = (currentPage - 1) * pageSize;
-    // Sanitize search input to prevent SQL injection if not using prepared statements securely (promiseDb does this)
-    const search = req.query.search ? req.query.search.trim() : ''; // Trim whitespace
-    const searchQuery = search ? `%${search}%` : null; // Use for LIKE clause
-    const rankingType = req.query.type || 'level'; // Default to level ranking
-
-    let connection;
-
-    try {
-        connection = await promiseDb.getConnection();
-
-        let totalPlayersCount;
-        let players;
-        let queryOrder = '';
-        // Base WHERE clause: not deleted, group_id less than 2 (assuming group_id 1 = player)
-        let queryWhere = 'WHERE deleted = 0 AND group_id < 2';
-        const queryParams = [];
-
-        if (searchQuery) {
-            queryWhere += ' AND name LIKE ?';
-            queryParams.push(searchQuery);
-        }
-
-        if (rankingType === 'level') {
-            queryOrder = 'ORDER BY level DESC, experience DESC';
-        } else if (rankingType === 'resets') {
-            queryOrder = 'ORDER BY resets DESC, level DESC, experience DESC'; // Order by resets first
-        } else {
-            // Default or invalid type
-            queryOrder = 'ORDER BY level DESC, experience DESC';
-        }
-
-        // Count total players matching criteria
-        const [countResult] = await connection.execute(
-            `SELECT COUNT(*) AS total FROM players ${queryWhere}`,
-            queryParams
-        );
-        totalPlayersCount = countResult[0].total;
-
-        // Fetch players for the current page and ranking type
-        const [rankingPlayers] = await connection.execute(
-            `SELECT id, account_id, name, level, vocation, experience, resets, deleted, group_id
-             FROM players
-             ${queryWhere}
-             ${queryOrder}
-             LIMIT ? OFFSET ?`,
-            [...queryParams, pageSize, offset] // Append limit and offset parameters
-        );
-
-        players = rankingPlayers; // Array of player objects
-
-        const totalPages = Math.ceil(totalPlayersCount / pageSize);
-
-        res.render('ranking', {
-            title: `Ranking de ${rankingType === 'level' ? 'Nível' : 'Resets'}`,
-            players: players, // Pass players data
-            currentPage: currentPage,
-            totalPages: totalPages,
-            pageSize: pageSize, // Pass pageSize back for frontend JS
-            totalPlayers: totalPlayersCount,
-            search: search, // Pass actual search term back
-            rankingType: rankingType, // Pass ranking type back
-            user: req.session.user // Pass logged-in user object for highlight
-        });
-
-    } catch (error) {
-        console.error('Erro ao buscar ranking:', error);
-        req.session.errorMessage = 'Erro ao carregar o ranking. Por favor, tente novamente mais tarde.';
-        return res.redirect('/'); // Redirect to home on error
-    } finally {
-        if (connection) connection.release(); // Release connection
-    }
-});
-
 
 app.post('/api/characters/create', requireLogin, accountController.createCharacter);
 app.get('/api/characters/checkname', accountController.checkCharacterName); // Keep public if needed for registration
 app.post('/api/characters/delete', requireLogin, accountController.deleteCharacter);
 
-
-app.get('/download', (req, res) => {
-    res.render('download', { title: 'Download' });
-});
-
-app.get('/wiki', (req, res) => {
-    res.render('wiki', { title: 'Wiki - Held Items' });
-});
 
 // Example route for individual character page (optional but good for ranking links)
 app.get('/character/:name', async (req, res) => {
@@ -436,12 +443,12 @@ app.get('/character/:name', async (req, res) => {
 });
 
 
-// Catch-all for 404 pages
+// Catch-all for 404 pages (ESTE DEVE SER O ÚLTIMO app.use/app.get/app.post para rotas específicas)
 app.use((req, res) => {
     res.status(404).render('404', { title: 'Página Não Encontrada' });
 });
 
-// Global error handler (optional but recommended)
+// Global error handler (sempre depois do 404 handler)
 app.use((err, req, res, next) => {
     console.error('Global Error Handler:', err.stack);
     res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.' });

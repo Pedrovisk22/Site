@@ -1,0 +1,283 @@
+/* Remove overflow:hidden do html/body para permitir scroll na página */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; /* Apenas esconde scroll horizontal para evitar bugs */
+    
+    /* --- MUDANÇA AQUI: Fundo Gradiente --- */
+    background: linear-gradient(to bottom right, 
+                               var(--bg-primary), /* Cor inicial (seu azul escuro principal) */
+                               #0c0c16);         /* Cor final (um tom mais escuro, quase preto-azulado) */
+    background-attachment: fixed; /* IMPORTANTE: Faz o gradiente ficar fixo enquanto a página rola */
+    /* --- FIM DA MUDANÇA --- */
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-primary); /* Usar variável para cor do texto principal também */
+}
+
+/* Estilos para o banner do mapa (similar ao ranking) */
+.map-banner {
+    background-image: url('/assets/images/background-4.png'); /* Use uma imagem de fundo que combine, talvez a mesma do ranking */
+    background-size: cover;
+    background-position: center;
+    padding: 80px 20px;
+    color: #fff; /* Manter branco para o texto no banner */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    margin-bottom: 30px; /* Espaço entre o banner e a próxima seção */
+    position: relative; /* Necessário para posicionar o overlay */
+    z-index: 1; /* Para que o banner fique acima do fundo fixo */
+}
+
+/* Adicionando um overlay escuro ao banner para o texto ficar legível */
+.map-banner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Ajuste a opacidade (0.4 = 40% preto) */
+    z-index: -1; /* Fica abaixo do conteúdo do banner, mas acima da imagem de fundo */
+}
+
+
+.map-banner .page-title {
+    font-size: 3em;
+    font-weight: bold;
+    color: var(--color-yellow-vibrant); /* Usar variável para amarelo */
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.map-banner .page-subtitle {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.map-banner .banner-buttons .btn {
+    margin: 0 10px;
+}
+
+/* Estilos para a seção de informação do mapa (similar ao ranking) */
+.map-info-section {
+    background-color: var(--bg-panel); /* Usar variável para o fundo dos painéis */
+    border-radius: 8px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 960px; /* Largura máxima para o conteúdo central */
+    margin-left: auto;
+    margin-right: auto;
+    position: relative; /* Para z-index */
+    z-index: 2; /* Fica acima do fundo fixo */
+}
+
+.map-info-section .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
+}
+
+.map-info-section .section-header h2 {
+    color: var(--text-primary); /* Usar variável para cor do texto principal */
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.map-info-section .search-box {
+    display: flex;
+}
+
+.map-info-section .search-box .form-control {
+    background-color: var(--bg-panel-subtle); /* Usar variável */
+    border: 1px solid var(--border-medium); /* Usar variável */
+    color: var(--text-primary); /* Usar variável para cor do texto principal */
+    border-radius: 4px 0 0 4px;
+    padding: 8px 12px;
+    outline: none;
+}
+
+.map-info-section .search-box .btn-search {
+    background-color: var(--color-yellow-vibrant); /* Usar variável para amarelo */
+    border: 1px solid var(--color-yellow-vibrant); /* Usar variável para amarelo */
+    border-radius: 0 4px 4px 0;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: var(--btn-primary-text); /* Usar variável para cor do texto do botão primário */
+    transition: background-color 0.2s ease;
+}
+
+.map-info-section .search-box .btn-search:hover {
+    background-color: var(--color-yellow-hover); /* Assumindo uma variável para hover do amarelo */
+}
+
+.map-text-description p {
+    line-height: 1.6;
+    margin-bottom: 10px;
+    color: var(--text-primary); /* Usar variável para cor do texto principal */
+}
+
+/* Estilos para a seção do mapa em si */
+.map-section {
+    padding-bottom: 50px; /* Espaço antes do rodapé */
+    position: relative; /* Para z-index */
+    z-index: 2; /* Fica acima do fundo fixo */
+}
+
+.map-viewport {
+    width: 90%; /* Ocupa a maior parte da largura da página */
+    max-width: 1200px; /* Largura máxima para não ficar muito grande */
+    height: 700px; /* Altura fixa para o mapa */
+    margin: 0 auto; /* Centraliza o mapa */
+    overflow: hidden; /* Continua ocultando o que está fora da área do mapa */
+    position: relative;
+    cursor: grab;
+    background-color: var(--bg-panel); /* Usar variável para o fundo do viewport do mapa */
+    border: 2px solid var(--border-medium); /* Usar variável */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}
+
+.map-viewport.grabbing {
+    cursor: grabbing;
+}
+
+.map-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    will-change: transform;
+}
+
+#gameMap {
+    display: block;
+    image-rendering: pixelated;
+    width: 1000px; /* Largura intrínseca da imagem original */
+    height: 1000px; /* Altura intrínseca da imagem original */
+    vertical-align: middle;
+}
+
+#mapMarkers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Permite cliques "através" do div para a imagem */
+}
+
+.marker {
+    position: absolute;
+    width: 18px; /* Ligeiramente maior */
+    height: 18px; /* Ligeiramente maior */
+    background-color: #ff5722; /* Manter cor específica para marcador ou criar variável */
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 10px rgba(255, 87, 34, 0.8), 0 0 5px rgba(255, 255, 255, 0.5); /* Sombra mais destacada */
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    pointer-events: all; /* Torna o marcador clicável/interagível */
+    transition: transform 0.1s ease-out, background-color 0.1s ease-out;
+    z-index: 10;
+}
+
+.marker:hover {
+    background-color: #e64a19; /* Manter cor específica para marcador ou criar variável */
+    transform: translate(-50%, -50%) scale(1.3); /* Mais destacado no hover */
+    box-shadow: 0 0 15px rgba(255, 87, 34, 1), 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+#tooltip {
+    position: fixed; /* 'fixed' para acompanhar a janela mesmo com scroll */
+    background-color: rgba(0, 0, 0, 0.85); /* Fundo mais escuro */
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 100;
+    border: 1px solid var(--border-medium); /* Usar variável */
+}
+
+#tooltip.visible {
+    opacity: 1;
+}
+
+/* Estilos de utilidade (se não estiverem em style.css) */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: var(--accent-color); /* Usar variável do tema */
+    color: var(--btn-primary-text); /* Usar variável do tema */
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color-hover); /* Assumindo uma variável para hover */
+}
+
+.btn-secondary {
+    background-color: var(--bg-panel-subtle); /* Usar variável do tema */
+    color: var(--text-primary); /* Usar variável do tema */
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-panel); /* Usar variável do tema */
+}
+
+/* Media Queries (Mantidas e levemente ajustadas) */
+@media (max-width: 992px) {
+     .map-banner { padding: 60px 20px; }
+     .map-banner .page-title { font-size: 2.5em; }
+     .map-banner .page-subtitle { font-size: 1.1em; }
+     .map-info-section { padding: 25px; }
+     .map-viewport { height: 600px; } /* Ajuste a altura do mapa para telas menores */
+}
+
+@media (max-width: 768px) {
+    .map-banner { padding: 50px 15px; }
+    .map-banner .page-title { font-size: 2em; }
+    .map-info-section .section-header { flex-direction: column; align-items: stretch; }
+    .map-info-section .search-box { width: 100%; max-width: unset; margin-top: 15px; }
+    .map-viewport { width: 95%; height: 500px; } /* Mais ajuste para telas menores */
+    .marker { width: 16px; height: 16px; }
+}
+
+@media (max-width: 576px) {
+    .map-banner { padding: 40px 10px; }
+    .map-banner .page-title { font-size: 1.8em; }
+    .map-banner .page-subtitle { font-size: 0.9em; }
+    .map-banner .banner-buttons { flex-direction: column; }
+    .map-banner .banner-buttons .btn { margin: 5px 0; width: 100%; }
+    .map-info-section { padding: 20px; }
+    .map-viewport { height: 400px; }
+    .marker { width: 14px; height: 14px; }
+}
