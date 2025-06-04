@@ -1,12 +1,11 @@
 .dashboard-wrapper {
-    padding: var(--spacing-lg) var(--spacing-md); /* Ajusta padding, o container já define a largura máxima */
+    padding: var(--spacing-lg) var(--spacing-md);
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
 }
 
 .dashboard-main {
-    /* Flex grow para ocupar espaço, se dashboard-wrapper for flex */
     flex-grow: 1;
 }
 
@@ -22,7 +21,7 @@
      font-size: 2em;
      color: var(--text-primary);
      margin-bottom: var(--spacing-sm);
-     text-align: center; /* Centraliza o título de boas-vindas */
+     text-align: center;
 }
 
 .welcome-card {
@@ -31,13 +30,13 @@
      border-radius: var(--radius-lg);
      padding: var(--spacing-lg);
      box-shadow: var(--shadow-panel);
-     text-align: center; /* Centraliza o conteúdo do card de boas-vindas */
-     margin-bottom: var(--spacing-md); /* Espaço abaixo do card */
+     text-align: center;
+     margin-bottom: var(--spacing-md);
 }
 
 .welcome-card h1 {
      margin-bottom: var(--spacing-sm);
-     font-size: 1.8em; /* Ajusta tamanho do título dentro do card */
+     font-size: 1.8em;
      color: var(--accent-color-light);
      text-shadow: var(--shadow-minimal);
 }
@@ -50,14 +49,12 @@
 
 .vip-days {
     font-weight: 700;
-    color: var(--warning-color); /* Amarelo para destaque VIP */
+    color: var(--warning-color);
 }
 
-/* Ajuste para as mensagens de alerta dentro do welcome-card */
 .welcome-card .alert {
     margin-top: var(--spacing-md);
     margin-bottom: 0;
-    /* Os outros estilos de .alert já estão no login.css */
 }
 
 
@@ -67,7 +64,6 @@
 }
 
 .admin-btn {
-     /* Estilo similar a um btn-secondary */
      display: inline-block;
      background-color: var(--btn-secondary-bg);
      color: var(--btn-secondary-text);
@@ -89,14 +85,13 @@
 }
 
 
-/* Menu de Navegação do Dashboard (Tabs) */
 .dashboard-nav {
      display: flex;
      gap: var(--spacing-sm);
      margin-bottom: var(--spacing-lg);
      border-bottom: 2px solid var(--border-medium);
-     overflow-x: auto; /* Permite scroll em telas pequenas */
-     padding-bottom: var(--spacing-xs); /* Espaço para a borda */
+     overflow-x: auto;
+     padding-bottom: var(--spacing-xs);
      -webkit-overflow-scrolling: touch;
 }
 
@@ -110,13 +105,13 @@
      cursor: pointer;
      position: relative;
      transition: color var(--transition-fast);
-     flex-shrink: 0; /* Evita que os botões encolham */
+     flex-shrink: 0;
 }
 
 .dashboard-nav .nav-tab::after {
      content: '';
      position: absolute;
-     bottom: -2px; /* Alinha com a borda inferior do nav */
+     bottom: -2px;
      left: 0;
      width: 0;
      height: 3px;
@@ -138,73 +133,57 @@
 }
 
 
-/* Conteúdo das Abas */
-.dashboard-tab-content {
-     /* A transição de opacidade e display pode ser complicada.
-        Gerenciamos o display via JS (block/none). */
-}
-
 .dashboard-tab-content .tab-pane {
-     display: none; /* Escondido por padrão, JS mostra */
-     /* Opcional: transition: opacity 0.3s ease-in-out; */
+     display: none;
 }
 
 .dashboard-tab-content .tab-pane.active {
      display: block;
-     /* Opcional: opacity: 1; */
 }
 
 
-/* Layout de Colunas para Conteúdo do Dashboard */
 .dashboard-sections-wrapper {
      display: flex;
-     gap: var(--spacing-lg); /* Espaço entre as colunas */
-     flex-wrap: wrap; /* Permite quebra de linha em telas menores */
+     gap: var(--spacing-lg);
+     flex-wrap: wrap;
 }
 
 .dashboard-main-column {
-     flex: 3; /* Coluna principal ocupa mais espaço */
+     flex: 3;
      display: flex;
      flex-direction: column;
      gap: var(--spacing-lg);
-     min-width: 300px; /* Largura mínima para evitar esmagamento */
+     min-width: 300px;
 }
 
 .dashboard-side-column {
-     flex: 1.5; /* Coluna lateral ocupa menos espaço */
+     flex: 1.5;
      display: flex;
      flex-direction: column;
      gap: var(--spacing-lg);
-     min-width: 250px; /* Largura mínima */
+     min-width: 250px;
 }
 
-/* Torna a coluna de tickets de largura total */
 .full-width-tickets {
     width: 100%;
 }
 .tab-pane.active .full-width-tickets {
     display: block;
 }
-.tab-pane .dashboard-sections-wrapper {
-    /* Se a aba de tickets não tiver colunas, ajustar o display aqui */
-}
 
-
-/* Seções dentro das colunas */
 .dashboard-section {
      background-color: var(--bg-panel);
      border: 1px solid var(--border-medium);
      border-radius: var(--radius-lg);
      padding: var(--spacing-lg);
      box-shadow: var(--shadow-panel);
-     flex-grow: 1; /* Faz as seções preencherem o espaço verticalmente */
-     display: flex; /* Permite alinhar header e grid */
+     flex-grow: 1;
+     display: flex;
      flex-direction: column;
 }
 
 .dashboard-section-container {
-    /* Opcional: div interna para padding diferente ou scroll */
-     /* padding: var(--spacing-md); */
+
 }
 
 
@@ -224,16 +203,15 @@
      font-weight: 700;
 }
 
-/* Grade de Personagens */
 .character-grid {
      display: grid;
-     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Grade responsiva */
-     gap: var(--spacing-md); /* Espaço entre os cards */
-     flex-grow: 1; /* Ocupa espaço no dashboard-section */
+     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+     gap: var(--spacing-md);
+     flex-grow: 1;
 }
 
 .character-card {
-     background-color: var(--bg-primary); /* Fundo ligeiramente mais escuro que o painel */
+     background-color: var(--bg-primary);
      border: 1px solid var(--border-soft);
      border-radius: var(--radius-md);
      overflow: hidden;
@@ -251,43 +229,51 @@
 
 .character-avatar-wrapper {
      width: 100%;
-     height: 120px; /* Altura fixa para a área do avatar */
+     height: 120px;
      overflow: hidden;
      position: relative;
-     background-color: var(--bg-panel-subtle); /* Fundo para a área do avatar */
+     background-color: var(--bg-panel-subtle);
      display: flex;
-     justify-content: center;
-     align-items: center;
+     justify-content: center; /* Centraliza horizontalmente o conteúdo */
+     align-items: center; /* Centraliza verticalmente o conteúdo */
      border-bottom: 1px solid var(--border-medium);
+     background-size: 200%; /* Aumentado para dar mais zoom */
+     background-position: center;
+     background-repeat: no-repeat;
 }
 
 .character-avatar-wrapper img.avatar {
-     /* Ajustar tamanho do avatar dentro do wrapper */
-     max-height: 100%; /* Limita pela altura do wrapper */
-     width: auto; /* Mantém proporção */
-     max-width: 100%; /* Limita pela largura */
+     max-height: 100%;
+     width: auto;
+     max-width: 100%;
      display: block;
-     object-fit: contain; /* Garante que a imagem inteira seja visível */
+     object-fit: contain;
+     position: relative;
+     z-index: 2;
 }
 
 .character-card .info {
      padding: var(--spacing-md);
      display: flex;
      flex-direction: column;
-     flex-grow: 1; /* Ocupa espaço restante */
+     flex-grow: 1;
 }
 
 .character-header {
      display: flex;
      justify-content: space-between;
-     align-items: flex-start; /* Alinha topo */
+     align-items: center;
      margin-bottom: var(--spacing-sm);
+     flex-wrap: wrap;
+     gap: var(--spacing-sm);
 }
 
 .character-name-and-status {
      display: flex;
      align-items: center;
      gap: var(--spacing-xs);
+     flex-grow: 1;
+     min-width: 0;
 }
 
 .character-name-and-status h3 {
@@ -295,17 +281,9 @@
      font-size: 1.3em;
      margin: 0;
      font-weight: 700;
-     word-break: break-word; /* Quebra nome longo */
-}
-
-.character-name-and-status h3 a {
-     color: var(--text-primary); /* Cor do nome do personagem */
-     transition: color var(--transition-fast);
-}
-
-.character-name-and-status h3 a:hover {
-     color: var(--accent-color-light);
-     text-decoration: underline;
+     word-break: break-word;
+     line-height: 1.2;
+     color: var(--text-primary);
 }
 
 
@@ -314,53 +292,55 @@
      width: 10px;
      height: 10px;
      border-radius: var(--radius-full);
-     background-color: var(--text-secondary); /* Cor padrão (desconhecido) */
-     flex-shrink: 0; /* Evita que o dot encolha */
+     background-color: var(--text-secondary);
+     flex-shrink: 0;
+     margin-left: var(--spacing-xs);
+     vertical-align: middle;
+     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .status-dot.on {
-     background-color: var(--success-color); /* Verde para online */
+     background-color: var(--success-color);
+     border-color: color-mix(in srgb, var(--success-color) 50%, black);
 }
 
 .status-dot.off {
-     background-color: var(--danger-color); /* Vermelho para offline */
+     background-color: var(--danger-color);
+     border-color: color-mix(in srgb, var(--danger-color) 50%, black);
 }
 
 
 .character-actions {
      display: flex;
      align-items: center;
-     gap: var(--spacing-sm); /* Espaço entre os botões de ação */
-     flex-shrink: 0; /* Evita que os botões encolham */
+     gap: var(--spacing-sm);
+     flex-shrink: 0;
 }
 
-/* Estilo para o botão de exclusão */
+/* Estilo base para botões apenas com ícone */
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    font-size: 1.2em; /* Tamanho do ícone */
+}
+
+.btn-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Estilo específico para o ícone de lixeira */
 .btn-delete {
-     background: none;
-     border: none;
-     cursor: pointer;
-     padding: 0;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     width: 24px; /* Tamanho do botão */
-     height: 24px;
-     transition: transform var(--transition-fast);
+    color: var(--danger-color); /* Cor vermelha para o ícone */
 }
 
 .btn-delete:hover {
-     transform: scale(1.1);
-}
-
-.btn-delete img.trash-icon {
-     width: 100%;
-     height: 100%;
-     filter: invert(43%) sepia(87%) saturate(651%) hue-rotate(327deg) brightness(101%) contrast(93%); /* Cor vermelha */
-     transition: filter var(--transition-fast);
-}
-
-.btn-delete:hover img.trash-icon {
-    filter: invert(22%) sepia(98%) saturate(5201%) hue-rotate(356deg) brightness(99%) contrast(97%); /* Vermelho mais vibrante no hover */
+    color: color-mix(in srgb, var(--danger-color) 20%, white); /* Vermelho mais claro no hover */
 }
 
 
@@ -368,10 +348,15 @@
      margin-bottom: var(--spacing-md);
      color: var(--text-secondary);
      font-size: 0.95em;
+     flex-grow: 1;
 }
 
 .character-info p {
      margin-bottom: var(--spacing-xs);
+     line-height: 1.4;
+}
+.character-info p:last-child {
+    margin-bottom: 0;
 }
 
 .character-info .info-label {
@@ -379,19 +364,18 @@
      color: var(--text-primary);
 }
 
-/* Estilos para a área do time (se implementada) */
 .team {
      display: flex;
      gap: var(--spacing-xs);
-     margin-top: auto; /* Empurra para o final do card */
+     margin-top: auto;
      flex-wrap: wrap;
 }
 
 .poke-slot {
-     width: 40px; /* Tamanho do slot */
+     width: 40px;
      height: 40px;
-     background-color: var(--bg-panel-subtle); /* Fundo do slot vazio */
-     border: 1px dashed var(--border-soft); /* Borda tracejada para slot vazio */
+     background-color: var(--bg-panel-subtle);
+     border: 1px dashed var(--border-soft);
      border-radius: var(--radius-sm);
      display: flex;
      justify-content: center;
@@ -403,13 +387,12 @@
      max-height: 100%;
      object-fit: contain;
 }
-.poke-slot[title] { /* Estilo para slots com Pokémon */
+.poke-slot[title] {
      border: 1px solid var(--border-medium);
      background-color: transparent;
 }
 
 
-/* Mensagem de sem personagens */
 .no-characters-message {
      text-align: center;
      color: var(--text-secondary);
@@ -419,12 +402,11 @@
      margin-top: var(--spacing-md);
 }
 
-/* Banner de criar personagem */
 .create-character-banner {
      text-align: center;
      margin-top: var(--spacing-md);
      padding-top: var(--spacing-md);
-     border-top: 1px solid var(--border-soft); /* Separador */
+     border-top: 1px solid var(--border-soft);
      display: flex;
      flex-direction: column;
      align-items: center;
@@ -432,12 +414,12 @@
 }
 
 .create-character-banner .btn {
-     font-size: 1.2em; /* Botão maior */
+     font-size: 1.2em;
      padding: var(--spacing-sm) var(--spacing-lg);
 }
 
 .create-character-banner .plus-icon {
-     font-size: 1.5em; /* Ícone de mais */
+     font-size: 1.5em;
      margin-right: var(--spacing-xs);
      color: var(--accent-color);
 }
@@ -448,9 +430,8 @@
 }
 
 
-/* Fancy Card (Sua Carteira) */
 .fancy-card {
-     background: linear-gradient(135deg, var(--bg-panel-subtle) 0%, var(--bg-panel) 100%); /* Gradiente sutil */
+     background: linear-gradient(135deg, var(--bg-panel-subtle) 0%, var(--bg-panel) 100%);
      border: 1px solid var(--border-medium);
      border-radius: var(--radius-lg);
      padding: var(--spacing-lg);
@@ -468,7 +449,6 @@
      margin-bottom: var(--spacing-md);
      font-weight: 700;
      text-shadow: var(--shadow-minimal);
-     /* Remover after se não quiser a linha */
 }
 
 .fancy-card .card-title::after {
@@ -479,8 +459,8 @@
 
 .rcoins-amount {
      font-family: 'Poppins', sans-serif;
-     font-size: 3em; /* Tamanho grande para a quantidade */
-     color: var(--warning-color); /* Cor de destaque para a moeda */
+     font-size: 3em;
+     color: var(--warning-color);
      font-weight: 700;
      margin-bottom: var(--spacing-sm);
      line-height: 1;
@@ -488,7 +468,7 @@
 }
 
 .rcoins-amount span {
-     font-size: 0.4em; /* Tamanho menor para o texto RCoins */
+     font-size: 0.4em;
      color: var(--text-primary);
      font-weight: 500;
      vertical-align: super;
@@ -506,11 +486,10 @@
      color: var(--text-secondary);
      font-size: 1em;
      margin-bottom: var(--spacing-md);
-     flex-grow: 1; /* Empurra o botão para baixo */
+     flex-grow: 1;
 }
 
 .btn-donate {
-     /* Estilo similar a btn-primary ou um novo */
      background-color: var(--color-yellow-vibrant);
      color: var(--bg-primary);
      padding: var(--spacing-sm) var(--spacing-md);
@@ -521,33 +500,28 @@
      transition: all var(--transition-fast);
 }
 .btn-donate:hover {
-     background-color: var(--btn-primary-hover-bg);
+     background-color: var(--btn-primary-hover-hover-bg);
      box-shadow: var(--shadow-panel);
      transform: scale(1.05);
 }
 
-
-/* Estilos para a área de Tickets */
 #tickets-section {
-    /* Adicione estilos específicos para a lista de tickets aqui */
     color: var(--text-primary);
 }
 
-
-/* Estilos para os Modais (baseados nos seus exemplos) */
 .modal {
-     display: none; /* Hidden by default */
-     position: fixed; /* Stay in place */
-     z-index: 10000; /* Sit on top */
+     display: none;
+     position: fixed;
+     z-index: 10000;
      left: 0;
      top: 0;
-     width: 100%; /* Full width */
-     height: 100%; /* Full height */
-     overflow: auto; /* Enable scroll if needed */
-     background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
-     backdrop-filter: blur(5px); /* Efeito de desfoque no fundo */
-     -webkit-backdrop-filter: blur(5px); /* Suporte Safari */
-     padding-top: 60px; /* Location of the box */
+     width: 100%;
+     height: 100%;
+     overflow: auto;
+     background-color: rgba(0, 0, 0, 0.8);
+     backdrop-filter: blur(5px);
+     -webkit-backdrop-filter: blur(5px);
+     padding-top: 60px;
 }
 
 .modal-content {
@@ -555,18 +529,17 @@
      border: 1px solid var(--border-medium);
      border-radius: var(--radius-lg);
      box-shadow: var(--shadow-modal);
-     margin: 5% auto; /* 15% from the top and centered */
+     margin: 5% auto;
      padding: var(--spacing-lg);
-     max-width: 500px; /* Could be more or less, depending on screen size */
-     width: 90%; /* Occupy 90% width on smaller screens */
+     max-width: 500px;
+     width: 90%;
      position: relative;
      display: flex;
      flex-direction: column;
      gap: var(--spacing-md);
-     animation: animatezoom 0.6s; /* Animação simples */
+     animation: animatezoom 0.6s;
 }
 
-/* Animação Zoom In */
 @keyframes animatezoom {
     from { transform: scale(0); }
     to { transform: scale(1); }
@@ -605,18 +578,16 @@
 }
 
 .modal-content .form-group {
-    /* Reutiliza estilos do form-group em login.css */
     width: 100%;
 }
 
 .modal-content .form-group label {
-    /* Reutiliza estilos da label em login.css */
+
 }
 .modal-content .form-group input[type="text"],
 .modal-content .form-group input[type="password"],
 .modal-content .form-group input[type="email"],
-.modal-content .form-group select { /* Adicionado select para Select2 */
-    /* Reutiliza estilos do input em login.css */
+.modal-content .form-group select {
      width: 100%;
      padding: var(--spacing-sm);
      border: 1px solid var(--input-border);
@@ -627,7 +598,6 @@
      box-shadow: var(--shadow-inset);
 }
 
-/* Específico para feedback de nome de personagem no modal */
 .character-name-feedback {
      margin-top: var(--spacing-xs);
      font-size: 0.85em;
@@ -637,7 +607,6 @@
      transition: color var(--transition-fast);
 }
 
-/* Estilos para o seletor de gênero no modal */
 .gender-selector h3, .country-selector h3 {
      font-family: 'Poppins', sans-serif;
      font-size: 1.1em;
@@ -648,7 +617,7 @@
 
 .gender-options {
      display: flex;
-     gap: var(--spacing-md); /* Espaço entre as opções */
+     gap: var(--spacing-md);
      justify-content: center;
 }
 
@@ -665,8 +634,8 @@
      font-size: 1em;
      color: var(--text-secondary);
      transition: all var(--transition-fast);
-     flex: 1; /* Permite que as opções ocupem espaço igual */
-     max-width: 120px; /* Limite opcional para a largura */
+     flex: 1;
+     max-width: 120px;
 }
 
 .gender-option-btn:hover {
@@ -685,20 +654,19 @@
 }
 
 .gender-option-btn img {
-     width: 40px; /* Tamanho dos ícones de gênero */
+     width: 40px;
      height: 40px;
-     filter: invert(50%) sepia(0%) saturate(0%) hue-rotate(149deg) brightness(107%) contrast(93%); /* Cor neutra */
+     filter: invert(50%) sepia(0%) saturate(0%) hue-rotate(149deg) brightness(107%) contrast(93%);
      transition: filter var(--transition-fast);
 }
 
 .gender-option-btn.active img {
-     filter: invert(36%) sepia(93%) saturate(2773%) hue-rotate(202deg) brightness(100%) contrast(101%); /* Cor de destaque */
+     filter: invert(36%) sepia(93%) saturate(2773%) hue-rotate(202deg) brightness(100%) contrast(101%);
 }
 
-/* Estilos para a área de ações do formulário no modal */
 .modal-content .form-actions {
      display: flex;
-     justify-content: flex-end; /* Alinha botões à direita */
+     justify-content: flex-end;
      gap: var(--spacing-md);
      margin-top: var(--spacing-md);
      padding-top: var(--spacing-md);
@@ -706,22 +674,15 @@
 }
 
 .modal-content .form-actions .btn {
-     font-size: 1em; /* Ajusta tamanho do botão no modal */
+     font-size: 1em;
      padding: var(--spacing-sm) var(--spacing-md);
-     /* Reutiliza estilos de btn-primary, btn-secondary, btn-danger */
 }
 
-/* Estilos para mensagens de erro dentro dos modais */
 .modal-content .alert {
-    /* Reutiliza estilos de .alert em login.css */
-     width: 100%; /* Ocupa a largura do formulário */
-     margin-bottom: 0; /* Remove margin inferior padrão do alert */
+     width: 100%;
+     margin-bottom: 0;
 }
 
-
-/* --------------------------------------------- */
-/* Media Queries para responsividade do Dashboard e Modais */
-/* --------------------------------------------- */
 
 @media (max-width: 992px) {
      .dashboard-wrapper {
@@ -744,13 +705,13 @@
      }
 
      .dashboard-sections-wrapper {
-         flex-direction: column; /* Empilha as colunas */
+         flex-direction: column;
          gap: var(--spacing-md);
      }
      .dashboard-main-column, .dashboard-side-column {
-         flex: none; /* Remove flex-basis */
-         width: 100%; /* Ocupa a largura total */
-         min-width: auto; /* Remove largura mínima */
+         flex: none;
+         width: 100%;
+         min-width: auto;
          gap: var(--spacing-md);
      }
 
@@ -758,7 +719,7 @@
      .section-header h2 { font-size: 1.4em; }
 
      .character-grid {
-         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Ajusta minmax para telas menores */
+         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
          gap: var(--spacing-md);
      }
      .character-card .info { padding: var(--spacing-sm); }
@@ -774,9 +735,8 @@
      .donate-message { font-size: 0.9em; }
      .btn-donate { font-size: 1em; }
 
-     /* Modal adjustments */
      .modal-content {
-         margin: 10% auto; /* Ajusta margem superior */
+         margin: 10% auto;
          padding: var(--spacing-md);
      }
      .modal-content h2 { font-size: 1.6em; }
@@ -816,24 +776,24 @@
      .dashboard-section { padding: var(--spacing-sm); }
      .section-header { flex-direction: column; align-items: flex-start; gap: var(--spacing-xs); }
      .section-header h2 { font-size: 1.2em; }
-     .section-header h2::after { content: none; /* Remover a linha abaixo do título da seção em mobile */ }
+     .section-header h2::after { content: none; }
 
 
      .character-grid {
-         grid-template-columns: 1fr; /* Uma coluna por padrão em mobile */
+         grid-template-columns: 1fr;
          gap: var(--spacing-md);
      }
      .character-card {
-         flex-direction: row; /* Alinha imagem e info lado a lado */
+         flex-direction: row;
          align-items: flex-start;
      }
      .character-avatar-wrapper {
-         width: 100px; /* Largura fixa para a imagem */
-         height: auto; /* Altura automática */
-         flex-shrink: 0; /* Evita que a imagem encolha */
+         width: 100px;
+         height: auto;
+         flex-shrink: 0;
          border-bottom: none;
-         border-right: 1px solid var(--border-medium); /* Borda lateral */
-         border-radius: var(--radius-md) 0 0 var(--radius-md); /* Ajusta raio */
+         border-right: 1px solid var(--border-medium);
+         border-radius: var(--radius-md) 0 0 var(--radius-md);
      }
       .character-avatar-wrapper img.avatar {
           width: 100%;
@@ -847,12 +807,12 @@
       .character-header { flex-direction: column; gap: var(--spacing-xs); align-items: flex-start;}
       .character-name-and-status h3 { font-size: 1.1em; }
       .character-actions { gap: var(--spacing-sm); margin-top: var(--spacing-xs); }
-      .btn-delete { width: 20px; height: 20px; }
+
 
      .character-info { font-size: 0.85em; margin-bottom: var(--spacing-sm); }
      .team {
           gap: var(--spacing-xs);
-          margin-top: var(--spacing-sm); /* Ajuste */
+          margin-top: var(--spacing-sm);
      }
      .poke-slot { width: 30px; height: 30px; }
 
@@ -862,12 +822,11 @@
 
      .fancy-card { padding: var(--spacing-sm); }
      .fancy-card .card-title { font-size: 1.2em; }
-      .fancy-card .card-title::after { content: none; /* Remover linha */ }
+      .fancy-card .card-title::after { content: none; }
      .rcoins-amount { font-size: 2em; }
      .donate-message { font-size: 0.85em; }
      .btn-donate { font-size: 0.9em; padding: var(--spacing-sm) var(--spacing-md); }
 
-     /* Modal adjustments mobile */
      .modal-content {
          margin: 10% auto;
          padding: var(--spacing-md);
@@ -877,13 +836,9 @@
      .modal-content .close-modal { font-size: 20px; top: var(--spacing-sm); right: var(--spacing-sm);}
      .modal-content form { gap: var(--spacing-sm); }
      .gender-options { gap: var(--spacing-sm); }
-     .gender-option-btn { padding: var(--spacing-sm); font-size: 0.85em; max-width: none; flex: 1;} /* Permitir ocupar espaço igual */
+     .gender-option-btn { padding: var(--spacing-sm); font-size: 0.85em; max-width: none; flex: 1;}
      .gender-option-btn img { width: 30px; height: 30px; }
-     .modal-content .form-actions { gap: var(--spacing-sm); flex-direction: column-reverse; /* Coloca cancelar em cima */ align-items: stretch;}
+     .modal-content .form-actions { gap: var(--spacing-sm); flex-direction: column-reverse; align-items: stretch;}
      .modal-content .form-actions .btn { width: 100%; justify-content: center;}
-
-     /* Select2 Mobile Adjustment (already in login.css, ensure consistency) */
-     /* .select2-container--default .select2-selection--single { ... } */
-     /* .select2-search--dropdown .select2-search__field { ... } */
 
 }
