@@ -67,9 +67,9 @@ app.get('/download', (req, res) => {
     res.render('download', { title: 'Download' });
 });
 
-app.get('/wiki', (req, res) => {
+
     res.render('wiki', { title: 'Wiki - Held Items' });
-});
+
 
 // --- Rota do MAPA (ADICIONADA AQUI) ---
 app.get('/mapa', (req, res) => {

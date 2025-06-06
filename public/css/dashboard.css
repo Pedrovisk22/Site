@@ -841,4 +841,35 @@
      .modal-content .form-actions { gap: var(--spacing-sm); flex-direction: column-reverse; align-items: stretch;}
      .modal-content .form-actions .btn { width: 100%; justify-content: center;}
 
+} 
+/* Regras para a imagem do Bulbasaur (usando ID para alta especificidade) */
+
+#bulbasaur-sprite {
+    /* 1. Para fazer a imagem do Pokémon parar de mexer (remover a animação): */
+    animation: none !important; /* ESSENCIAL para parar a animação */
+
+    /* 2. Para ajustar a altura da imagem do Pokémon (mantenha ou ajuste): */
+    /* Você pode ajustar 'max-height' para tornar o Pokémon maior ou menor. */
+    /* Ex: max-height: 120px !important; (para deixá-lo um pouco maior) */
+    max-height: 100px !important; /* Mantém o tamanho atual, mas garante a aplicação */
+
+    /* 3. Para ajustar a posição vertical do Pokémon sobre a grama: */
+    /* O valor original é 30px, que o faz flutuar. Um valor menor o "senta" mais na grama.
+       Experimente: 5px, 0px, 10px, etc., até ficar como você quer. */
+    bottom: 5px !important; /* Sugestão de posição mais baixa */
+
+    /* Garante que o transform inicial não cause problemas ao remover a animação */
+    transform: translateX(-50%) translateY(0) !important;
+}
+
+/* Opcional: Garante que a imagem da grama também não se mova, se ela tiver uma animação */
+.ultima-captura-image-wrapper .grass-base {
+    animation: none !important;
+}
+
+/* Opcional: Ajusta a altura total do contêiner da imagem se o Pokémon estiver cortando
+   ou se você quiser mais espaço vertical após ajustar o tamanho do Pokémon. */
+.ultima-captura-image-wrapper {
+    height: 110px !important; /* Manter ou aumentar se necessário */
+    /* overflow: hidden; */ /* Certifique-se de que não haja overflow que cause corte */
 }

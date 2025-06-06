@@ -1092,3 +1092,39 @@ section { padding: var(--spacing-lg) 0; }
     color: var(  --color-yellow-vibrant);
    
 }
+/* Regras para a imagem do Bulbasaur (usando ID para alta especificidade) */
+
+#bulbasaur-sprite {
+    /* 1. Para fazer a imagem do Pokémon parar de mexer (remover a animação): */
+    animation: none !important; /* ESSENCIAL para parar a animação */
+
+    /* 2. Para ajustar a altura da imagem do Pokémon (mantenha ou ajuste): */
+    /* A altura original é 100px. Se você quiser que o Bulbasaur seja maior ou menor,
+       altere 'max-height'. */
+    /* Ex: max-height: 120px !important; (para deixá-lo um pouco maior) */
+    max-height: 100px !important; /* Mantém o tamanho original, mas garante a aplicação */
+
+    /* 3. Para ajustar a posição vertical do Pokémon sobre a grama: */
+    /* O valor original (30px) faz com que ele flutue.
+       Um valor menor fará com que ele "sente" mais na grama.
+       Experimente diferentes valores (ex: 5px, 0px, 10px) para ver qual fica melhor. */
+    bottom: 15px !important; /* Sugestão de posição mais baixa */
+
+    /* Garante que o transform inicial não cause problemas ao remover a animação.
+       A animação original usa 'transform: translateX(-50%) translateY(Ypx)'.
+       Remover a animação faria com que o translateY sumisse, então o definimos para 0. */
+    transform: translateX(-50%) translateY(0) !important;
+}
+
+/* Opcional: Garante que a imagem da grama também não se mova, se ela tiver uma animação */
+/* Pela sua imagem, o grass-base parece estar fixo, mas é bom garantir. */
+.ultima-captura-image-wrapper .grass-base {
+    animation: none !important;
+}
+
+/* Opcional: Ajusta a altura total do contêiner da imagem se o Pokémon estiver cortando
+   ou se você quiser mais espaço vertical após ajustar o tamanho do Pokémon. */
+.ultima-captura-image-wrapper {
+    height: 110px !important; /* Manter este valor ou aumentar se necessário (ex: 130px) */
+    /* overflow: hidden; */ /* Geralmente já está como hidden, mas se o Pokémon parecer "sair" do card, pode verificar isso. */
+}
