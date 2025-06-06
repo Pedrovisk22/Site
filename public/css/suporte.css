@@ -1,0 +1,615 @@
+/* ========================================= */
+/*  suporte.css - Estilos da Página de Suporte  */
+/* ========================================= */
+
+/* --- Layout Principal --- */
+.support-main {
+    padding: var(--spacing-lg) var(--spacing-md); /* Usando variáveis de espaçamento */
+     background-color: color-mix(in srgb, var(--bg-panel) 85%, transparent); /* 85% opaco do --bg-panel */
+}
+
+.support-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: var(--spacing-lg); /* Usando variáveis de espaçamento */
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.support-left,
+.support-right {
+    flex: 1;
+    min-width: 300px;
+}
+
+.support-left {
+    flex-basis: 60%;
+    max-width: 60%;
+}
+
+.support-right {
+    flex-basis: 35%;
+    max-width: 35%;
+}
+
+/* --- Alertas de Mensagem --- */
+.alert {
+    padding: var(--spacing-sm) var(--spacing-md); /* Usando variáveis de espaçamento */
+    border-radius: var(--radius-md); /* Usando variáveis de raio */
+    margin-bottom: var(--spacing-lg); /* Usando variáveis de espaçamento */
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.alert-success {
+    /* Cores derivadas de success-color do style.css */
+    background-color: color-mix(in srgb, var(--success-color) 15%, transparent);
+    color: color-mix(in srgb, var(--success-color) 80%, black);
+    border: 1px solid color-mix(in srgb, var(--success-color) 80%, black);
+}
+
+.alert-danger {
+    /* Cores derivadas de danger-color do style.css */
+    background-color: color-mix(in srgb, var(--danger-color) 15%, transparent);
+    color: color-mix(in srgb, var(--danger-color) 80%, black);
+    border: 1px solid color-mix(in srgb, var(--danger-color) 80%, black);
+}
+
+/* --- Formulário de Contato --- */
+.contact-form {
+    background-color: var(--bg-panel); /* Cor de fundo do painel */
+    padding: var(--spacing-lg); /* Usando variáveis de espaçamento */
+    border-radius: var(--radius-lg); /* Usando variáveis de raio */
+    box-shadow: var(--shadow-panel); /* Usando variáveis de sombra */
+    border: 1px solid var(--border-medium); /* Usando variáveis de borda */
+}
+
+.form-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary); /* Cor principal do texto */
+    margin-bottom: var(--spacing-lg); /* Usando variáveis de espaçamento */
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-md); /* Usando variáveis de espaçamento */
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.1rem;
+    color: var(--text-primary); /* Cor principal do texto */
+    margin-bottom: var(--spacing-xs); /* Usando variáveis de espaçamento */
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: calc(100% - 20px);
+    padding: var(--spacing-sm) var(--spacing-xs); /* Usando variáveis de espaçamento */
+    border: 1px solid var(--input-border); /* Cor da borda de input */
+    border-radius: var(--radius-sm); /* Usando variáveis de raio */
+    background-color: var(--bg-panel-subtle); /* Fundo sutil para inputs */
+    color: var(--text-primary); /* Cor principal do texto */
+    font-size: 1rem;
+    transition: var(--transition-fast);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-shadow: var(--shadow-inset); /* Sombra interna para profundidade */
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--accent-color-light); /* Cor do foco */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--color-yellow-vibrant-rgb), 0.3), var(--shadow-inset); /* Ajustando RGB para amarelo vibrante */
+}
+
+/* Definindo o RGB da cor amarela vibrante para o box-shadow de foco */
+/* Se não estiver definido em style.css */
+:root {
+    --color-yellow-vibrant-rgb: 255, 215, 0; /* RGB de #FFD700 */
+}
+
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Estilo específico para a seta do SELECT para torná-la visível */
+.form-group select {
+    /* Adiciona uma imagem SVG como seta de dropdown, com cor clara */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23F0F2F5" class="bi bi-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); /* Cor branca para o SVG da seta */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 30px;
+}
+
+/* --- Botões --- */
+/* Estes estilos de botão estão provavelmente duplicados e deveriam vir do style.css.
+   Estou remapeando para as variáveis do style.css para consistência. */
+.btn {
+    padding: 0.75rem 1.5rem; /* Ajuste para o padding padrão do btn */
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    text-align: center;
+    display: inline-block;
+    box-shadow: var(--shadow-minimal); /* Sombra padrão para botões */
+}
+
+.btn-primary {
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    background: linear-gradient(45deg, var(--btn-primary-bg) 0%, color-mix(in srgb, var(--btn-primary-bg) 80%, white) 100%);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, var(--btn-primary-hover-bg) 0%, color-mix(in srgb, var(--btn-primary-hover-bg) 80%, white) 100%);
+    transform: translateY(-1px); /* Elevando no hover */
+    box-shadow: var(--shadow-subtle);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-inset); /* Sombra interna no clique */
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: var(--spacing-lg); /* Usando variáveis de espaçamento */
+}
+
+/* --- Outras Opções de Suporte --- */
+.support-options,
+.support-hours {
+    background-color: var(--bg-panel); /* Cor de fundo do painel */
+    padding: var(--spacing-lg); /* Usando variáveis de espaçamento */
+    border-radius: var(--radius-lg); /* Usando variáveis de raio */
+    box-shadow: var(--shadow-panel); /* Usando variáveis de sombra */
+    border: 1px solid var(--border-medium); /* Usando variáveis de borda */
+    margin-bottom: var(--spacing-lg); /* Usando variáveis de espaçamento */
+}
+
+.options-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-primary); /* Cor principal do texto */
+    margin-bottom: var(--spacing-lg); /* Usando variáveis de espaçamento */
+    text-align: center;
+}
+
+.support-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-md); /* Usando variáveis de espaçamento */
+    background-color: var(--bg-panel-subtle); /* Fundo sutil para opções */
+    padding: var(--spacing-sm) var(--spacing-md); /* Usando variáveis de espaçamento */
+    border-radius: var(--radius-md); /* Usando variáveis de raio */
+    border: 1px solid var(--border-soft); /* Usando variáveis de borda */
+    transition: var(--transition-fast);
+}
+
+.support-option:hover {
+    background-color: var(--bg-panel); /* Fundo do painel no hover */
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-subtle); /* Sombra no hover */
+}
+
+.support-option:last-child {
+    margin-bottom: 0;
+}
+
+.support-option img {
+    width: 48px;
+    height: 48px;
+    margin-right: var(--spacing-md); /* Usando variáveis de espaçamento */
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.option-content {
+    flex-grow: 1;
+}
+
+.option-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary); /* Cor principal do texto */
+    margin-bottom: var(--spacing-xs); /* Usando variáveis de espaçamento */
+}
+
+.option-description {
+    font-size: 0.95rem;
+    color: var(--text-secondary); /* Cor secundária do texto */
+    line-height: 1.5;
+}
+
+.option-description a {
+    color: var(--accent-color-light); /* Cor do link */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.option-description a:hover {
+    text-decoration: underline;
+}
+
+/* --- Horário de Atendimento --- */
+.support-hours .text-center {
+    margin-bottom: var(--spacing-md); /* Usando variáveis de espaçamento */
+    font-size: 1rem;
+    color: var(--text-secondary); /* Cor secundária do texto */
+}
+
+.support-hours-schedule {
+    margin-top: var(--spacing-md); /* Usando variáveis de espaçamento */
+    border: 1px solid var(--border-medium); /* Usando variáveis de borda */
+    border-radius: var(--radius-md); /* Usando variáveis de raio */
+    overflow: hidden;
+}
+
+.hour-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--spacing-xs) var(--spacing-md); /* Usando variáveis de espaçamento */
+    border-bottom: 1px solid var(--border-soft); /* Usando variáveis de borda */
+    background-color: var(--bg-panel-subtle); /* Fundo sutil para linhas */
+}
+
+.hour-row:last-child {
+    border-bottom: none;
+}
+
+.hour-row .day-of-week {
+    font-weight: 500;
+    color: var(--text-primary); /* Cor principal do texto */
+    font-size: 1rem;
+}
+
+.hour-row .time-range {
+    font-weight: 400;
+    color: var(--text-secondary); /* Cor secundária do texto */
+    font-size: 1rem;
+}
+
+/* --- Seção de Status do Servidor --- */
+.status-section {
+    padding: var(--spacing-lg) var(--spacing-md); /* Usando variáveis de espaçamento */
+    background-color: var(--bg-panel); /* Cor de fundo principal como o painel */
+}
+
+.status-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--bg-panel); /* Cor de fundo do painel */
+    padding: var(--spacing-xl); /* Usando variáveis de espaçamento */
+    border-radius: var(--radius-lg); /* Usando variáveis de raio */
+    box-shadow: var(--shadow-panel); /* Usando variáveis de sombra */
+    border: 1px solid var(--border-medium); /* Usando variáveis de borda */
+}
+
+.status-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-primary); /* Cor principal do texto */
+    margin-bottom: var(--spacing-xl); /* Usando variáveis de espaçamento */
+    text-align: center;
+}
+
+.server-status {
+    margin-bottom: var(--spacing-xl); /* Usando variáveis de espaçamento */
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--spacing-lg); /* Usando variáveis de espaçamento */
+    border-bottom: 1px solid var(--border-soft); /* Usando variáveis de borda */
+    padding-bottom: var(--spacing-xs); /* Usando variáveis de espaçamento */
+}
+
+.status-header h3 {
+    font-size: 1.5rem;
+    color: var(--text-primary); /* Cor principal do texto */
+    font-weight: 600;
+}
+
+.status-header p {
+    font-size: 0.9rem;
+    color: var(--text-secondary); /* Cor secundária do texto */
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md); /* Usando variáveis de espaçamento */
+}
+
+.status-item {
+    background-color: var(--bg-panel-subtle); /* Fundo sutil para itens de status */
+    padding: var(--spacing-sm) var(--spacing-md); /* Usando variáveis de espaçamento */
+    border-radius: var(--radius-md); /* Usando variáveis de raio */
+    border: 1px solid var(--border-soft); /* Usando variáveis de borda */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary); /* Cor principal do texto */
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: var(--radius-full); /* Raio total */
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-primary); /* Cor do texto no badge */
+}
+
+.status-online {
+    background-color: var(--success-color); /* Cor de sucesso */
+}
+
+.status-offline {
+    background-color: var(--danger-color); /* Cor de perigo */
+}
+
+.status-maintenance {
+    background-color: var(--warning-color); /* Cor de aviso/manutenção */
+}
+
+/* --- Alertas Recentes --- */
+.alerts-container {
+    margin-top: var(--spacing-lg); /* Usando variáveis de espaçamento */
+}
+
+.alert-item {
+    background-color: var(--bg-panel-subtle); /* Fundo sutil para itens de alerta */
+    padding: var(--spacing-md); /* Usando variáveis de espaçamento */
+    border-radius: var(--radius-md); /* Usando variáveis de raio */
+    border: 1px solid var(--border-soft); /* Usando variáveis de borda */
+    margin-bottom: var(--spacing-md); /* Usando variáveis de espaçamento */
+}
+
+.alert-item:last-child {
+    margin-bottom: 0;
+}
+
+.alert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xs); /* Usando variáveis de espaçamento */
+}
+
+.alert-type {
+    padding: 4px 10px;
+    border-radius: var(--radius-full); /* Raio total */
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-primary); /* Cor do texto no alert type */
+}
+
+.alert-maintenance {
+    background-color: var(--warning-color); /* Cor de aviso/manutenção */
+}
+
+.alert-update {
+    background-color: var(--info-color); /* Cor de informação/atualização */
+}
+
+.alert-time {
+    font-size: 0.85rem;
+    color: var(--text-secondary); /* Cor secundária do texto */
+}
+
+.alert-message {
+    font-size: 0.95rem;
+    color: var(--text-primary); /* Cor principal do texto */
+    line-height: 1.6;
+}
+
+/* --- FAQ Section --- */
+.faq-section {
+    padding: var(--spacing-lg) var(--spacing-md); /* Usando variáveis de espaçamento */
+    background-color: var(--bg-panel); /* Cor de fundo principal como o painel */
+}
+
+.faq-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: var(--bg-panel); /* Cor de fundo do painel */
+    padding: var(--spacing-xl); /* Usando variáveis de espaçamento */
+    border-radius: var(--radius-lg); /* Usando variáveis de raio */
+    box-shadow: var(--shadow-panel); /* Usando variáveis de sombra */
+    border: 1px solid var(--border-medium); /* Usando variáveis de borda */
+}
+
+.faq-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-primary); /* Cor principal do texto */
+    margin-bottom: var(--spacing-xl); /* Usando variáveis de espaçamento */
+    text-align: center;
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--border-soft); /* Usando variáveis de borda */
+    margin-bottom: var(--spacing-md); /* Usando variáveis de espaçamento */
+    padding-bottom: var(--spacing-md); /* Usando variáveis de espaçamento */
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary); /* Cor principal do texto */
+    cursor: pointer;
+    padding: var(--spacing-xs) 0; /* Usando variáveis de espaçamento */
+    transition: color var(--transition-fast);
+}
+
+.faq-question:hover {
+    color: var(--accent-color-light); /* Cor do acento claro no hover */
+}
+
+.faq-question::after {
+    content: '+';
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent-color-light); /* Cor do acento claro */
+    transition: transform var(--transition-fast);
+}
+
+.faq-item.active .faq-question::after {
+    content: '-';
+    transform: rotate(0deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-medium), opacity var(--transition-medium);
+    opacity: 0;
+    padding-top: 0;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 500px;
+    opacity: 1;
+    padding-top: var(--spacing-md); /* Usando variáveis de espaçamento */
+}
+
+.faq-answer p {
+    font-size: 1rem;
+    color: var(--text-primary); /* Cor principal do texto */
+    line-height: 1.6;
+}
+
+.faq-answer a {
+    color: var(--accent-color-light); /* Cor do link */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.faq-answer a:hover {
+    text-decoration: underline;
+}
+
+/* ====================================================== */
+/* ESTILOS PARA IGUALAR HERO SECTION AO RANKING           */
+/* ====================================================== */
+
+/* Ajusta o contêiner da seção hero para centralizar o texto */
+.hero {
+    text-align: center;
+}
+
+/* Estilo para o título principal (Suporte ao Jogador) */
+.hero-title {
+    color: var(--color-yellow-vibrant); /* Cor amarela vibrante */
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-sm); /* Usando variáveis de espaçamento */
+    text-shadow: var(--shadow-subtle); /* Sombra para destaque */
+}
+
+/* Estilo para o subtítulo */
+.hero-subtitle {
+    color: var(--text-primary); /* Cor clara para o texto */
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.5;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* --- Media Queries para Responsividade --- */
+@media (max-width: 992px) {
+    .support-container {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+
+    .support-left,
+    .support-right {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+
+    .options-title, .form-title, .faq-title, .status-title {
+        font-size: 1.8rem;
+    }
+
+    .hero-title {
+        font-size: 2.8rem;
+    }
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .support-main, .status-section, .faq-section {
+        padding: var(--spacing-xl) var(--spacing-sm); /* Ajuste de espaçamento */
+    }
+
+    .support-container, .status-container, .faq-container, .contact-form, .support-options, .support-hours {
+        padding: var(--spacing-lg); /* Ajuste de espaçamento */
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: var(--spacing-xs); /* Ajuste de espaçamento */
+        font-size: 0.95rem;
+    }
+
+    .tab-nav button {
+        padding: var(--spacing-sm) var(--spacing-md); /* Ajuste de espaçamento */
+        font-size: 1rem;
+    }
+
+    .faq-question {
+        font-size: 1.1rem;
+    }
+
+    .status-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs); /* Ajuste de espaçamento */
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+}
