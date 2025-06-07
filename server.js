@@ -5,8 +5,11 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
 
+// --- Importações Existentes ---
 const { db, promiseDb } = require('./db');
 const accountController = require('./accountController'); // Certifique-se que accountController está definido/importado corretamente
+const avatarRoutes = require('./routes/avatar');
+
 
 const app = express();
 const port = 3000;
@@ -20,10 +23,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(session({
-  secret: 'uma_string_secreta_muito_forte_e_aleatoria_12345',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 hours
+    secret: 'uma_string_secreta_muito_forte_e_aleatoria_12345',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 hours
 }));
 
 // Middleware para disponibilizar informações do usuário logado e mensagens flash no template
@@ -38,12 +41,12 @@ app.use((req, res, next) => {
 
 // Middleware para proteger rotas que exigem login
 function requireLogin(req, res, next) {
-  if (req.session && req.session.user) {
-    next(); // Usuário logado, continua para a próxima middleware/rota
-  } else {
-    req.session.errorMessage = 'Você precisa estar logado para acessar esta página.';
-    res.redirect('/login'); // Redireciona para login se não estiver logado
-  }
+    if (req.session && req.session.user) {
+        next(); // Usuário logado, continua para a próxima middleware/rota
+    } else {
+        req.session.errorMessage = 'Você precisa estar logado para acessar esta página.';
+        res.redirect('/login'); // Redireciona para login se não estiver logado
+    }
 }
 
 // Middleware para redirecionar se já estiver logado (para rotas como login, register)
@@ -117,7 +120,7 @@ app.get('/ranking', async (req, res) => {
 
         // Fetch players for the current page and ranking type
         const [rankingPlayers] = await connection.execute(
-            `SELECT id, account_id, name, level, vocation, experience, resets, deleted, group_id
+            `SELECT id, account_id, name, level, vocation, experience, resets, deleted, group_id, looktype, lookhead, lookbody, looklegs, lookfeet, sex
              FROM players
              ${queryWhere}
              ${queryOrder}
@@ -153,13 +156,13 @@ app.get('/ranking', async (req, res) => {
 
 // --- Rotas de Autenticação e Dashboard ---
 app.get('/register', redirectIfLoggedIn, (req, res) => {
-  const formData = req.session.formDataStep1;
-  delete req.session.formDataStep1;
+    const formData = req.session.formDataStep1;
+    delete req.session.formDataStep1;
 
-  res.render('register_step1', {
-    title: 'Criar Conta - Etapa 1',
-    formData: formData
-  });
+    res.render('register_step1', {
+        title: 'Criar Conta - Etapa 1',
+        formData: formData
+    });
 });
 
 app.get('/register/step2', redirectIfLoggedIn, (req, res) => {
@@ -172,8 +175,8 @@ app.get('/register/step2', redirectIfLoggedIn, (req, res) => {
     delete req.session.formDataStep2;
 
     res.render('register_step2', {
-      title: 'Criar Conta - Etapa 2',
-      formData: formData
+        title: 'Criar Conta - Etapa 2',
+        formData: formData
     });
 });
 
@@ -194,8 +197,8 @@ app.post('/register', redirectIfLoggedIn, async (req, res) => {
             }
 
             if (!/\S+@\S+\.\S+/.test(email)) {
-                 req.session.errorMessage = 'Por favor, insira um email válido.';
-                 return res.redirect('/register');
+                req.session.errorMessage = 'Por favor, insira um email válido.';
+                return res.redirect('/register');
             }
 
             const [existingUsers] = await connection.execute(
@@ -208,11 +211,11 @@ app.post('/register', redirectIfLoggedIn, async (req, res) => {
                 const emailExists = existingUsers.some(user => user.email === email);
 
                 if (nameExists && emailExists) {
-                     req.session.errorMessage = 'Nome de conta e Email já cadastrados.';
+                    req.session.errorMessage = 'Nome de conta e Email já cadastrados.';
                 } else if (nameExists) {
-                     req.session.errorMessage = 'Nome de conta já cadastrado.';
+                    req.session.errorMessage = 'Nome de conta já cadastrado.';
                 } else if (emailExists) {
-                     req.session.errorMessage = 'Email já cadastrado.';
+                    req.session.errorMessage = 'Email já cadastrado.';
                 }
                 return res.redirect('/register');
             }
@@ -252,12 +255,12 @@ app.post('/register', redirectIfLoggedIn, async (req, res) => {
             const generatedKey = require('crypto').randomBytes(64).toString('hex');
             const creationTimestamp = Math.floor(Date.now() / 1000);
 
-             // Valores padrão para novas contas
-             const defaultValues = {
-                 change_pass: 0, salt: '', premdays: 0, lastday: 0, blocked: 0, warnings: 0,
-                 group_id: 1, type: 1, accept_news: 0, event_points: 0, language: 0,
-                 vip_time: 0, lang_id: 0, shop_points: 0, userInfoProcessed: 0, rcoins: 0
-             };
+            // Valores padrão para novas contas
+            const defaultValues = {
+                change_pass: 0, salt: '', premdays: 0, lastday: 0, blocked: 0, warnings: 0,
+                group_id: 1, type: 1, accept_news: 0, event_points: 0, language: 0,
+                vip_time: 0, lang_id: 0, shop_points: 0, userInfoProcessed: 0, rcoins: 0
+            };
 
             const [result] = await connection.execute(
                 `INSERT INTO accounts (name, email, password, \`key\`, location, created,
@@ -265,10 +268,10 @@ app.post('/register', redirectIfLoggedIn, async (req, res) => {
                  accept_news, event_points, language, vip_time, lang_id, shop_points, userInfoProcessed, rcoins
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [name, email, hashedPassword, generatedKey, country, creationTimestamp,
-                 defaultValues.change_pass, defaultValues.salt, defaultValues.premdays, defaultValues.lastday, defaultValues.blocked,
-                 defaultValues.warnings, defaultValues.group_id, defaultValues.type, defaultValues.accept_news,
-                 defaultValues.event_points, defaultValues.language, defaultValues.vip_time, defaultValues.lang_id,
-                 defaultValues.shop_points, defaultValues.userInfoProcessed, defaultValues.rcoins
+                    defaultValues.change_pass, defaultValues.salt, defaultValues.premdays, defaultValues.lastday, defaultValues.blocked,
+                    defaultValues.warnings, defaultValues.group_id, defaultValues.type, defaultValues.accept_news,
+                    defaultValues.event_points, defaultValues.language, defaultValues.vip_time, defaultValues.lang_id,
+                    defaultValues.shop_points, defaultValues.userInfoProcessed, defaultValues.rcoins
                 ]
             );
 
@@ -289,16 +292,16 @@ app.post('/register', redirectIfLoggedIn, async (req, res) => {
 
     } catch (error) {
         console.error('Erro durante o registro:', error);
-         // Preserve form data on error if possible and redirect back to the relevant step
-         if (step === '2' && req.session.registrationData) {
-              req.session.errorMessage = 'Erro ao finalizar o registro. Tente novamente mais tarde.';
-              // req.session.formDataStep2 is already set above
-              return res.redirect('/register/step2');
-          } else {
-              req.session.errorMessage = 'Erro ao processar a Etapa 1. Tente novamente mais tarde.';
-              // req.session.formDataStep1 is already set above
-              return res.redirect('/register');
-          }
+        // Preserve form data on error if possible and redirect back to the relevant step
+        if (step === '2' && req.session.registrationData) {
+            req.session.errorMessage = 'Erro ao finalizar o registro. Tente novamente mais tarde.';
+            // req.session.formDataStep2 is already set above
+            return res.redirect('/register/step2');
+        } else {
+            req.session.errorMessage = 'Erro ao processar a Etapa 1. Tente novamente mais tarde.';
+            // req.session.formDataStep1 is already set above
+            return res.redirect('/register');
+        }
 
     } finally {
         if (connection) connection.release(); // Release connection
@@ -306,7 +309,7 @@ app.post('/register', redirectIfLoggedIn, async (req, res) => {
 });
 
 app.get('/login', redirectIfLoggedIn, (req, res) => {
-  res.render('login', { title: 'Login' });
+    res.render('login', { title: 'Login' });
 });
 
 app.post('/login', redirectIfLoggedIn, async (req, res) => {
@@ -329,75 +332,73 @@ app.post('/login', redirectIfLoggedIn, async (req, res) => {
 });
 
 app.get('/dashboard', requireLogin, async (req, res) => {
-  const accountId = req.session.user.id;
-  const accountName = req.session.user.name; // Not strictly needed here, but good practice
-  const accountGroupId = req.session.user.group_id; // Not strictly needed here, but good practice
+    const accountId = req.session.user.id;
+    const accountName = req.session.user.name; // Not strictly needed here, but good practice
+    const accountGroupId = req.session.user.group_id; // Not strictly needed here, but good practice
 
-  let connection;
+    let connection;
 
-  try {
-    connection = await promiseDb.getConnection();
+    try {
+        connection = await promiseDb.getConnection();
 
-    // Fetch account details - ensure fields match your DB schema
-    const [accountRows] = await connection.query(
-        'SELECT id, name, premdays, shop_points, group_id, rcoins FROM accounts WHERE id = ?',
-        [accountId]
-    );
-    if (accountRows.length === 0) {
-        // Account not found, something is wrong with the session ID
-        req.session.destroy(); // Destroy session
-        req.session.errorMessage = 'Sua conta não foi encontrada.';
-        return res.redirect('/login'); // Redirect to login
+        // Fetch account details - ensure fields match your DB schema
+        const [accountRows] = await connection.query(
+            'SELECT id, name, premdays, shop_points, group_id, rcoins FROM accounts WHERE id = ?',
+            [accountId]
+        );
+        if (accountRows.length === 0) {
+            // Account not found, something is wrong with the session ID
+            req.session.destroy(); // Destroy session
+            req.session.errorMessage = 'Sua conta não foi encontrada.';
+            return res.redirect('/login'); // Redirect to login
+        }
+        const account = accountRows[0];
+        // Map database names to potentially different display names if necessary
+        account.vip = account.premdays; // Example mapping as used in EJS
+        account.rcoins = account.shop_points; // Example mapping as used in EJS
+
+        const [characterRows] = await connection.query(
+            'SELECT id, name, sex, picture, level, online, created, resets, looktype, lookhead, lookbody, looklegs, lookfeet FROM players WHERE account_id = ? AND deleted = 0',
+            [accountId]
+        );
+
+        const characters = characterRows; // Array of characters
+
+        const maxPlayersPerAccount = 5; // Example limit
+        const canCreateCharacter = characters.length < maxPlayersPerAccount;
+
+
+        res.render('dashboard', {
+            title: 'Dashboard',
+            account: account, // Pass account details
+            characters: characters, // Pass characters list
+            // group_id: accountGroupId, // Already available in account object, might remove redundant pass
+            canCreateCharacter: canCreateCharacter,
+            maxPlayersPerAccount: maxPlayersPerAccount,
+            user: req.session.user // Make user object available for general header/footer includes
+        });
+
+    } catch (error) {
+        console.error('Erro ao carregar dashboard:', error);
+        req.session.errorMessage = 'Erro ao carregar informações do dashboard. Por favor, tente novamente mais tarde.';
+        return res.redirect('/'); // Redirect to home or error page
+    } finally {
+        if (connection) connection.release(); // Release connection
     }
-    const account = accountRows[0];
-     // Map database names to potentially different display names if necessary
-     // account.vip = account.premdays; // Example if you want to rename
-     // account.rcoins = account.shop_points; // Example if you want to rename
-
-
-    // Fetch characters belonging to this account
-    const [characterRows] = await connection.query(
-        'SELECT id, name, sex, picture, level, online, created, resets FROM players WHERE account_id = ? AND deleted = 0',
-        [accountId]
-    );
-
-    const characters = characterRows; // Array of characters
-
-    const maxPlayersPerAccount = 5; // Example limit
-    const canCreateCharacter = characters.length < maxPlayersPerAccount;
-
-
-    res.render('dashboard', {
-        title: 'Dashboard',
-        account: account, // Pass account details
-        characters: characters, // Pass characters list
-        // group_id: accountGroupId, // Already available in account object, might remove redundant pass
-        canCreateCharacter: canCreateCharacter,
-        maxPlayersPerAccount: maxPlayersPerAccount,
-        user: req.session.user // Make user object available for general header/footer includes
-    });
-
-  } catch (error) {
-    console.error('Erro ao carregar dashboard:', error);
-    req.session.errorMessage = 'Erro ao carregar informações do dashboard. Por favor, tente novamente mais tarde.';
-    return res.redirect('/'); // Redirect to home or error page
-  } finally {
-    if (connection) connection.release(); // Release connection
-  }
 });
 
 app.get('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Erro ao destruir a sessão:', err);
-      // Optionally handle error, maybe keep user logged in or show a message
-      req.session.errorMessage = 'Erro ao fazer logout. Tente novamente.';
-      return res.redirect('/dashboard'); // Or stay on current page
-    }
-    console.log('Usuário deslogado.');
-    // Successful logout, redirect
-    return res.redirect('/login'); // Redirect to login or home
-  });
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Erro ao destruir a sessão:', err);
+            // Optionally handle error, maybe keep user logged in or show a message
+            req.session.errorMessage = 'Erro ao fazer logout. Tente novamente.';
+            return res.redirect('/dashboard'); // Or stay on current page
+        }
+        console.log('Usuário deslogado.');
+        // Successful logout, redirect
+        return res.redirect('/login'); // Redirect to login or home
+    });
 });
 
 
@@ -418,17 +419,17 @@ app.get('/character/:name', async (req, res) => {
         );
         if (playerRows.length > 0) {
             const player = playerRows[0];
-             // Fetch account info if needed for account-specific details on character page
+            // Fetch account info if needed for account-specific details on character page
             const [accountRows] = await connection.execute(
-                 'SELECT name FROM accounts WHERE id = ?',
-                 [player.account_id]
+                'SELECT name FROM accounts WHERE id = ?',
+                [player.account_id]
             );
             player.accountName = accountRows.length > 0 ? accountRows[0].name : 'N/A'; // Add account name
 
 
             res.render('character', {
                 title: player.name,
-                player: player,
+                player: player, // Pass the full player object including look data
                 user: req.session.user // Pass user for header/footer
             });
         } else {
@@ -441,6 +442,9 @@ app.get('/character/:name', async (req, res) => {
         if (connection) connection.release();
     }
 });
+
+// --- Usar a nova rota de avatar ---
+app.use('/', avatarRoutes);
 
 
 // Catch-all for 404 pages (ESTE DEVE SER O ÚLTIMO app.use/app.get/app.post para rotas específicas)
@@ -456,5 +460,5 @@ app.use((err, req, res, next) => {
 
 
 app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
+    console.log(`Servidor rodando em http://localhost:${port}`);
 });
