@@ -52,7 +52,9 @@ function redirectIfLoggedIn(req, res, next) {
     next();
 }
 
-// --- Rotas Públicas ---
+---
+## Rotas Públicas
+
 app.get('/', (req, res) => {
     res.render('index', { title: 'Home' });
 });
@@ -70,7 +72,7 @@ app.get('/mapa', (req, res) => {
 });
 
 app.get('/ranking', async (req, res) => {
-    const pageSize = parseInt(req.query.pageSize) || 50; // Default to 50 players per page
+    const pageSize = parseInt(req.query.pageSize) || 50;
     const currentPage = parseInt(req.query.page) || 1;
     const offset = (currentPage - 1) * pageSize;
     const search = req.query.search ? req.query.search.trim() : '';
@@ -173,7 +175,9 @@ app.get('/character/:name', async (req, res) => {
     }
 });
 
-// --- Rotas de Autenticação ---
+---
+## Rotas de Autenticação
+
 app.get('/register', redirectIfLoggedIn, (req, res) => {
     const formData = req.session.formDataStep1;
     delete req.session.formDataStep1;
@@ -351,7 +355,9 @@ app.get('/logout', (req, res) => {
     });
 });
 
-// --- Rotas do Dashboard e Personagens (Requer Login) ---
+---
+## Rotas do Dashboard e Personagens (Requer Login)
+
 app.get('/dashboard', requireLogin, async (req, res) => {
     const accountId = req.session.user.id;
     let connection;
@@ -416,15 +422,21 @@ app.get('/dashboard', requireLogin, async (req, res) => {
     }
 });
 
-// --- API de Personagens ---
+---
+## API de Personagens
+
 app.post('/api/characters/create', requireLogin, accountController.createCharacter);
 app.get('/api/characters/checkname', accountController.checkCharacterName);
 app.post('/api/characters/delete', requireLogin, accountController.deleteCharacter);
 
-// --- Usar a rota de avatar ---
+---
+## Rota de Avatar
+
 app.use('/', avatarRoutes);
 
-// --- Tratamento de Erros e 404 ---
+---
+## Tratamento de Erros e 404
+
 // Catch-all for 404 pages - This should be the last route handler
 app.use((req, res) => {
     res.status(404).render('404', { title: 'Página Não Encontrada' });
@@ -436,24 +448,6 @@ app.use((err, req, res, next) => {
     res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.' });
 });
 
-<<<<<<< Updated upstream
-=======
-// Catch-all for 404 pages
-app.use((req, res) => {
-    res.status(404).render('404', { title: 'Página Não Encontrada' });
-});
-
-// Global error handler (optional but recommended)
-app.use((err, req, res, next) => {
-    console.error('Global Error Handler:', err.stack);
-    res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.' });
-});
-
-
-
-
-=======
->>>>>>> Stashed changes
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });

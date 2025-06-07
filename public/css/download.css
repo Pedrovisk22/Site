@@ -78,8 +78,8 @@
 }
 
 .download-card img {
-    width: 90px; /* Larger icon */
-    height: 90px;
+    width: 150px; /* Larger icon */
+    height: 150px;
     margin-bottom: var(--spacing-md);
     object-fit: contain;
     filter: invert(36%) sepia(93%) saturate(2773%) hue-rotate(202deg) brightness(100%) contrast(101%); /* Apply theme color filter */
