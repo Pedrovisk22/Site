@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <!-- CSS global do site (ex: fontes, cores base, layout geral) -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- CSS específico do header (se tiver) -->
+    <link rel="stylesheet" href="/css/header.css">
+    <!-- Font Awesome para ícones (como os do menu de conta) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- CSS específico do ranking (para reutilizar estilos de botões/caixas) -->
+    <link rel="stylesheet" href="/css/ranking.css">
+    <!-- CSS específico do mapa (DEVE VIR DEPOIS DOS OUTROS PARA SOBRESCREVER ESTILOS DO MAPA) -->
+    <link rel="stylesheet" href="/css/mapa.css">
+</head>
+<body>
+    <!-- Inclui o cabeçalho. Passamos o objeto 'user' porque o header.ejs o utiliza. -->
+    <%- include('partials/header', { user: user }) %>
+
+    <main class="main-content">
+        <!-- Seção de Banner/Título (similar ao ranking) -->
+        <section class="page-banner map-banner">
+            <div class="container text-center">
+                <h1 class="page-title">MAPA</h1>
+                <p class="page-subtitle">Explore os continentes e as cidades de PokeMonster!</p>
+                <div class="banner-buttons">
+                    <a href="#" class="btn btn-primary"><i class="fas fa-search"></i> Explorar Locais</a>
+                    <a href="/wiki" class="btn btn-secondary"><i class="fas fa-book"></i> Ver Wiki</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Conteúdo Principal (similar ao ranking) -->
+        <section class="section-content map-info-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Pontos de Interesse</h2>
+                    <div class="search-box">
+                        <input type="text" placeholder="Buscar local..." class="form-control">
+                        <button class="btn btn-search"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="map-text-description">
+                    <p>Utilize o scroll do mouse para dar zoom no mapa e clique e arraste para navegar. Clique nos marcadores para mais informações sobre as cidades e áreas.</p>
+                    <p>O mundo de PokeMonster é vasto, com diversas biomas, cidades e dungeons a serem descobertas. Prepare-se para sua aventura!</p>
+                </div>
+                <!-- Você pode adicionar mais conteúdo aqui, como uma pequena tabela de locais famosos, etc. -->
+            </div>
+        </section>
+
+        <!-- Seção do Mapa em si (agora com altura definida e rolável na página) -->
+        <section class="map-section">
+            <div class="map-viewport">
+                <div class="map-content">
+                    <!-- A imagem do mapa original que você forneceu -->
+                    <img id="gameMap" src="/assets/images/flag-mapa.png" alt="Mapa do Jogo">
+                    <div id="mapMarkers">
+                        <div class="marker" data-x="500" data-y="700" data-name="Cidade do Vale Verde"></div>
+                        <div class="marker" data-x="850" data-y="200" data-name="Pico Congelado"></div>
+                        <div class="marker" data-x="150" data-y="550" data-name="Posto Avançado do Deserto"></div>
+                        <div class="marker" data-x="420" data-y="380" data-name="Refúgio da Floresta"></div>
+                        <div class="marker" data-x="700" data-y="600" data-name="Covil Vulcânico"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- !!! O TOOLTIP DEVE FICAR FORA DO MAP-VIEWPORT se a rolagem for na página inteira e você quiser que ele acompanhe o mouse em relação à janela. -->
+            <div id="tooltip"></div>
+        </section>
+    </main>
+
+    <!-- Inclui o rodapé -->
+    <%- include('partials/footer') %>
+
+    <!-- Scripts JS -->
+    <script src="/js/script.js"></script>
+    <script src="/js/mapa.js"></script>
+</body>
+</html>
