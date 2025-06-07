@@ -35,12 +35,12 @@
         </section>
 
         <section class="ranking-content-section" id="ranking-content-section"
-                 data-current-page="<%= currentPage %>"
-                 data-total-pages="<%= totalPages %>"
-                 data-page-size="<%= pageSize %>"
-                 data-ranking-type="level"
-                 data-search-term="<%= search %>"
-                 data-available-page-sizes='<%- JSON.stringify(availablePageSizes) %>'>
+                    data-current-page="<%= currentPage %>"
+                    data-total-pages="<%= totalPages %>"
+                    data-page-size="<%= pageSize %>"
+                    data-ranking-type="level"
+                    data-search-term="<%= search %>"
+                    data-available-page-sizes='<%- JSON.stringify(availablePageSizes) %>'>
 
             <div class="loading-overlay hidden" id="loading-overlay">
                 <div class="spinner"></div>
@@ -70,7 +70,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nome do Jogador</th>
+                                    <th>Jogador</th>
                                     <th>Level</th>
                                 </tr>
                             </thead>
@@ -84,14 +84,14 @@
                                         else if (globalRank === 3) rankClass = 'top-3';
 
                                         const isPlayerLoggedIn = user && player.account_id === user.id;
-
                                         const avatarUrl = `/avatar/${player.name}`;
-                                        const backgroundUrl = `/assets/images/characters/backgrounds/background_${player.background && player.background !== 0 ? player.background : 1}.png`;
+                                        // Usa player.flagCode que é adicionado no server.js
+                                        const flagSrc = `assets/svg/flags/${player.flagCode}.svg`;
                                     %>
                                     <tr class="<%= rankClass %> <%= isPlayerLoggedIn ? 'is-logged-in' : '' %>" data-player-id="<%= player.id %>">
                                         <td class="rank-cell"><%= globalRank %></td>
                                         <td class="player-cell">
-                                            <div class="ranked-avatar-wrapper" style="background-image: url('<%= backgroundUrl %>');">
+                                            <div class="ranked-avatar-wrapper">
                                                 <img src="<%= avatarUrl %>" alt="<%= player.name %> Avatar">
                                             </div>
                                             <div class="ranked-name">
@@ -99,8 +99,13 @@
                                                     <%= isPlayerLoggedIn ? player.name + ' (VOCÊ)' : player.name %>
                                                 </a>
                                             </div>
+                                            <img src="<%= flagSrc %>" alt="Bandeira de <%= player.location %>" class="player-flag" title="<%= player.location || 'País Desconhecido' %>">
                                         </td>
-                                        <td class="value-cell"><%= player.level %></td>
+                                        <td class="value-cell">
+                                            <div class="level-circle <%= rankClass %>">
+                                                <span><%= player.level %></span>
+                                            </div>
+                                        </td>
                                     </tr>
                                 <% }); %>
                             </tbody>
@@ -108,10 +113,10 @@
                     </div>
 
                     <div class="pagination-controls"
-                         data-current-page="<%= currentPage %>"
-                         data-total-pages="<%= totalPages %>">
+                                data-current-page="<%= currentPage %>"
+                                data-total-pages="<%= totalPages %>">
                         <button class="btn btn-secondary" id="prevPageBtn" <%= currentPage === 1 ? 'disabled' : '' %>>
-                            <i class="fas fa-chevron-left"></i> Anterior
+                            <i class="fas fa-chevron-left"></i>
                         </button>
 
                         <%
@@ -146,7 +151,7 @@
                         <% } %>
 
                         <button class="btn btn-secondary" id="nextPageBtn" <%= currentPage === totalPages ? 'disabled' : '' %>>
-                            Próxima <i class="fas fa-chevron-right"></i>
+                            <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
 
@@ -166,6 +171,7 @@
     <%- include('partials/footer') %>
 
     <script src="js/script.js"></script>
+    <script src="js/flags.js"></script>
     <script src="js/ranking.js"></script>
 
 </body>

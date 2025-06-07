@@ -1,5 +1,3 @@
-// public/js/ranking.js
-
 document.addEventListener('DOMContentLoaded', () => {
     const rankingContentSection = document.getElementById('ranking-content-section');
     const searchInput = document.getElementById('rankingSearchInput');
@@ -9,44 +7,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingOverlay = document.getElementById('loading-overlay');
     const rankingTableBody = document.querySelector('.ranking-table tbody');
     const rankingTableContainer = document.getElementById('ranking-table-container');
-    // Select the specific .no-results element within the ranking section if needed,
-    // or rely on the general selector if there's only one.
     const noResultsMessage = rankingContentSection ? rankingContentSection.querySelector('.no-results') : null;
 
-
-    // --- Read initial state from data attributes ---
-    // These values are set by EJS on the initial render
     let currentState = {
-        currentPage: parseInt(rankingContentSection?.dataset.currentPage) || 1,
-        totalPages: parseInt(rankingContentSection?.dataset.totalPages) || 1,
-        pageSize: parseInt(rankingContentSection?.dataset.pageSize) || 5,
-        rankingType: rankingContentSection?.dataset.rankingType || 'level', // Read type from data attribute
+        currentPage: parseInt(rankingContentSection?.dataset.currentPage, 10) || 1,
+        totalPages: parseInt(rankingContentSection?.dataset.totalPages, 10) || 1,
+        pageSize: parseInt(rankingContentSection?.dataset.pageSize, 10) || 5,
+        rankingType: rankingContentSection?.dataset.rankingType || 'level',
         search: rankingContentSection?.dataset.searchTerm || '',
         availablePageSizes: JSON.parse(pageSizeSelection?.dataset.availablePageSizes || '[]')
     };
-
+    
     const showLoading = () => {
-        if (loadingOverlay) {
-            loadingOverlay.classList.remove('hidden');
-        }
+        if (loadingOverlay) loadingOverlay.classList.remove('hidden');
     };
 
     const hideLoading = () => {
-        if (loadingOverlay) {
-            loadingOverlay.classList.add('hidden');
-        }
+        if (loadingOverlay) loadingOverlay.classList.add('hidden');
     };
 
     const updateURL = (page, pageSize, search) => {
-        const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set('type', currentState.rankingType);
-        currentUrl.searchParams.set('search', search);
-        currentUrl.searchParams.set('page', page);
-        currentUrl.searchParams.set('pageSize', pageSize);
-        history.pushState(null, '', currentUrl.toString());
+        const url = new URL(window.location.href);
+        url.searchParams.set('page', page);
+        url.searchParams.set('pageSize', pageSize);
+        url.searchParams.set('search', search);
+        history.pushState(null, '', url.toString());
     };
 
-    // Function to fetch ranking data from the server
+    const preloadImages = (players) => {
+        if (!players || players.length === 0) return Promise.resolve();
+        const promises = players.map(player => new Promise((resolve) => {
+            const avatarImg = new Image();
+            avatarImg.src = `/avatar/${player.name}`;
+            avatarImg.onload = resolve;
+            avatarImg.onerror = resolve; // Continue mesmo se a imagem falhar
+            
+            // Pré-carregar a bandeira também, usando player.flagCode que já veio do servidor
+            const flagImg = new Image();
+            flagImg.src = `assets/svg/flags/${player.flagCode || 'BR'}.svg`;
+            flagImg.onload = resolve;
+            flagImg.onerror = resolve; // Continue mesmo se a imagem falhar
+        }));
+        return Promise.all(promises);
+    };
+
     const fetchRankingData = async (page, pageSize, search) => {
         showLoading();
         const url = new URL('/ranking', window.location.origin);
@@ -56,28 +60,15 @@ document.addEventListener('DOMContentLoaded', () => {
         url.searchParams.set('pageSize', pageSize);
 
         try {
-            const response = await fetch(url, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest' // Indicate AJAX request
-                }
-            });
-
+            const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+            
             const data = await response.json();
-
-            // Update currentState with new data
-            currentState = {
-                ...currentState,
-                currentPage: data.currentPage,
-                totalPages: data.totalPages,
-                pageSize: data.pageSize,
-                search: data.search,
-                // rankingType and availablePageSizes are assumed to be constant for this page
-            };
-
+            await preloadImages(data.players);
+            
+            currentState = { ...currentState, ...data };
             updateRankingTable(data.players);
             updatePaginationControls(data.currentPage, data.totalPages);
             updatePageSizeButtons(data.pageSize);
@@ -86,306 +77,220 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Erro ao buscar dados do ranking:', error);
-            // Display an error message to the user
-            updateRankingTable([]); // Clear table on error
-            updatePaginationControls(1, 1); // Reset pagination to a default state
-            updateNoResultsMessage(false); // Show no results message
+            updateRankingTable([]); // Limpa a tabela em caso de erro
+            updatePaginationControls(1, 1); // Resetar paginação
+            updateNoResultsMessage(false); // Exibe mensagem de "sem resultados"
             if (noResultsMessage) {
-                 noResultsMessage.textContent = 'Ocorreu um erro ao carregar o ranking. Tente novamente mais tarde.';
-                 noResultsMessage.style.display = 'block'; // Ensure it's visible
+                noResultsMessage.textContent = 'Ocorreu um erro ao carregar o ranking. Tente novamente mais tarde.';
+                noResultsMessage.style.display = 'block';
             }
-
         } finally {
             hideLoading();
         }
     };
 
-    // Function to update the HTML table with fetched player data
     const updateRankingTable = (players) => {
         if (!rankingTableBody) return;
-
-        rankingTableBody.innerHTML = ''; // Clear current table body
+        rankingTableBody.innerHTML = ''; // Limpa a tabela existente
 
         if (!players || players.length === 0) {
             if (rankingTableContainer) rankingTableContainer.style.display = 'none';
+            if (noResultsMessage) noResultsMessage.style.display = 'block';
+            if (paginationControls) paginationControls.style.display = 'none'; // Oculta paginação se não há resultados
             return;
         }
-
+        
+        // Exibe a tabela e paginação se houver resultados
         if (rankingTableContainer) rankingTableContainer.style.display = 'block';
+        if (noResultsMessage) noResultsMessage.style.display = 'none';
+        if (paginationControls) paginationControls.style.display = 'flex';
 
         players.forEach((player, index) => {
-            // Calculate global rank based on current state
             const globalRank = (currentState.currentPage - 1) * currentState.pageSize + index + 1;
-
             let rankClass = '';
             if (globalRank === 1) rankClass = 'top-1';
             else if (globalRank === 2) rankClass = 'top-2';
             else if (globalRank === 3) rankClass = 'top-3';
 
-            // Check if user is logged in and matches the player account_id (Access user from global scope if set)
             const isPlayerLoggedIn = window.user && player.account_id === window.user.id;
-
             const avatarUrl = `/avatar/${player.name}`;
-            // Use player.background if available and not 0, otherwise default to 1
-            const backgroundId = player.background && player.background !== 0 ? player.background : 1;
-            const backgroundUrl = `/assets/images/characters/backgrounds/background_${backgroundId}.png`;
-
+            // Usa player.flagCode que é adicionado no server.js
+            const flagUrl = `assets/svg/flags/${player.flagCode || 'BR'}.svg`; // Default para BR no cliente também, por segurança.
 
             const row = document.createElement('tr');
-            row.classList.add(rankClass);
-             if (isPlayerLoggedIn) {
-                row.classList.add('is-logged-in');
-            }
-            row.dataset.playerId = player.id; // Add data attribute for potential future use
-
+            row.className = `${rankClass} ${isPlayerLoggedIn ? 'is-logged-in' : ''}`.trim();
+            row.dataset.playerId = player.id;
             row.innerHTML = `
                 <td class="rank-cell">${globalRank}</td>
                 <td class="player-cell">
-                    <div class="ranked-avatar-wrapper"
-                         style="background-image: url('${backgroundUrl}');">
+                    <div class="ranked-avatar-wrapper">
                         <img src="${avatarUrl}" alt="${player.name} Avatar">
                     </div>
                     <div class="ranked-name">
                         <a href="/character/${player.name}">
-                            ${isPlayerLoggedIn ? player.name + ' (VOCÊ)' : player.name}
+                            ${isPlayerLoggedIn ? `${player.name} (VOCÊ)` : player.name}
                         </a>
                     </div>
+                    <img src="${flagUrl}" alt="Bandeira do Jogador" class="player-flag">
                 </td>
-                <td class="value-cell">${player.level}</td>
-            `;
+                <td class="value-cell">
+                    <div class="level-circle ${rankClass}">
+                        <span>${player.level}</span>
+                    </div>
+                </td>`;
             rankingTableBody.appendChild(row);
         });
     };
 
-    // Function to update the pagination controls HTML and state
     const updatePaginationControls = (currentPage, totalPages) => {
-         if (!paginationControls) return;
+        if (!paginationControls || totalPages <= 1) {
+            if(paginationControls) paginationControls.innerHTML = '';
+            return;
+        }
+        paginationControls.innerHTML = '';
 
-         paginationControls.innerHTML = ''; // Clear current pagination
+        const createButton = (id, disabled) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-secondary';
+            btn.id = id;
+            btn.disabled = disabled;
+            btn.innerHTML = `<i class="fas fa-chevron-${id === 'prevPageBtn' ? 'left' : 'right'}"></i>`;
+            return btn;
+        };
+        const createPageLink = (page, isActive) => {
+            const link = document.createElement('a');
+            link.href = "#";
+            link.className = `page-number ${isActive ? 'active' : ''}`;
+            link.dataset.page = page;
+            link.textContent = page;
+            return link;
+        };
 
-         const createButton = (text, id, disabled) => {
-             const btn = document.createElement('button');
-             btn.classList.add('btn', 'btn-secondary');
-             if (id) btn.id = id;
-             if (disabled) btn.disabled = true;
-             btn.innerHTML = id === 'prevPageBtn' ? '<i class="fas fa-chevron-left"></i> Anterior' : (id === 'nextPageBtn' ? 'Próxima <i class="fas fa-chevron-right"></i>' : text);
-             return btn;
-         };
+        paginationControls.appendChild(createButton('prevPageBtn', currentPage === 1));
 
-         const createPageLink = (page, isActive) => {
-             const link = document.createElement('a');
-             link.href = "#"; // Prevent default link behavior, handle click with JS
-             link.classList.add('page-number');
-             if (isActive) link.classList.add('active');
-             link.dataset.page = page; // Store page number in data attribute
-             link.textContent = page;
-             return link;
-         };
+        const maxPagesToShow = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+        let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
 
-         paginationControls.appendChild(createButton(null, 'prevPageBtn', currentPage === 1));
+        // Ajusta startPage se houver menos de maxPagesToShow no final
+        if (endPage - startPage + 1 < maxPagesToShow && totalPages > maxPagesToShow) {
+            startPage = Math.max(1, totalPages - maxPagesToShow + 1);
+            endPage = totalPages;
+        }
 
-         // Logic to determine which page numbers to show (same as EJS logic)
-         const maxPagesToShow = 5;
-         let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-         let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
 
-         if (endPage - startPage + 1 < maxPagesToShow && totalPages > maxPagesToShow) {
-             startPage = Math.max(1, endPage - maxPagesToShow + 1);
-              endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-         }
+        if (startPage > 1) {
+            paginationControls.appendChild(createPageLink(1, false));
+            if (startPage > 2) paginationControls.insertAdjacentHTML('beforeend', '<span class="pagination-dots">...</span>');
+        }
 
-         if (startPage > 1) {
-             paginationControls.appendChild(createPageLink(1, false));
-             if (startPage > 2) {
-                 const dots = document.createElement('span');
-                 dots.classList.add('pagination-dots');
-                 dots.textContent = '...';
-                 paginationControls.appendChild(dots);
-             }
-         }
+        for (let i = startPage; i <= endPage; i++) {
+            paginationControls.appendChild(createPageLink(i, i === currentPage));
+        }
 
-         for (let i = startPage; i <= endPage; i++) {
-             paginationControls.appendChild(createPageLink(i, i === currentPage));
-         }
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) paginationControls.insertAdjacentHTML('beforeend', '<span class="pagination-dots">...</span>');
+            paginationControls.appendChild(createPageLink(totalPages, false));
+        }
 
-         if (endPage < totalPages) {
-             if (endPage < totalPages - 1) {
-                 const dots = document.createElement('span');
-                 dots.classList.add('pagination-dots');
-                 dots.textContent = '...';
-                 paginationControls.appendChild(dots);
-             }
-             paginationControls.appendChild(createPageLink(totalPages, false));
-         }
+        paginationControls.appendChild(createButton('nextPageBtn', currentPage === totalPages));
+        paginationControls.dataset.currentPage = currentPage;
+        paginationControls.dataset.totalPages = totalPages;
+    };
 
-         paginationControls.appendChild(createButton(null, 'nextPageBtn', currentPage === totalPages));
-
-         // Update data attributes on pagination container to reflect current state
-         paginationControls.dataset.currentPage = currentPage;
-         paginationControls.dataset.totalPages = totalPages;
-     };
-
-    // Function to update the active state of page size buttons
     const updatePageSizeButtons = (pageSize) => {
         if (!pageSizeSelection) return;
         pageSizeSelection.querySelectorAll('.btn').forEach(btn => {
-            if (parseInt(btn.dataset.pageSize) === pageSize) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
+            btn.classList.toggle('active', parseInt(btn.dataset.pageSize, 10) === pageSize);
         });
-         // Update data attribute on the main ranking section as a central source of truth
         if (rankingContentSection) rankingContentSection.dataset.pageSize = pageSize;
     };
 
-    // Function to show/hide the "No Results" message
     const updateNoResultsMessage = (hasResults) => {
         if (noResultsMessage) {
             noResultsMessage.style.display = hasResults ? 'none' : 'block';
-             // Also hide the table container if there are no results
-            if (rankingTableContainer) {
-                 rankingTableContainer.style.display = hasResults ? 'block' : 'none';
-            }
-        } else {
-             // If no-results message element doesn't exist, just control the table container
-            if (rankingTableContainer) {
-                 rankingTableContainer.style.display = hasResults ? 'block' : 'none';
-            }
+        }
+        if (rankingTableContainer) {
+            rankingTableContainer.style.display = hasResults ? 'block' : 'none';
+        }
+        if (paginationControls) {
+             paginationControls.style.display = hasResults ? 'flex' : 'none';
         }
     };
 
-
-    // --- Event Handling using Delegation ---
-    // Listen for clicks on the main ranking section and delegate based on the target
     const handleRankingControlClick = (event) => {
-        // Find the closest button or link that was clicked
-        const target = event.target.closest('button') || event.target.closest('a');
-
-        // If no relevant element was clicked, do nothing
+        const target = event.target.closest('button, a.page-number');
         if (!target) return;
-
-        // Prevent default actions for elements we handle
-        if (target.tagName === 'A' || target.tagName === 'BUTTON') {
-             // Only prevent default if we determine we will fetch data later
-             // or if it's a page link (href="#")
-             if (target.href === "#" || target.id === 'prevPageBtn' || target.id === 'nextPageBtn' || pageSizeSelection?.contains(target) || searchBtn === target) {
-                 event.preventDefault();
-             }
-        }
-
+        event.preventDefault();
 
         let newSearch = searchInput ? searchInput.value.trim() : currentState.search;
         let newPage = currentState.currentPage;
         let newPageSize = currentState.pageSize;
-        let shouldFetch = false;
-
-        // Handle Search Button
-        if (searchBtn === target) {
-            newSearch = searchInput.value.trim();
-            // Fetch if search term changed or if search was cleared
-            if (newSearch !== currentState.search || (newSearch === '' && currentState.search !== '')) {
-                newPage = 1; // Reset to first page on new search
-                shouldFetch = true;
+        
+        if (target.id === 'rankingSearchBtn') {
+            if (newSearch !== currentState.search) {
+                newPage = 1; // Sempre volta para a primeira página ao pesquisar
             } else {
-                 // If search didn't change and we are not changing page, do nothing
-                 return; // Exit the function
+                return; // Não faz nada se a busca não mudou
             }
-        }
-        // Handle Pagination controls (buttons and page number links)
-        else if (paginationControls?.contains(target)) {
-            if (target.id === 'prevPageBtn' && currentState.currentPage > 1 && !target.disabled) {
-                 newPage = currentState.currentPage - 1;
-                 shouldFetch = true;
-             } else if (target.id === 'nextPageBtn' && currentState.currentPage < currentState.totalPages && !target.disabled) {
-                 newPage = currentState.currentPage + 1;
-                 shouldFetch = true;
-             } else if (target.classList.contains('page-number') && target.dataset.page && !target.classList.contains('active')) {
-                 const page = parseInt(target.dataset.page);
-                 if (!isNaN(page) && page >= 1 && page <= currentState.totalPages && page !== currentState.currentPage) {
-                     newPage = page;
-                     shouldFetch = true;
-                 }
-             } else {
-                 return; // Don't fetch if a disabled or inactive pagination control was clicked
-             }
-        }
-        // Handle Page Size Selection buttons
-        else if (pageSizeSelection?.contains(target) && target.dataset.pageSize && !target.classList.contains('active')) {
-             const size = parseInt(target.dataset.pageSize);
-             // Check if the clicked size is available and different from the current size
-             if (!isNaN(size) && currentState.availablePageSizes.includes(size) && size !== currentState.pageSize) {
-                 newPageSize = size;
-                 newPage = 1; // Reset to first page when changing page size
-                 shouldFetch = true;
-             } else {
-                 return; // Don't fetch if a non-page-size button or the active size button was clicked
-             }
+        } else if (paginationControls?.contains(target)) {
+            if (target.id === 'prevPageBtn' && !target.disabled) {
+                newPage--;
+            } else if (target.id === 'nextPageBtn' && !target.disabled) {
+                newPage++;
+            } else if (target.classList.contains('page-number') && target.dataset.page && !target.classList.contains('active')) {
+                newPage = parseInt(target.dataset.page, 10);
+            } else {
+                return; // Não faz nada se o botão está desabilitado ou a página já está ativa
+            }
+        } else if (pageSizeSelection?.contains(target) && target.dataset.pageSize && !target.classList.contains('active')) {
+            newPageSize = parseInt(target.dataset.pageSize, 10);
+            if (newPageSize !== currentState.pageSize) {
+                newPage = 1; // Sempre volta para a primeira página ao mudar o tamanho
+            } else {
+                return; // Não faz nada se o tamanho da página não mudou
+            }
         } else {
-            return; // Do nothing if the clicked target is not a relevant ranking control
+            return; // Clique em um elemento não relevante
         }
 
-        // If any condition triggered a change requiring data fetching
-        if (shouldFetch) {
-             fetchRankingData(newPage, newPageSize, newSearch);
-        }
+        fetchRankingData(newPage, newPageSize, newSearch);
     };
-
-    // Add the single click listener to the main container
+    
     rankingContentSection?.addEventListener('click', handleRankingControlClick);
 
-    // Handle Search (specifically for Enter key press in the input field)
-    if (searchBtn && searchInput) {
-        searchInput.addEventListener('keypress', (event) => {
-            // Check if the pressed key is Enter
-            if (event.key === 'Enter') {
-                event.preventDefault(); // Prevent form submission or new line in input
-                const newSearch = searchInput.value.trim();
-                 // Fetch if search term changed or if search was cleared
-                if (newSearch !== currentState.search || (newSearch === '' && currentState.search !== '')) {
-                     fetchRankingData(1, currentState.pageSize, newSearch); // Always reset to page 1 on search
-                 }
+    searchInput?.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const newSearch = searchInput.value.trim();
+            if (newSearch !== currentState.search) {
+                fetchRankingData(1, currentState.pageSize, newSearch);
             }
-        });
-    }
+        }
+    });
 
-    // Handle back/forward button in browser using the popstate event
     window.addEventListener('popstate', (event) => {
         const urlParams = new URLSearchParams(window.location.search);
-        // Read state from URL, defaulting if not present
-        const page = parseInt(urlParams.get('page')) || 1;
-        const pageSize = parseInt(urlParams.get('pageSize')) || 5;
+        const page = parseInt(urlParams.get('page'), 10) || 1;
+        const pageSize = parseInt(urlParams.get('pageSize'), 10) || currentState.pageSize;
         const search = urlParams.get('search') || '';
-        // Only fetch if the state from history is different from the current state
         if (page !== currentState.currentPage || pageSize !== currentState.pageSize || search !== currentState.search) {
-             // fetchRankingData will update the currentState and the UI
             fetchRankingData(page, pageSize, search);
         }
     });
 
+    const lastUpdatedSpan = document.getElementById('last-updated-time');
+    if (lastUpdatedSpan) {
+        const now = new Date();
+        lastUpdatedSpan.textContent = `${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+    }
 
-    // Update "Last Updated" time on page load (Client-side approach)
-     const lastUpdatedSpan = document.getElementById('last-updated-time');
-     if(lastUpdatedSpan) {
-         const now = new Date();
-         const hours = String(now.getHours()).padStart(2, '0');
-         const minutes = String(now.getMinutes()).padStart(2, '0');
-         const day = String(now.getDate()).padStart(2, '0');
-         const month = String(now.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-         const year = now.getFullYear();
-         lastUpdatedSpan.textContent = `${day}/${month}/${year} às ${hours}:${minutes}`;
-     }
-
-     // --- Initial Setup on Page Load ---
-     // The EJS template already renders the initial table, pagination, and buttons.
-     // These lines ensure the JS state and UI elements match the initial EJS render
-     // and set up event listeners. They are useful if the EJS render might be slightly
-     // off or if you navigate back/forward.
-     // Re-render controls based on the initial state read from data attributes.
-      updatePaginationControls(currentState.currentPage, currentState.totalPages);
-      updatePageSizeButtons(currentState.pageSize);
-      // Ensure the no-results message and table container visibility are correct initially
-      updateNoResultsMessage(document.querySelectorAll('.ranking-table tbody tr').length > 0);
-
-
+    // A paginação inicial e o estado são baseados nos dados do EJS,
+    // e o `updateRankingTable` dentro de `fetchRankingData` (chamado no popstate/interações)
+    // já lida com a renderização das bandeiras.
+    // Não é mais necessário um `setInitialFlags` separado ou chamadas de update diretas no DOMContentLoaded
+    // para bandeiras, pois o EJS já renderiza o `flagCode`.
+    updatePaginationControls(currentState.currentPage, currentState.totalPages);
+    updatePageSizeButtons(currentState.pageSize);
+    updateNoResultsMessage(document.querySelectorAll('.ranking-table tbody tr').length > 0);
 });

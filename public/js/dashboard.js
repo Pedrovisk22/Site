@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             createCharModal.style.display = 'block';
             if (formCreateChar) formCreateChar.reset();
             if (createCharErrorDiv) createCharErrorDiv.style.display = 'none';
-             if (characterNameFeedback) characterNameFeedback.textContent = '';
+            if (characterNameFeedback) characterNameFeedback.textContent = '';
         });
     }
 
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             createCharModal.style.display = 'none';
         });
     }
-     if (cancelCreateModalBtn && createCharModal) {
+    if (cancelCreateModalBtn && createCharModal) {
         cancelCreateModalBtn.addEventListener('click', () => {
             createCharModal.style.display = 'none';
         });
@@ -71,7 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const characterName = document.getElementById('characterName').value;
             const sex = document.getElementById('sex').value;
-            const background = document.getElementById('background').value;
+            // The background for creation is set to default in accountController,
+            // so we don't need to pass it from here for new character creation.
+            // const background = document.getElementById('background').value;
 
             if (!characterName || !sex) {
                 showCreateCharError('Por favor, preencha todos os campos obrigatórios.');
@@ -84,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ characterName, sex, background })
+                    body: JSON.stringify({ characterName, sex }) // Removed background from here
                 });
 
                 const result = await response.json();
@@ -116,55 +118,57 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         const initialSex = sexInputHidden.value || '1';
+        // Corrected template literal syntax
         const initialButton = document.querySelector(`.gender-options .gender-option-btn[data-sex="${initialSex}"]`);
         if (initialButton) {
-             initialButton.classList.add('active');
+            initialButton.classList.add('active');
         }
     }
 
     if (characterNameInput && characterNameFeedback) {
-         characterNameInput.addEventListener('input', () => {
-             if (nameCheckTimeout) {
-                 clearTimeout(nameCheckTimeout);
-             }
-             const name = characterNameInput.value.trim();
-             if (name.length < 3) {
-                 characterNameFeedback.textContent = 'Digite pelo menos 3 caracteres.';
-                 characterNameFeedback.style.color = 'orange';
-                 return;
-             }
-             if (!/^[a-zA-Z0-9 ]+$/.test(name)) {
-                 characterNameFeedback.textContent = 'Nome inválido. Use letras, números e espaços.';
-                 characterNameFeedback.style.color = 'red';
-                 return;
-             }
-             if (name.includes('  ')) {
-                 characterNameFeedback.textContent = 'Múltiplos espaços não são permitidos.';
-                 characterNameFeedback.style.color = 'red';
-                 return;
-             }
+        characterNameInput.addEventListener('input', () => {
+            if (nameCheckTimeout) {
+                clearTimeout(nameCheckTimeout);
+            }
+            const name = characterNameInput.value.trim();
+            if (name.length < 3) {
+                characterNameFeedback.textContent = 'Digite pelo menos 3 caracteres.';
+                characterNameFeedback.style.color = 'orange';
+                return;
+            }
+            if (!/^[a-zA-Z0-9 ]+$/.test(name)) {
+                characterNameFeedback.textContent = 'Nome inválido. Use letras, números e espaços.';
+                characterNameFeedback.style.color = 'red';
+                return;
+            }
+            if (name.includes('  ')) {
+                characterNameFeedback.textContent = 'Múltiplos espaços não são permitidos.';
+                characterNameFeedback.style.color = 'red';
+                return;
+            }
 
-             characterNameFeedback.textContent = 'Verificando...';
-             characterNameFeedback.style.color = 'gray';
+            characterNameFeedback.textContent = 'Verificando...';
+            characterNameFeedback.style.color = 'gray';
 
-             nameCheckTimeout = setTimeout(async () => {
-                 try {
-                     const response = await fetch(`/api/characters/checkname?name=${encodeURIComponent(name)}`);
-                     const result = await response.json();
-                     if (result.exists) {
-                         characterNameFeedback.textContent = 'Nome indisponível.';
-                         characterNameFeedback.style.color = 'red';
-                     } else {
-                         characterNameFeedback.textContent = 'Nome disponível!';
-                         characterNameFeedback.style.color = 'green';
-                     }
-                 } catch (error) {
-                     console.error('Erro na verificação de nome:', error);
-                     characterNameFeedback.textContent = 'Erro ao verificar nome.';
-                     characterNameFeedback.style.color = 'red';
-                 }
-             }, 500);
-         });
+            nameCheckTimeout = setTimeout(async () => {
+                try {
+                    // Corrected template literal syntax
+                    const response = await fetch(`/api/characters/checkname?name=${encodeURIComponent(name)}`);
+                    const result = await response.json();
+                    if (result.exists) {
+                        characterNameFeedback.textContent = 'Nome indisponível.';
+                        characterNameFeedback.style.color = 'red';
+                    } else {
+                        characterNameFeedback.textContent = 'Nome disponível!';
+                        characterNameFeedback.style.color = 'green';
+                    }
+                } catch (error) {
+                    console.error('Erro na verificação de nome:', error);
+                    characterNameFeedback.textContent = 'Erro ao verificar nome.';
+                    characterNameFeedback.style.color = 'red';
+                }
+            }, 500);
+        });
     }
 
     const deleteCharModal = document.getElementById('deleteCharModal');
@@ -176,9 +180,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const deletePasswordInput = document.getElementById('delete-password');
     const deleteCharErrorDiv = deleteCharModal ? deleteCharModal.querySelector('.delete-char-error') : null;
 
+    // FIX: Corrected class selector for delete button
     document.body.addEventListener('click', (event) => {
-        if (event.target.closest('.data-char-delete')) {
-            const deleteButton = event.target.closest('.data-char-delete');
+        if (event.target.closest('.btn-delete-char')) { // Changed from .data-char-delete
+            const deleteButton = event.target.closest('.btn-delete-char');
             const charId = deleteButton.getAttribute('data-id');
             const charName = deleteButton.getAttribute('data-name');
 
@@ -186,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 deleteCharNameSpan.textContent = charName;
                 deleteCharIdInput.value = charId;
                 deletePasswordInput.value = '';
-                 if (deleteCharErrorDiv) deleteCharErrorDiv.style.display = 'none';
+                if (deleteCharErrorDiv) deleteCharErrorDiv.style.display = 'none';
                 deleteCharModal.style.display = 'block';
             }
         }
@@ -197,19 +202,19 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteCharModal.style.display = 'none';
         });
     }
-     if (cancelDeleteModalBtn && deleteCharModal) {
+    if (cancelDeleteModalBtn && deleteCharModal) {
         cancelDeleteModalBtn.addEventListener('click', () => {
             deleteCharModal.style.display = 'none';
         });
     }
 
-     if (deleteCharModal) {
-         window.addEventListener('click', (event) => {
+    if (deleteCharModal) {
+        window.addEventListener('click', (event) => {
             if (event.target === deleteCharModal) {
-                 deleteCharModal.style.display = 'none';
-             }
-         });
-     }
+                deleteCharModal.style.display = 'none';
+            }
+        });
+    }
 
     function showDeleteCharError(message) {
         if (deleteCharErrorDiv) {
@@ -244,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (result.success) {
-                     alert(result.message);
+                    alert(result.message);
                     deleteCharModal.style.display = 'none';
                     window.location.reload();
                 } else {
@@ -279,12 +284,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showEditCharSuccess(message) {
-         if (editCharSuccessDiv) {
-             editCharSuccessDiv.textContent = message;
-             editCharSuccessDiv.style.display = 'block';
-             if (editCharErrorDiv) editCharErrorDiv.style.display = 'none';
-         }
-     }
+        if (editCharSuccessDiv) {
+            editCharSuccessDiv.textContent = message;
+            editCharSuccessDiv.style.display = 'block';
+            if (editCharErrorDiv) editCharErrorDiv.style.display = 'none';
+        }
+    }
 
     function hideEditCharMessages() {
         if (editCharErrorDiv) editCharErrorDiv.style.display = 'none';
@@ -298,31 +303,33 @@ document.addEventListener('DOMContentLoaded', () => {
             thumb.classList.remove('active');
         });
 
+        // Corrected template literal syntax
         const selectedThumb = backgroundOptionsGrid.querySelector(`.background-thumbnail[data-background-value="${value}"]`);
         if (selectedThumb) {
             selectedThumb.classList.add('active');
             selectedBackgroundValueInput.value = value;
         } else {
-            const defaultThumb = backgroundOptionsGrid.querySelector(`.background-thumbnail[data-background-value="0"]`);
+            // Fallback to default background if the selected one doesn't exist (e.g., if char.background was 0)
+            const defaultThumb = backgroundOptionsGrid.querySelector(`.background-thumbnail[data-background-value="1"]`); // Assuming background 1 is default
             if (defaultThumb) {
-                 defaultThumb.classList.add('active');
-                 selectedBackgroundValueInput.value = '0';
+                defaultThumb.classList.add('active');
+                selectedBackgroundValueInput.value = '1';
             } else {
-                 selectedBackgroundValueInput.value = value;
+                selectedBackgroundValueInput.value = value; // Keep original if no default found
             }
         }
-         console.log('Selected background:', selectedBackgroundValueInput.value);
+        console.log('Selected background:', selectedBackgroundValueInput.value);
     }
 
 
     if (backgroundOptionsGrid) {
-         backgroundOptionsGrid.addEventListener('click', (event) => {
-             const thumbnail = event.target.closest('.background-thumbnail');
-             if (thumbnail) {
-                 const bgValue = thumbnail.getAttribute('data-background-value');
-                 selectBackgroundThumbnail(bgValue);
-             }
-         });
+        backgroundOptionsGrid.addEventListener('click', (event) => {
+            const thumbnail = event.target.closest('.background-thumbnail');
+            if (thumbnail) {
+                const bgValue = thumbnail.getAttribute('data-background-value');
+                selectBackgroundThumbnail(bgValue);
+            }
+        });
     }
 
 
@@ -335,10 +342,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (editCharModal && editCharIdInput && editCharModalTitle && selectedBackgroundValueInput) {
                 editCharIdInput.value = charId;
+                // Corrected template literal syntax
                 editCharModalTitle.textContent = `Editar ${charName}`;
                 hideEditCharMessages();
 
-                selectBackgroundThumbnail(charBackground || '0');
+                selectBackgroundThumbnail(charBackground || '1'); // Default to '1' if charBackground is null or 0
 
                 editCharModal.style.display = 'block';
             }
@@ -350,19 +358,19 @@ document.addEventListener('DOMContentLoaded', () => {
             editCharModal.style.display = 'none';
         });
     }
-     if (cancelEditModalBtn && editCharModal) {
+    if (cancelEditModalBtn && editCharModal) {
         cancelEditModalBtn.addEventListener('click', () => {
             editCharModal.style.display = 'none';
         });
     }
 
-     if (editCharModal) {
-         window.addEventListener('click', (event) => {
+    if (editCharModal) {
+        window.addEventListener('click', (event) => {
             if (event.target === editCharModal) {
-                 editCharModal.style.display = 'none';
-             }
-         });
-     }
+                editCharModal.style.display = 'none';
+            }
+        });
+    }
 
     if (formEditChar) {
         formEditChar.addEventListener('submit', async (event) => {
@@ -374,11 +382,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             if (!characterId || selectedBackground === undefined) {
-                 showEditCharError('Dados inválidos para atualização.');
-                 return;
+                showEditCharError('Dados inválidos para atualização.');
+                return;
             }
 
             try {
+                // Corrected template literal syntax
                 const response = await fetch(`/api/characters/${characterId}`, {
                     method: 'PUT',
                     headers: {
@@ -390,11 +399,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (result.success) {
-                     showEditCharSuccess(result.message);
+                    showEditCharSuccess(result.message);
                     setTimeout(() => {
-                         editCharModal.style.display = 'none';
-                         window.location.reload();
-                     }, 1500);
+                        editCharModal.style.display = 'none';
+                        window.location.reload();
+                    }, 1500);
                 } else {
                     showEditCharError(result.message);
                 }
@@ -410,29 +419,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target.classList.contains('private-toggle')) {
             const toggle = event.target;
             const charId = toggle.getAttribute('data-char-id');
-            const isPrivate = toggle.checked;
+            const isPrivate = toggle.checked; // This is already a boolean
 
             try {
+                // Corrected template literal syntax
                 const response = await fetch(`/api/characters/${charId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ isPrivate: isPrivate })
+                    body: JSON.stringify({ isPrivate: isPrivate }) // Send boolean directly
                 });
 
                 const result = await response.json();
 
                 if (result.success) {
                     console.log(result.message);
+                    // No need to reload, the UI state (checkbox) already reflects the change.
+                    // alert(result.message); // Optionally show a temporary alert
                 } else {
-                    toggle.checked = !isPrivate;
+                    toggle.checked = !isPrivate; // Revert the toggle if update failed
                     alert(`Erro: ${result.message}`);
                 }
 
             } catch (error) {
                 console.error('Erro ao alternar privacidade:', error);
-                toggle.checked = !isPrivate;
+                toggle.checked = !isPrivate; // Revert on network/server error
                 alert('Erro ao alternar privacidade. Tente novamente.');
             }
         }
