@@ -42,7 +42,7 @@
                     data-search-term="<%= search %>"
                     data-available-page-sizes='<%- JSON.stringify(availablePageSizes) %>'>
 
-            <div class="loading-overlay hidden" id="loading-overlay">
+            <div class="loading-overlay" id="loading-overlay">
                 <div class="spinner"></div>
                 <p>Carregando Ranking...</p>
             </div>
@@ -50,14 +50,14 @@
             <div class="container">
                 <div class="ranking-controls">
                     <div class="search-bar">
-                        <input type="text" id="rankingSearchInput" placeholder="Buscar jogador..." value="<%= search %>">
+                        <input type="text" id="rankingSearchInput" placeholder="Buscar jogador (mín. 3 letras)..." value="<%= search %>" autocomplete="off">
                         <button id="rankingSearchBtn" class="btn btn-primary"><i class="fas fa-search"></i></button>
                     </div>
 
-                    <div class="page-size-selection" data-available-page-sizes='<%- JSON.stringify(availablePageSizes) %>'>
+                    <div class="page-size-selection">
                         <span>Mostrar:</span>
                         <% availablePageSizes.forEach(size => { %>
-                            <button class="btn btn-secondary btn-sm <%= pageSize === size ? 'active' : '' %>" data-page-size="<%= size %>">
+                            <button class="btn btn-secondary btn-sm <%= Number(pageSize) === size ? 'active' : '' %>" data-page-size="<%= size %>">
                                 <%= size %>
                             </button>
                         <% }); %>
@@ -85,14 +85,13 @@
 
                                         const isPlayerLoggedIn = user && player.account_id === user.id;
                                         const avatarUrl = `/avatar/${player.name}`;
-                                        // Usa player.flagCode que é adicionado no server.js
                                         const flagSrc = `assets/svg/flags/${player.flagCode}.svg`;
                                     %>
                                     <tr class="<%= rankClass %> <%= isPlayerLoggedIn ? 'is-logged-in' : '' %>" data-player-id="<%= player.id %>">
                                         <td class="rank-cell"><%= globalRank %></td>
                                         <td class="player-cell">
                                             <div class="ranked-avatar-wrapper">
-                                                <img src="<%= avatarUrl %>" alt="<%= player.name %> Avatar">
+                                                <img src="<%= avatarUrl %>" alt="<%= player.name %> Avatar" class="ranking-avatar">
                                             </div>
                                             <div class="ranked-name">
                                                 <a href="/character/<%= player.name %>">
@@ -118,38 +117,26 @@
                         <button class="btn btn-secondary" id="prevPageBtn" <%= currentPage === 1 ? 'disabled' : '' %>>
                             <i class="fas fa-chevron-left"></i>
                         </button>
-
                         <%
                             const maxPagesToShow = 5;
                             let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
                             let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-
                             if (endPage - startPage + 1 < maxPagesToShow && totalPages > maxPagesToShow) {
                                 startPage = Math.max(1, endPage - maxPagesToShow + 1);
                                 endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
                             }
                         %>
-
                         <% if (startPage > 1) { %>
                             <a href="#" class="page-number" data-page="1">1</a>
-                            <% if (startPage > 2) { %>
-                                <span class="pagination-dots">...</span>
-                            <% } %>
+                            <% if (startPage > 2) { %><span class="pagination-dots">...</span><% } %>
                         <% } %>
-
                         <% for (let i = startPage; i <= endPage; i++) { %>
-                            <a href="#" class="page-number <%= currentPage === i ? 'active' : '' %>" data-page="<%= i %>">
-                                <%= i %>
-                            </a>
+                            <a href="#" class="page-number <%= currentPage === i ? 'active' : '' %>" data-page="<%= i %>"><%= i %></a>
                         <% } %>
-
                         <% if (endPage < totalPages) { %>
-                            <% if (endPage < totalPages - 1) { %>
-                                <span class="pagination-dots">...</span>
-                            <% } %>
+                            <% if (endPage < totalPages - 1) { %><span class="pagination-dots">...</span><% } %>
                             <a href="#" class="page-number" data-page="<%= totalPages %>"><%= totalPages %></a>
                         <% } %>
-
                         <button class="btn btn-secondary" id="nextPageBtn" <%= currentPage === totalPages ? 'disabled' : '' %>>
                             <i class="fas fa-chevron-right"></i>
                         </button>

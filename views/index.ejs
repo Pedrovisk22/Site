@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Monster - Home</title>
+    <title>PokeMonster - <%= title %></title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="assets/svg/pokeball.svg" type="image/svg+xml">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-
 <body>
 
     <%- include('partials/header') %>
+
     <main class="main-content">
         <section class="hero-section hero-single-slide animate-on-scroll" id="hero-section">
             <div class="hero-background" style="background-image: url('assets/images/background-4.png');"></div>
@@ -24,56 +22,55 @@
                     <h1>Novo Client Disponível!</h1>
                     <p>Baixe agora e entre no mundo magico de PokeMonster.</p>
                     <div class="hero-buttons">
-                        <%# Adicionado id="baixar" para o botão fixo em mobile %>
-                        <a href="/baixar" id="baixar" class="btn btn-primary hero-cta">
+                        <a href="/download" id="baixar" class="btn btn-primary hero-cta">
                             <i class="fas fa-download"></i> BAIXAR AGORA
                         </a>
-                         <%# Atualizado href para a nova seção do trailer %>
                         <a href="#trailer-section" class="btn btn-secondary hero-cta-secondary">
                             <i class="fas fa-play-circle"></i> Assistir ao Trailer
                         </a>
                     </div>
                 </div>
                 <div class="hero-visual-element">
-                    <img src="assets/images/charizard.png" alt="Pikachu dançando" class="hero-animated-png">
+                    <img src="assets/images/charizard.png" alt="Charizard" class="hero-animated-png">
                 </div>
             </div>
         </section>
+
         <section class="server-status-bar animate-on-scroll" style="animation-delay: 0.2s;">
             <div class="container status-items">
                 <div class="status-item">
                     <div class="status-icon">
-                          <img src="assets/images/flag-pessoa2.png" alt="numero total de jogadores">
+                        <img src="assets/images/flag-pessoa2.png" alt="numero total de jogadores">
                     </div>
-                    <div class="status-value">1296</div>
+                    <div class="status-value"><%= serverStats.totalPlayers || 0 %></div>
                     <div class="status-label">Número Total de Jogadores</div>
                 </div>
                 <div class="status-item">
                     <div class="status-icon">
                         <img src="assets/images/flag-online.png" alt="status servidor">
                     </div>
-                    <div class="status-value is-online">Online</div> <%# Adicionado classe para colorir o status %>
+                    <div class="status-value is-online">Online</div>
                     <div class="status-label">Status Servidor</div>
                 </div>
                 <div class="status-item">
                     <div class="status-icon">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12c0 5.515 4.486 10 10 10 5.515 0 10-4.485 10-10C22 6.486 17.515 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zM13 12V7h-2v5H7v2h6v-2z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12c0 5.515 4.486 10 10 10 5.515 0 10-4.485 10-10C22 6.486 17.515 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zM13 12V7h-2v5H7v2h6v-2z"/></svg>
                     </div>
-                    <div class="status-value">32d 14h</div> <%# Placeholder de tempo no ar %>
+                    <div class="status-value">32d 14h</div>
                     <div class="status-label">Tempo de Uptime</div>
                 </div>
                 <div class="status-item">
                     <div class="status-icon">
-                         <img src="assets/images/flag-ping.png" alt="ping medio">
+                        <img src="assets/images/flag-ping.png" alt="ping medio">
                     </div>
-                    <div class="status-value">45ms</div> <%# Placeholder de ping %>
+                    <div class="status-value">45ms</div>
                     <div class="status-label">Ping Médio</div>
                 </div>
                 <div class="status-item">
                     <div class="status-icon">
                        <img src="assets/images/flag-ranking1.png" alt="Nivel mais alto">
                     </div>
-                    <div class="status-value">898</div> <%# Placeholder do nível mais alto %>
+                    <div class="status-value"><%= serverStats.highestLevel || 0 %></div>
                     <div class="status-label">Nível mais alto</div>
                 </div>
             </div>
@@ -81,12 +78,12 @@
 
         <section class="quick-actions-section animate-on-scroll" style="animation-delay: 0.4s;">
             <div class="container action-buttons">
-                <a href="/baixar" class="action-btn animate-on-scroll" style="animation-delay: 0.5s;">
+                <a href="/download" class="action-btn animate-on-scroll" style="animation-delay: 0.5s;">
                     <img src="assets/svg/download.svg" alt="Ícone Download">
                     <span class="btn-title">BAIXAR JOGO</span>
                     <span class="btn-subtitle">PokeMonster Client</span>
                 </a>
-                <a href="#" class="action-btn animate-on-scroll" style="animation-delay: 0.6s;">
+                <a href="/register" class="action-btn animate-on-scroll" style="animation-delay: 0.6s;">
                     <img src="assets/svg/register.svg" alt="Ícone Registrar">
                     <span class="btn-title">CRIAR CONTA</span>
                     <span class="btn-subtitle">Junte-se à Aventura</span>
@@ -99,22 +96,16 @@
             </div>
         </section>
 
-        <!-- NOVA SEÇÃO DO TRAILER AQUI -->
         <section class="trailer-section card-like-section animate-on-scroll" id="trailer-section">
             <div class="container">
                 <h2 class="section-title typewriter" data-text="Assista ao Trailer">Assista ao Trailer</h2>
                 <div class="video-container">
-                    <%# Coloque aqui o código embed do YouTube. Exemplo: %>
-                    <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; background-in-background" allowfullscreen></iframe>
-                    <%# ^^^ SUBSTITUA "YOUR_VIDEO_ID" PELO ID REAL DO SEU VÍDEO DO YOUTUBE ^^^ %>
-                    <%# Adicionado ?rel=0 para não mostrar vídeos relacionados ao final %>
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
         </section>
-        <!-- FIM DA NOVA SEÇÃO DO TRAILER -->
 
         <section class="news-community-section" id="news-community-section">
-             <%# O bloco do trailer que estava aqui foi movido para a nova seção acima. %>
             <div class="container">
                 <div class="news-main-column animate-on-scroll">
                     <div class="news-card-wrapper">
@@ -123,8 +114,7 @@
                             <img src="assets/images/flag-ofertas.avif" alt="Novas Promoções Evento Aniversário">
                             <div class="news-content">
                                 <h3>EVENTO DE ANIVERSÁRIO: NOVAS PROMOÇÕES IMPERDÍVEIS!</h3>
-                                <p>Neste mês comemorativo, liberamos todos os packs atualizados e adicionamos bônus
-                                        exclusivos para jogadores veteranos e novatos. Não perca!</p>
+                                <p>Neste mês comemorativo, liberamos todos os packs atualizados e adicionamos bônus exclusivos para jogadores veteranos e novatos. Não perca!</p>
                                 <div class="news-meta">
                                     <i class="fas fa-clock"></i> <span>29/05/2025 por ADM Pedro</span>
                                 </div>
@@ -137,10 +127,7 @@
                                 <div class="news-content">
                                     <h4>O QUERIDINHO CHEGOU</h4>
                                     <p>Pokémon exclusivo do Mês (Stitch - Addons incluso)</p>
-                                    <div class="news-meta">
-                                        <i class="fas fa-clock"></i>
-                                        <span>05/05/2025 por ADM Pedro</span>
-                                    </div>
+                                    <div class="news-meta"><i class="fas fa-clock"></i> <span>05/05/2025 por ADM Pedro</span></div>
                                     <a href="#" class="btn-tertiary">Ler Mais</a>
                                 </div>
                             </div>
@@ -149,10 +136,7 @@
                                 <div class="news-content">
                                     <h4>PROMOÇÕES ABRIL</h4>
                                     <p>Válidas a partir do Dia 05</p>
-                                    <div class="news-meta">
-                                        <i class="fas fa-clock"></i>
-                                        <span>05/04/2025 por ADM Pedro</span>
-                                    </div>
+                                    <div class="news-meta"><i class="fas fa-clock"></i> <span>05/04/2025 por ADM Pedro</span></div>
                                     <a href="#" class="btn-tertiary">Ler Mais</a>
                                 </div>
                             </div>
@@ -161,49 +145,39 @@
                                 <div class="news-content">
                                     <h4>CHIEN PAO ISLAND</h4>
                                     <p>Conclua as Tasks e capture!</p>
-                                    <div class="news-meta">
-                                        <i class="fas fa-clock"></i>
-                                        <span>05/04/2025 por ADM Pedro</span>
-                                    </div>
+                                    <div class="news-meta"><i class="fas fa-clock"></i> <span>05/04/2025 por ADM Pedro</span></div>
                                     <a href="#" class="btn-tertiary">Ler Mais</a>
                                 </div>
                             </div>
                         </div>
                         <a href="/news" class="btn btn-secondary view-full-ranking" style="margin-top: var(--spacing-md); align-self: center;">Ver Todas as Notícias</a>
-                        
                     </div>
                 </div>
+
                 <aside class="community-sidebar">
                     <div class="top-level-ranking-wrapper animate-on-scroll" style="animation-delay: 0.3s;">
                         <h3 class="section-title card-title typewriter" data-text="RANKING">RANKING</h3>
                         <div class="top-level-ranking">
                             <table>
                                 <tbody>
-                                    <tr>
-                                        <td><img src="/assets/images/flag-tro.png" alt="1st place trophy"> 1</td>
-                                        <td>Tumi Frutti</td>
-                                        <td>898</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="assets/images/flag-tro.png" alt="2nd place trophy"> 2</td>
-                                        <td>Whitenomore</td>
-                                        <td>807</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="assets/images/flag-tro.png" alt="3rd place trophy"> 3</td>
-                                        <td>Lucas</td>
-                                        <td>750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Gato Galactico</td>
-                                        <td>720</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Meliodas</td>
-                                        <td>700</td>
-                                    </tr>
+                                    <% if (serverStats && serverStats.topPlayers && serverStats.topPlayers.length > 0) { %>
+                                        <% serverStats.topPlayers.forEach((player, index) => { %>
+                                            <tr>
+                                                <td>
+                                                    <% if (index < 3) { %>
+                                                        <img src="/assets/images/flag-tro.png" alt="trophy icon">
+                                                    <% } %>
+                                                    <%= index + 1 %>
+                                                </td>
+                                                <td><a href="/character/<%= player.name %>"><%= player.name %></a></td>
+                                                <td><%= player.level %></td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="3" style="text-align: center;">Nenhum jogador no ranking.</td>
+                                        </tr>
+                                    <% } %>
                                 </tbody>
                             </table>
                             <a href="/ranking" class="btn btn-secondary view-full-ranking">Ver Ranking Completo</a>
@@ -228,8 +202,7 @@
                                     </tr>
                                     <tr>
                                         <td class="detail-label">Treinador:</td>
-                                        <td class="detail-value trainer-name"><i class="fas fa-user"></i>
-                                            Pedrovisk</td>
+                                        <td class="detail-value trainer-name"><i class="fas fa-user"></i> Pedrovisk</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -238,12 +211,10 @@
                 </aside>
             </div>
         </section>
-
     </main>
 
     <%- include('partials/footer') %>
 
     <script src="js/script.js"></script>
 </body>
-
 </html>
