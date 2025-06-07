@@ -168,11 +168,9 @@ app.get('/character/:name', async (req, res) => {
     try {
         connection = await promiseDb.getConnection();
 
-        // Query principal do jogador, agora com mais campos
         const playerQuery = `
             SELECT 
-                p.id, p.name, p.level, p.experience, p.isPrivate, p.account_id,
-                p.background, p.online, p.mural_message,
+                p.id, p.name, p.level, p.experience, p.isPrivate,
                 a.created AS account_creation, a.lastday AS last_login, a.location
             FROM players p
             JOIN accounts a ON p.account_id = a.id
@@ -180,25 +178,20 @@ app.get('/character/:name', async (req, res) => {
         const [playerRows] = await connection.execute(playerQuery, [charName]);
 
         if (playerRows.length === 0) {
-            return res.status(404).render('404', { title: 'Jogador Não Encontrado', message: `Jogador "${charName}" não encontrado.` });
+            return res.status(404).render('404', { title: 'Jogador Não Encontrado', message: `Jogador "${charName}" não encontrado ou foi deletado.` });
         }
 
         const player = playerRows[0];
-        const isOwner = req.session.user && req.session.user.id === player.account_id;
 
-        if (player.isPrivate === 1 && !isOwner) {
+        if (player.isPrivate === 1) {
             return res.render('character', {
                 title: 'Perfil Privado',
                 player: { name: player.name },
                 isPrivate: true,
-                isOwner: false, // Adicionado para consistência
                 user: req.session.user
             });
         }
         
-        // --- BUSCA DE DADOS ADICIONAIS ---
-
-        // 1. Posição no Ranking
         const rankQuery = `
             SELECT COUNT(*) + 1 AS rank 
             FROM players 
@@ -208,135 +201,16 @@ app.get('/character/:name', async (req, res) => {
         player.rank = rankRows[0].rank;
         player.flagCode = getFlagCodeForServer(player.location);
 
-        // 2. Estatísticas Gerais (Exemplo: buscando de uma tabela 'player_stats')
-        // Substitua esta query pela sua lógica real
-        /*
-        const [statsRows] = await connection.execute(
-            'SELECT total_captures, total_deaths, battles_won, online_time_seconds FROM player_stats WHERE player_id = ?', 
-            [player.id]
-        );
-        const playerStats = statsRows.length > 0 ? statsRows[0] : { total_captures: 0, total_deaths: 0, battles_won: 0, online_time_seconds: 0 };
-        */
-        // Dados de exemplo até você implementar a query:
-        const playerStats = {
-            total_captures: 123,
-            total_deaths: 45,
-            battles_won: 340,
-            online_time_seconds: 273600 // (3 dias, 4 horas)
-        };
-        
-        // 3. Insígnias (Exemplo: buscando de 'player_badges')
-        /*
-        const [badgeRows] = await connection.execute(
-            'SELECT name, date_achieved, leader_name FROM player_badges WHERE player_id = ?', 
-            [player.id]
-        );
-        const playerBadges = badgeRows;
-        */
-        // Dados de exemplo:
-        const playerBadges = [
-            { name: 'Rocha', date_achieved: '2023-01-15', leader_name: 'Brock' },
-            { name: 'Cascata', date_achieved: '2023-02-20', leader_name: 'Misty' },
-            { name: 'Trovão', date_achieved: '2023-03-10', leader_name: 'Lt. Surge' }
-        ];
-
-        // 4. Últimas Mortes (Exemplo: buscando de 'player_deaths')
-        /*
-        const [deathRows] = await connection.execute(
-            'SELECT `time`, `level`, killed_by, killer_sprite FROM player_deaths WHERE player_id = ? ORDER BY `time` DESC LIMIT 5',
-            [player.id]
-        );
-        const lastDeaths = deathRows.map(d => ({ ...d, time: new Date(d.time * 1000) }));
-        */
-        // Dados de exemplo:
-        const lastDeaths = [
-            { time: new Date(), level: 150, killed_by: 'um Dragonite', killer_sprite: '149.gif' },
-            { time: new Date(Date.now() - 86400000), level: 148, killed_by: 'um Gengar', killer_sprite: '094.gif' }
-        ];
-
-        // 5. Pokémons Derrotados (Exemplo: de 'player_kills')
-        /*
-        const [defeatedRows] = await connection.execute(
-            'SELECT pokemon_name, count, sprite_name FROM player_pokemon_kills WHERE player_id = ? ORDER BY count DESC',
-            [player.id]
-        );
-        const defeatedPokemons = defeatedRows;
-        */
-       // Dados de exemplo:
-       const defeatedPokemons = [
-            { pokemon_name: 'Pikachu', count: 120, sprite_name: '025.gif' },
-            { pokemon_name: 'Snorlax', count: 95, sprite_name: '143.gif' },
-            { pokemon_name: 'Gengar', count: 80, sprite_name: '094.gif' },
-            { pokemon_name: 'Charizard', count: 50, sprite_name: '006.gif' }
-       ];
-        
-        // 6. Pokémons Capturados (Exemplo: de 'player_captures')
-        /*
-        const [capturedRows] = await connection.execute(
-            'SELECT pokemon_name, rarity, type, sprite_name FROM player_captures WHERE player_id = ? ORDER BY capture_date DESC',
-            [player.id]
-        );
-        const capturedPokemons = capturedRows;
-        */
-       // Dados de exemplo:
-       const capturedPokemons = [
-            { pokemon_name: 'Mewtwo', rarity: 'Lendário', type: 'shiny', sprite_name: '150.gif' },
-            { pokemon_name: 'Bulbasaur', rarity: 'Comum', type: 'normal', sprite_name: '001.gif' }
-       ];
-
-
         res.render('character', {
             title: player.name,
-            player, // Contém os dados principais
-            playerStats,
-            playerBadges,
-            lastDeaths,
-            defeatedPokemons,
-            capturedPokemons,
+            player: player,
             isPrivate: false,
-            isOwner, // Passa se o visitante é o dono do perfil
             user: req.session.user
         });
 
     } catch (error) {
         console.error('Erro ao buscar jogador:', error);
         res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro ao buscar informações do jogador.' });
-    } finally {
-        if (connection) connection.release();
-    }
-});
-
-
-// Adicione esta nova rota para editar o mural (Ponto 4)
-app.put('/api/characters/:charId/mural', requireLogin, async (req, res) => {
-    const { charId } = req.params;
-    const { muralMessage } = req.body;
-    const accountId = req.session.user.id;
-
-    if (muralMessage === undefined || muralMessage.length > 140) {
-        return res.status(400).json({ success: false, message: 'Mensagem inválida ou excede 140 caracteres.' });
-    }
-
-    let connection;
-    try {
-        connection = await promiseDb.getConnection();
-        
-        // Verifica se o personagem pertence ao usuário logado
-        const [characterCheck] = await connection.execute(
-            'SELECT account_id FROM players WHERE id = ? AND deleted = 0', 
-            [charId]
-        );
-
-        if (characterCheck.length === 0 || characterCheck[0].account_id !== accountId) {
-            return res.status(403).json({ success: false, message: 'Não autorizado.' });
-        }
-
-        await connection.execute('UPDATE players SET mural_message = ? WHERE id = ?', [muralMessage, charId]);
-        
-        res.json({ success: true, message: 'Mural atualizado com sucesso!' });
-    } catch (error) {
-        console.error('Erro ao atualizar mural:', error);
-        res.status(500).json({ success: false, message: 'Erro interno ao atualizar o mural.' });
     } finally {
         if (connection) connection.release();
     }

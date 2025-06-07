@@ -93,11 +93,11 @@
                                             <div class="ranked-avatar-wrapper">
                                                 <img src="<%= avatarUrl %>" alt="<%= player.name %> Avatar" class="ranking-avatar">
                                             </div>
-                                            <div class="ranked-name">
-                                                <a href="/character/<%= player.name %>">
-                                                    <%= isPlayerLoggedIn ? player.name + ' (VOCÊ)' : player.name %>
-                                                </a>
-                                            </div>
+                                                <div class="ranked-name">
+                                                    <a href="/character/<%= player.name %>">
+                                                        <%= isPlayerLoggedIn ? player.name + ' (VOCÊ)' : player.name %>
+                                                    </a>
+                                                </div>
                                             <img src="<%= flagSrc %>" alt="Bandeira de <%= player.location %>" class="player-flag" title="<%= player.location || 'País Desconhecido' %>">
                                         </td>
                                         <td class="value-cell">
