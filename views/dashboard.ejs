@@ -75,7 +75,7 @@
                         <% if (characters && characters.length > 0) { %>
                             <% characters.forEach(char => { %>
                                 <div class="character-card">
-                                  <div class="character-avatar-wrapper" style="background-image: url('/assets/images/characters/background.png');">
+                                  <div class="character-avatar-wrapper" style="background-image: url('/assets/images/characters/backgrounds/background_<%= char.background && char.background !== 0 ? char.background : 1 %>.png');">
                                     <img class="avatar" src="/avatar/<%= char.name %>" alt="<%= char.name %> Avatar" width="64" height="64" />
                                   </div>
                                   <div class="info">
@@ -85,6 +85,9 @@
                                            <span class="status-dot <%= char.online === 1 ? 'on' : 'off' %>" title="<%= char.online === 1 ? 'Online' : 'Offline' %>"></span>
                                        </div>
                                        <div class="character-actions">
+                                           <button class="btn-icon btn-edit-char" data-id="<%= char.id %>" data-name="<%= char.name %>" data-background="<%= char.background %>" title="Editar Personagem">
+                                               <i class="fas fa-edit"></i>
+                                           </button>
                                             <button class="btn-icon btn-delete data-char-delete" data-id="<%= char.id %>" data-name="<%= char.name %>" title="Excluir Personagem">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
@@ -93,6 +96,13 @@
                                     <div class="character-info">
                                          <p><span class="info-label">Level:</span> <%= char.level %></p>
                                          <p><span class="info-label">Criado em:</span> <%= new Date(char.created * 1000).toLocaleDateString() %></p>
+                                          <div class="privacy-toggle-container">
+                                            <span class="info-label">Perfil Privado:</span>
+                                            <label class="switch">
+                                              <input type="checkbox" class="private-toggle" data-char-id="<%= char.id %>" <%= char.isPrivate === 1 ? 'checked' : '' %>>
+                                              <span class="slider round"></span>
+                                            </label>
+                                          </div>
                                     </div>
                                   </div>
                                 </div>
@@ -197,6 +207,7 @@
           </div>
 
           <input type="hidden" id="picture" name="picture" value="1" />
+          <input type="hidden" id="background" name="background" value="0" />
 
           <div class="create-char-error alert alert-danger mt-2" style="display: none;"></div>
 
@@ -209,6 +220,41 @@
         </form>
       </div>
     </div>
+
+     <div id="editCharModal" class="modal">
+      <div class="modal-content">
+        <span id="btn-close-edit-modal" class="close-modal">×</span>
+        <h2 id="edit-char-modal-title">Editar Personagem</h2>
+        <form id="form-edit-char">
+          <input type="hidden" id="edit-char-id" name="characterId" value="">
+           <input type="hidden" id="selected-background-value" name="background" value="1">
+
+          <div class="form-group">
+              <label>Selecionar Background:</label>
+              <div class="background-options-grid">
+                <% if (backgroundFiles && backgroundFiles.length > 0) { %>
+                  <% backgroundFiles.forEach(bgNum => { %>
+                    <div class="background-thumbnail" data-background-value="<%= bgNum %>" title="Background <%= bgNum %>">
+                      <img src="/assets/images/characters/backgrounds/background_<%= bgNum %>.png" alt="Background <%= bgNum %> Thumbnail">
+                    </div>
+                  <% }) %>
+                <% } %>
+              </div>
+
+
+           <div class="edit-char-error alert alert-danger mt-2" style="display: none;"></div>
+           <div class="edit-char-success alert alert-success mt-2" style="display: none;"></div>
+
+          <div class="form-actions">
+            <button type="button" id="btn-cancel-edit" class="btn btn-secondary">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
 
     <div id="deleteCharModal" class="modal">
       <div class="modal-content">

@@ -82,7 +82,7 @@ exports.createCharacter = async (req, res) => {
   }
 
   const created = Math.floor(Date.now() / 1000);
-  const defaultPicture = 1;
+  const defaultbackground = 1;
   const defaultLanguage = 'pt-BR';
   const defaultIsPrivate = 0;
 
@@ -105,11 +105,11 @@ exports.createCharacter = async (req, res) => {
 
     await connection.query(
       `INSERT INTO players (
-        name, account_id, sex, picture, town_id, posx, posy, posz,
+        name, account_id, sex, background, town_id, posx, posy, posz,
         level, vocation, health, healthmax, experience, deleted,
         conditions, created, language, isPrivate
       ) VALUES (?, ?, ?, ?, 1, 32368, 32236, 7, 1, 0, 150, 150, 0, 0, '', ?, ?, ?)`,
-      [cleanName, accountId, sex, defaultPicture, created, defaultLanguage, defaultIsPrivate]
+      [cleanName, accountId, sex, defaultbackground, created, defaultLanguage, defaultIsPrivate]
     );
 
     return res.json({ success: true, message: 'Personagem criado com sucesso!' });
