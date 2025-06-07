@@ -1,7 +1,6 @@
 // public/js/dashboard.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('dashboard.js carregado');
 
     const navTabs = document.querySelectorAll('.dashboard-nav .nav-tab');
     const tabPanes = document.querySelectorAll('.dashboard-tab-content .tab-pane');
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tab.classList.add('active');
             document.getElementById(targetTabId + '-tab').classList.add('active');
 
-            console.log('Aba ativada:', targetTabId);
         });
     });
 
@@ -73,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const characterName = document.getElementById('characterName').value;
             const sex = document.getElementById('sex').value;
-            const picture = document.getElementById('picture').value;
+            const background = document.getElementById('background').value;
 
             if (!characterName || !sex) {
                 showCreateCharError('Por favor, preencha todos os campos obrigatórios.');
@@ -86,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ characterName, sex, picture })
+                    body: JSON.stringify({ characterName, sex, background })
                 });
 
                 const result = await response.json();
@@ -115,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 genderOptionBtns.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
                 sexInputHidden.value = button.getAttribute('data-sex');
-                 console.log('Sexo selecionado:', sexInputHidden.value);
             });
         });
         const initialSex = sexInputHidden.value || '1';
@@ -195,7 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
     if (closeDeleteModalBtn && deleteCharModal) {
         closeDeleteModalBtn.addEventListener('click', () => {
             deleteCharModal.style.display = 'none';
@@ -261,5 +257,185 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    const editCharModal = document.getElementById('editCharModal');
+    const closeEditModalBtn = document.getElementById('btn-close-edit-modal');
+    const cancelEditModalBtn = document.getElementById('btn-cancel-edit');
+    const formEditChar = document.getElementById('form-edit-char');
+    const editCharIdInput = document.getElementById('edit-char-id');
+    const selectedBackgroundValueInput = document.getElementById('selected-background-value');
+    const backgroundOptionsGrid = editCharModal ? editCharModal.querySelector('.background-options-grid') : null;
+    const editCharModalTitle = document.getElementById('edit-char-modal-title');
+    const editCharErrorDiv = editCharModal ? editCharModal.querySelector('.edit-char-error') : null;
+    const editCharSuccessDiv = editCharModal ? editCharModal.querySelector('.edit-char-success') : null;
+
+
+    function showEditCharError(message) {
+        if (editCharErrorDiv) {
+            editCharErrorDiv.textContent = message;
+            editCharErrorDiv.style.display = 'block';
+            if (editCharSuccessDiv) editCharSuccessDiv.style.display = 'none';
+        }
+    }
+
+    function showEditCharSuccess(message) {
+         if (editCharSuccessDiv) {
+             editCharSuccessDiv.textContent = message;
+             editCharSuccessDiv.style.display = 'block';
+             if (editCharErrorDiv) editCharErrorDiv.style.display = 'none';
+         }
+     }
+
+    function hideEditCharMessages() {
+        if (editCharErrorDiv) editCharErrorDiv.style.display = 'none';
+        if (editCharSuccessDiv) editCharSuccessDiv.style.display = 'none';
+    }
+
+    function selectBackgroundThumbnail(value) {
+        if (!backgroundOptionsGrid || !selectedBackgroundValueInput) return;
+
+        backgroundOptionsGrid.querySelectorAll('.background-thumbnail').forEach(thumb => {
+            thumb.classList.remove('active');
+        });
+
+        const selectedThumb = backgroundOptionsGrid.querySelector(`.background-thumbnail[data-background-value="${value}"]`);
+        if (selectedThumb) {
+            selectedThumb.classList.add('active');
+            selectedBackgroundValueInput.value = value;
+        } else {
+            const defaultThumb = backgroundOptionsGrid.querySelector(`.background-thumbnail[data-background-value="0"]`);
+            if (defaultThumb) {
+                 defaultThumb.classList.add('active');
+                 selectedBackgroundValueInput.value = '0';
+            } else {
+                 selectedBackgroundValueInput.value = value;
+            }
+        }
+         console.log('Selected background:', selectedBackgroundValueInput.value);
+    }
+
+
+    if (backgroundOptionsGrid) {
+         backgroundOptionsGrid.addEventListener('click', (event) => {
+             const thumbnail = event.target.closest('.background-thumbnail');
+             if (thumbnail) {
+                 const bgValue = thumbnail.getAttribute('data-background-value');
+                 selectBackgroundThumbnail(bgValue);
+             }
+         });
+    }
+
+
+    document.body.addEventListener('click', (event) => {
+        if (event.target.closest('.btn-edit-char')) {
+            const editButton = event.target.closest('.btn-edit-char');
+            const charId = editButton.getAttribute('data-id');
+            const charName = editButton.getAttribute('data-name');
+            const charBackground = editButton.getAttribute('data-background');
+
+            if (editCharModal && editCharIdInput && editCharModalTitle && selectedBackgroundValueInput) {
+                editCharIdInput.value = charId;
+                editCharModalTitle.textContent = `Editar ${charName}`;
+                hideEditCharMessages();
+
+                selectBackgroundThumbnail(charBackground || '0');
+
+                editCharModal.style.display = 'block';
+            }
+        }
+    });
+
+    if (closeEditModalBtn && editCharModal) {
+        closeEditModalBtn.addEventListener('click', () => {
+            editCharModal.style.display = 'none';
+        });
+    }
+     if (cancelEditModalBtn && editCharModal) {
+        cancelEditModalBtn.addEventListener('click', () => {
+            editCharModal.style.display = 'none';
+        });
+    }
+
+     if (editCharModal) {
+         window.addEventListener('click', (event) => {
+            if (event.target === editCharModal) {
+                 editCharModal.style.display = 'none';
+             }
+         });
+     }
+
+    if (formEditChar) {
+        formEditChar.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            hideEditCharMessages();
+
+            const characterId = editCharIdInput.value;
+            const selectedBackground = selectedBackgroundValueInput.value;
+
+
+            if (!characterId || selectedBackground === undefined) {
+                 showEditCharError('Dados inválidos para atualização.');
+                 return;
+            }
+
+            try {
+                const response = await fetch(`/api/characters/${characterId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ background: parseInt(selectedBackground, 10) })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                     showEditCharSuccess(result.message);
+                    setTimeout(() => {
+                         editCharModal.style.display = 'none';
+                         window.location.reload();
+                     }, 1500);
+                } else {
+                    showEditCharError(result.message);
+                }
+
+            } catch (error) {
+                console.error('Erro na requisição de edição:', error);
+                showEditCharError('Ocorreu um erro ao salvar as alterações. Tente novamente.');
+            }
+        });
+    }
+
+    document.body.addEventListener('change', async (event) => {
+        if (event.target.classList.contains('private-toggle')) {
+            const toggle = event.target;
+            const charId = toggle.getAttribute('data-char-id');
+            const isPrivate = toggle.checked;
+
+            try {
+                const response = await fetch(`/api/characters/${charId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ isPrivate: isPrivate })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    console.log(result.message);
+                } else {
+                    toggle.checked = !isPrivate;
+                    alert(`Erro: ${result.message}`);
+                }
+
+            } catch (error) {
+                console.error('Erro ao alternar privacidade:', error);
+                toggle.checked = !isPrivate;
+                alert('Erro ao alternar privacidade. Tente novamente.');
+            }
+        }
+    });
 
 });
