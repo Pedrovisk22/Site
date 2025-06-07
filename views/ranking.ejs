@@ -1,175 +1,144 @@
-<!-- views/ranking.ejs -->
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokeXGames - <%= title %></title>
+    <title>PokeMonster - <%= title %></title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/ranking.css"> <!-- Link para o CSS específico -->
+    <link rel="stylesheet" href="css/ranking.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="assets/svg/pokeball.svg" type="image/svg+xml">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-
 <body>
 
     <%- include('partials/header') %>
 
     <main class="main-content">
-        <!-- 1. Background hero visual no topo -->
         <section class="hero-section ranking-hero-section hero-single-slide animate-on-scroll" id="ranking-hero-section">
-            <!-- Usando a mesma imagem de fundo da index para consistência -->
             <div class="hero-background" style="background-image: url('assets/images/background-4.png');"></div>
             <div class="hero-overlay"></div>
             <div class="container hero-content-wrapper">
                 <div class="hero-text-content">
-                    <!-- Título estilizado que reflete o tipo de ranking -->
-                    <h1 class="typewriter" data-text="RANKING DE <%= rankingType === 'level' ? 'NÍVEL' : 'RESETS' %>">
-                        RANKING DE <%= rankingType === 'level' ? 'NÍVEL' : 'RESETS' %>
-                    </h1>
-                    <p>Confira os treinadores mais fortes e dedicados de PokeXGames!</p>
-                    <!-- Botões de ação rápida podem ser relevantes aqui, ou links para outras seções da página -->
+                    <h1 class="typewriter" data-text="RANKING DE NÍVEL">RANKING DE NÍVEL</h1>
+                    <p>Confira os treinadores mais fortes de PokeMonster!</p>
                     <div class="hero-buttons">
-                         <a href="#ranking-table-container" class="btn btn-primary hero-cta">
+                        <a href="#ranking-content-section" class="btn btn-primary hero-cta">
                             <i class="fas fa-arrow-down"></i> Ver Ranking
                         </a>
-                         <a href="/register" class="btn btn-secondary hero-cta-secondary">
-                             <i class="fas fa-user-plus"></i> Criar Conta
-                         </a>
+                        <a href="/register" class="btn btn-secondary hero-cta-secondary">
+                            <i class="fas fa-user-plus"></i> Criar Conta
+                        </a>
                     </div>
                 </div>
-                <!-- Mascote ou PNG animado pode ser adicionado aqui se houver um adequado para o tema de ranking -->
-                <!-- <div class="hero-visual-element">
-                     <img src="assets/images/seu_mascote_ranking.png" alt="Mascote Ranking" class="hero-animated-png">
-                </div> -->
             </div>
         </section>
 
+        <section class="ranking-content-section" id="ranking-content-section"
+                    data-current-page="<%= currentPage %>"
+                    data-total-pages="<%= totalPages %>"
+                    data-page-size="<%= pageSize %>"
+                    data-ranking-type="level"
+                    data-search-term="<%= search %>"
+                    data-available-page-sizes='<%- JSON.stringify(availablePageSizes) %>'>
 
-        <!-- Main Ranking Content Section -->
-        <section class="ranking-content-section animate-on-scroll" style="animation-delay: 0.2s;">
+            <div class="loading-overlay hidden" id="loading-overlay">
+                <div class="spinner"></div>
+                <p>Carregando Ranking...</p>
+            </div>
+
             <div class="container">
-                 <!-- Título principal da seção (pode ser removido ou alterado se o hero já for suficiente) -->
-                 <!-- <h2 class="section-title typewriter" data-text="Confira o Ranking">Confira o Ranking</h2> -->
-
-                <div class="ranking-controls animate-on-scroll" style="animation-delay: 0.3s;">
-                    <div class="ranking-type-selection" id="ranking-type-selection">
-                        <button class="btn btn-secondary <%= rankingType === 'level' ? 'active' : '' %>" data-ranking-type="level">
-                            <i class="fas fa-chart-line"></i> Ranking de Nível
-                        </button>
-                        <button class="btn btn-secondary <%= rankingType === 'resets' ? 'active' : '' %>" data-ranking-type="resets">
-                            <i class="fas fa-sync-alt"></i> Ranking de Resets
-                        </button>
-                    </div>
-
+                <div class="ranking-controls">
                     <div class="search-bar">
                         <input type="text" id="rankingSearchInput" placeholder="Buscar jogador..." value="<%= search %>">
                         <button id="rankingSearchBtn" class="btn btn-primary"><i class="fas fa-search"></i></button>
                     </div>
+
+                    <div class="page-size-selection" data-available-page-sizes='<%- JSON.stringify(availablePageSizes) %>'>
+                        <span>Mostrar:</span>
+                        <% availablePageSizes.forEach(size => { %>
+                            <button class="btn btn-secondary btn-sm <%= pageSize === size ? 'active' : '' %>" data-page-size="<%= size %>">
+                                <%= size %>
+                            </button>
+                        <% }); %>
+                    </div>
                 </div>
 
-                <% if (players.length > 0) { %>
+                <% if (players && players.length > 0) { %>
                     <div class="ranking-table-container scrollable-container" id="ranking-table-container">
                         <table class="ranking-table">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nome do Jogador</th>
+                                    <th>Jogador</th>
                                     <th>Level</th>
-                                    <% if (rankingType === 'resets') { %>
-                                        <th>Resets</th>
-                                    <% } %>
-                                    <th>Experiência</th>
-                                    <th>Vocação</th>
-                                    <!-- Opcional: Adicionar mais colunas aqui -->
-                                    <!-- <th>Último Login</th> -->
-                                    <!-- <th>País</th> -->
                                 </tr>
                             </thead>
                             <tbody>
                                 <% players.forEach((player, index) => { %>
-                                     <%
-                                        // Calcular o rank global
+                                    <%
                                         const globalRank = (currentPage - 1) * pageSize + index + 1;
-                                        // Determinar a classe para Top 3
                                         let rankClass = '';
                                         if (globalRank === 1) rankClass = 'top-1';
                                         else if (globalRank === 2) rankClass = 'top-2';
                                         else if (globalRank === 3) rankClass = 'top-3';
 
-                                        // Verificar se é o jogador logado
-                                        // user (req.session.user) contém a ID da conta logada
-                                        // player.account_id deve ser retornado pela query no server.js
                                         const isPlayerLoggedIn = user && player.account_id === user.id;
-                                     %>
-                                    <tr class="<%= rankClass %> <%= isPlayerLoggedIn ? 'is-logged-in' : '' %>">
-                                        <td>
-                                            <% if (globalRank === 1) { %>
-                                                <img src="/assets/images/gold-trophy.svg" alt="1st Place">
-                                            <% } else if (globalRank === 2) { %>
-                                                <img src="/assets/images/silver-trophy.svg" alt="2nd Place">
-                                            <% } else if (globalRank === 3) { %>
-                                                <img src="/assets/images/bronze-trophy.svg" alt="3rd Place">
-                                            <% } else { %>
-                                                <%= globalRank %>
-                                            <% } %>
+                                        const avatarUrl = `/avatar/${player.name}`;
+                                        // Usa player.flagCode que é adicionado no server.js
+                                        const flagSrc = `assets/svg/flags/${player.flagCode}.svg`;
+                                    %>
+                                    <tr class="<%= rankClass %> <%= isPlayerLoggedIn ? 'is-logged-in' : '' %>" data-player-id="<%= player.id %>">
+                                        <td class="rank-cell"><%= globalRank %></td>
+                                        <td class="player-cell">
+                                            <div class="ranked-avatar-wrapper">
+                                                <img src="<%= avatarUrl %>" alt="<%= player.name %> Avatar">
+                                            </div>
+                                            <div class="ranked-name">
+                                                <a href="/character/<%= player.name %>">
+                                                    <%= isPlayerLoggedIn ? player.name + ' (VOCÊ)' : player.name %>
+                                                </a>
+                                            </div>
+                                            <img src="<%= flagSrc %>" alt="Bandeira de <%= player.location %>" class="player-flag" title="<%= player.location || 'País Desconhecido' %>">
                                         </td>
-                                        <td>
-                                             <!-- Placeholder de Avatar -->
-                                             <div class="player-avatar" title="<%= player.name %>">
-                                                <%= player.name.charAt(0).toUpperCase() %>
-                                                <!-- Substituir por imagem se disponível: <img src="/avatars/<%= player.id %>.png" alt="<%= player.name %> Avatar"> -->
-                                             </div>
-                                            <a href="/character/<%= player.name %>">
-                                                <%= isPlayerLoggedIn ? 'VOCÊ' : player.name %>
-                                            </a>
+                                        <td class="value-cell">
+                                            <div class="level-circle <%= rankClass %>">
+                                                <span><%= player.level %></span>
+                                            </div>
                                         </td>
-                                        <td><%= player.level %></td>
-                                        <% if (rankingType === 'resets') { %>
-                                            <td><%= player.resets %></td>
-                                        <% } %>
-                                        <td><%= player.experience ? player.experience.toLocaleString() : 'N/A' %></td> <!-- Formatando experiência -->
-                                        <td><%= player.vocation %></td>
-                                        <!-- Opcional: Células para mais colunas -->
-                                        <!-- <td><%= player.lastday ? new Date(player.lastday * 1000).toLocaleDateString() : 'Nunca' %></td> -->
-                                        <!-- <td><%= player.location || 'Desconhecido' %></td> -->
                                     </tr>
                                 <% }); %>
                             </tbody>
                         </table>
                     </div>
 
-                     <!-- Paginação Aprimorada -->
-                    <div class="pagination-controls">
+                    <div class="pagination-controls"
+                                data-current-page="<%= currentPage %>"
+                                data-total-pages="<%= totalPages %>">
                         <button class="btn btn-secondary" id="prevPageBtn" <%= currentPage === 1 ? 'disabled' : '' %>>
-                            <i class="fas fa-chevron-left"></i> Anterior
+                            <i class="fas fa-chevron-left"></i>
                         </button>
 
-                        <!-- Lógica para mostrar números de página -->
                         <%
-                            const maxPagesToShow = 5; // Quantos números de página mostrar no total
+                            const maxPagesToShow = 5;
                             let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
                             let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
 
-                            // Ajustar se a faixa inicial ou final for muito próxima dos limites
-                            if (endPage - startPage + 1 < maxPagesToShow) {
+                            if (endPage - startPage + 1 < maxPagesToShow && totalPages > maxPagesToShow) {
                                 startPage = Math.max(1, endPage - maxPagesToShow + 1);
+                                endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
                             }
                         %>
 
                         <% if (startPage > 1) { %>
-                            <a href="?page=1&pageSize=<%= pageSize %>&type=<%= rankingType %>&search=<%= search %>" class="page-number">1</a>
+                            <a href="#" class="page-number" data-page="1">1</a>
                             <% if (startPage > 2) { %>
                                 <span class="pagination-dots">...</span>
                             <% } %>
                         <% } %>
 
                         <% for (let i = startPage; i <= endPage; i++) { %>
-                            <a href="?page=<%= i %>&pageSize=<%= pageSize %>&type=<%= rankingType %>&search=<%= search %>"
-                               class="page-number <%= currentPage === i ? 'active' : '' %>">
+                            <a href="#" class="page-number <%= currentPage === i ? 'active' : '' %>" data-page="<%= i %>">
                                 <%= i %>
                             </a>
                         <% } %>
@@ -178,23 +147,22 @@
                             <% if (endPage < totalPages - 1) { %>
                                 <span class="pagination-dots">...</span>
                             <% } %>
-                            <a href="?page=<%= totalPages %>&pageSize=<%= pageSize %>&type=<%= rankingType %>&search=<%= search %>" class="page-number"><%= totalPages %></a>
+                            <a href="#" class="page-number" data-page="<%= totalPages %>"><%= totalPages %></a>
                         <% } %>
 
-
                         <button class="btn btn-secondary" id="nextPageBtn" <%= currentPage === totalPages ? 'disabled' : '' %>>
-                            Próxima <i class="fas fa-chevron-right"></i>
+                            <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
 
-                    <!-- Rodapé da tabela com info de atualização -->
-                     <p class="ranking-footer-info">
-                         Ranking atualizado: <span id="last-updated-time"></span>.
-                         Dados atualizados automaticamente a cada 15 minutos.
-                     </p>
-
+                    <p class="ranking-footer-info">
+                        Ranking atualizado: <span id="last-updated-time"></span>.
+                        <span class="tooltip-info" title="Os dados do ranking são atualizados automaticamente pelo servidor. A hora mostrada aqui é a hora em que você carregou a página.">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                    </p>
                 <% } else { %>
-                    <p class="no-results">Nenhum jogador encontrado para o ranking selecionado ou termo de busca.</p>
+                    <p class="no-results" style="display: block;">Nenhum jogador encontrado para o ranking selecionado ou termo de busca.</p>
                 <% } %>
             </div>
         </section>
@@ -202,13 +170,9 @@
 
     <%- include('partials/footer') %>
 
-    <script src="js/script.js"></script> <!-- Script principal para animate-on-scroll etc. -->
-    <script src="js/ranking.js"></script> <!-- Script específico para ranking -->
+    <script src="js/script.js"></script>
+    <script src="js/flags.js"></script>
+    <script src="js/ranking.js"></script>
 
-     <!-- Scripts para troféus SVG (exemplo) -->
-     <script src="/assets/svg/gold-trophy.svg"></script>
-     <script src="/assets/svg/silver-trophy.svg"></script>
-     <script src="/assets/svg/bronze-trophy.svg"></script>
 </body>
-
 </html>

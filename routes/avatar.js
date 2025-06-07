@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const { promiseDb } = require('../db'); // Ensure you have promiseDb exported from db.js
-const { renderOutfit } = require('../utils/outfitRenderer');
+const { renderOutfit } = require('../utils/outfitRenderer'); // Assuming this exists and works
 
 // GET /avatar/:name - Rota para gerar a imagem do personagem
 router.get('/avatar/:name', async (req, res) => {
@@ -24,9 +24,9 @@ router.get('/avatar/:name', async (req, res) => {
         );
 
         if (players.length === 0) {
-            // Player not found or deleted
             console.warn(`[AvatarRoute] Character not found: ${characterName}`);
-            // Optionally serve a default "not found" image
+            // Serve a default "not found" image if available, or just 404
+            // Example: return res.sendFile(path.join(__dirname, '..', 'public', 'assets', 'images', 'default_avatar_notfound.png'));
             return res.status(404).send('Personagem não encontrado.');
         }
 
@@ -39,7 +39,7 @@ router.get('/avatar/:name', async (req, res) => {
             lookbody: player.lookbody,
             looklegs: player.looklegs,
             lookfeet: player.lookfeet,
-            // sex: player.sex // Sex is not directly used by the current renderer logic
+            // sex: player.sex // Sex might be needed by your specific renderOutfit function
         });
 
         // Send the image buffer
@@ -49,6 +49,7 @@ router.get('/avatar/:name', async (req, res) => {
     } catch (error) {
         console.error(`[AvatarRoute] Error rendering avatar for ${characterName}:`, error);
         // Respond with an error image or just a 500 error
+         // Example: return res.sendFile(path.join(__dirname, '..', 'public', 'assets', 'images', 'default_avatar_error.png'));
         res.status(500).send('Erro ao gerar a imagem do personagem.');
     } finally {
         if (connection) connection.release();

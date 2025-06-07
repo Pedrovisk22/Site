@@ -15,7 +15,6 @@
      gap: var(--spacing-lg);
 }
 
-
 .dashboard-title {
      font-family: 'Poppins', sans-serif;
      font-size: 2em;
@@ -57,7 +56,6 @@
     margin-bottom: 0;
 }
 
-
 .admin-btn-container {
      text-align: center;
      margin-bottom: var(--spacing-lg);
@@ -83,7 +81,6 @@
      box-shadow: var(--shadow-subtle);
      transform: translateY(-2px);
 }
-
 
 .dashboard-nav {
      display: flex;
@@ -132,7 +129,6 @@
      width: 100%;
 }
 
-
 .dashboard-tab-content .tab-pane {
      display: none;
 }
@@ -140,7 +136,6 @@
 .dashboard-tab-content .tab-pane.active {
      display: block;
 }
-
 
 .dashboard-sections-wrapper {
      display: flex;
@@ -185,7 +180,6 @@
 .dashboard-section-container {
 
 }
-
 
 .section-header {
      display: flex;
@@ -234,10 +228,10 @@
      position: relative;
      background-color: var(--bg-panel-subtle);
      display: flex;
-     justify-content: center; /* Centraliza horizontalmente o conteúdo */
-     align-items: center; /* Centraliza verticalmente o conteúdo */
+     justify-content: center;
+     align-items: center;
      border-bottom: 1px solid var(--border-medium);
-     background-size: 200%; /* Aumentado para dar mais zoom */
+     background-size: cover;
      background-position: center;
      background-repeat: no-repeat;
 }
@@ -286,7 +280,6 @@
      color: var(--text-primary);
 }
 
-
 .status-dot {
      display: inline-block;
      width: 10px;
@@ -309,7 +302,6 @@
      border-color: color-mix(in srgb, var(--danger-color) 50%, black);
 }
 
-
 .character-actions {
      display: flex;
      align-items: center;
@@ -317,7 +309,6 @@
      flex-shrink: 0;
 }
 
-/* Estilo base para botões apenas com ícone */
 .btn-icon {
     background: none;
     border: none;
@@ -327,22 +318,28 @@
     align-items: center;
     justify-content: center;
     transition: color var(--transition-fast), transform var(--transition-fast);
-    font-size: 1.2em; /* Tamanho do ícone */
+    font-size: 1.2em;
+    color: var(--text-secondary);
 }
 
 .btn-icon:hover {
     transform: scale(1.1);
 }
 
-/* Estilo específico para o ícone de lixeira */
 .btn-delete {
-    color: var(--danger-color); /* Cor vermelha para o ícone */
+    color: var(--danger-color);
 }
 
 .btn-delete:hover {
-    color: color-mix(in srgb, var(--danger-color) 20%, white); /* Vermelho mais claro no hover */
+    color: color-mix(in srgb, var(--danger-color) 20%, white);
 }
 
+.btn-edit-char {
+    color: var(--accent-color);
+}
+.btn-edit-char:hover {
+    color: var(--accent-color-light);
+}
 
 .character-info {
      margin-bottom: var(--spacing-md);
@@ -362,6 +359,76 @@
 .character-info .info-label {
      font-weight: 600;
      color: var(--text-primary);
+}
+
+.privacy-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+.privacy-toggle-container .info-label {
+    margin-bottom: 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--border-soft);
+  transition: .4s;
+  border: 1px solid var(--border-medium);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--text-secondary);
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--success-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+  background-color: var(--bg-primary);
+}
+
+.slider.round {
+  border-radius: var(--radius-full);
+}
+
+.slider.round:before {
+  border-radius: var(--radius-full);
 }
 
 .team {
@@ -391,7 +458,6 @@
      border: 1px solid var(--border-medium);
      background-color: transparent;
 }
-
 
 .no-characters-message {
      text-align: center;
@@ -429,7 +495,6 @@
      font-size: 1em;
 }
 
-
 .fancy-card {
      background: linear-gradient(135deg, var(--bg-panel-subtle) 0%, var(--bg-panel) 100%);
      border: 1px solid var(--border-medium);
@@ -449,13 +514,13 @@
      margin-bottom: var(--spacing-md);
      font-weight: 700;
      text-shadow: var(--shadow-minimal);
+     position: relative;
 }
 
 .fancy-card .card-title::after {
     content: ''; position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
     width: var(--spacing-lg); height: 3px; background-color: var(--accent-color); border-radius: var(--radius-full);
 }
-
 
 .rcoins-amount {
      font-family: 'Poppins', sans-serif;
@@ -498,6 +563,9 @@
      font-size: 1.1em;
      box-shadow: var(--shadow-subtle);
      transition: all var(--transition-fast);
+     border: none;
+     cursor: pointer;
+     text-decoration: none;
 }
 .btn-donate:hover {
      background-color: var(--btn-primary-hover-hover-bg);
@@ -545,7 +613,6 @@
     to { transform: scale(1); }
 }
 
-
 .modal-content h2 {
      font-family: 'Poppins', sans-serif;
      font-size: 1.8em;
@@ -582,7 +649,11 @@
 }
 
 .modal-content .form-group label {
-
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1em;
 }
 .modal-content .form-group input[type="text"],
 .modal-content .form-group input[type="password"],
@@ -596,6 +667,13 @@
      color: var(--text-primary);
      font-size: 1em;
      box-shadow: var(--shadow-inset);
+     appearance: none;
+     -webkit-appearance: none;
+     -moz-appearance: none;
+     background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path fill="currentColor" d="M216.49,88.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,143l71.51-71.52a12,12,0,0,1,17,17Z"></path></svg>');
+     background-repeat: no-repeat;
+     background-position: right 10px center;
+     background-size: 16px;
 }
 
 .character-name-feedback {
@@ -636,6 +714,7 @@
      transition: all var(--transition-fast);
      flex: 1;
      max-width: 120px;
+     text-align: center;
 }
 
 .gender-option-btn:hover {
@@ -681,6 +760,63 @@
 .modal-content .alert {
      width: 100%;
      margin-bottom: 0;
+}
+
+/* New styles for background thumbnail selection */
+.background-options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* fixa 3 por linha */
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
+  max-height: 270px;
+  overflow-y: auto;
+  justify-items: center;
+}
+
+
+.background-thumbnail {
+  width: 120px;
+  height: 90px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: border-color 0.2s, transform 0.2s;
+  background-color: var(--bg-panel-subtle);
+}
+
+.background-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.background-thumbnail.active {
+  border-color: var(--accent-color-light);
+  box-shadow: 0 0 8px rgba(66, 165, 245, 0.6);
+  transform: scale(1.06);
+  z-index: 2;
+}
+
+
+.background-thumbnail:hover {
+  border-color: var(--accent-color);
+  transform: none;
+}
+
+
+.background-thumbnail .thumbnail-placeholder {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.8em;
+    padding: var(--spacing-xs);
 }
 
 
@@ -746,6 +882,13 @@
      .gender-option-btn { padding: var(--spacing-sm); font-size: 0.9em; max-width: 100px;}
      .gender-option-btn img { width: 35px; height: 35px; }
      .modal-content .form-actions { gap: var(--spacing-md); }
+
+    .background-options-grid {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    }
+    .background-thumbnail {
+        max-width: 90px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -762,7 +905,6 @@
       .admin-btn-container { margin-bottom: var(--spacing-md); }
      .admin-btn { font-size: 0.9em; padding: var(--spacing-xs) var(--spacing-sm); }
 
-
      .dashboard-nav {
           gap: var(--spacing-sm);
           padding-bottom: var(--spacing-xs);
@@ -772,12 +914,10 @@
          padding: var(--spacing-xs) var(--spacing-sm);
      }
 
-
      .dashboard-section { padding: var(--spacing-sm); }
      .section-header { flex-direction: column; align-items: flex-start; gap: var(--spacing-xs); }
      .section-header h2 { font-size: 1.2em; }
      .section-header h2::after { content: none; }
-
 
      .character-grid {
          grid-template-columns: 1fr;
@@ -790,6 +930,7 @@
      .character-avatar-wrapper {
          width: 100px;
          height: auto;
+         background-size: 200%;
          flex-shrink: 0;
          border-bottom: none;
          border-right: 1px solid var(--border-medium);
@@ -805,9 +946,7 @@
          flex-grow: 1;
      }
       .character-header { flex-direction: column; gap: var(--spacing-xs); align-items: flex-start;}
-      .character-name-and-status h3 { font-size: 1.1em; }
       .character-actions { gap: var(--spacing-sm); margin-top: var(--spacing-xs); }
-
 
      .character-info { font-size: 0.85em; margin-bottom: var(--spacing-sm); }
      .team {
@@ -818,7 +957,6 @@
 
      .create-character-banner .btn { font-size: 1em; padding: var(--spacing-sm) var(--spacing-md); width: 100%;}
      .create-character-banner .limit-message { font-size: 0.9em; }
-
 
      .fancy-card { padding: var(--spacing-sm); }
      .fancy-card .card-title { font-size: 1.2em; }
@@ -841,35 +979,10 @@
      .modal-content .form-actions { gap: var(--spacing-sm); flex-direction: column-reverse; align-items: stretch;}
      .modal-content .form-actions .btn { width: 100%; justify-content: center;}
 
-} 
-/* Regras para a imagem do Bulbasaur (usando ID para alta especificidade) */
-
-#bulbasaur-sprite {
-    /* 1. Para fazer a imagem do Pokémon parar de mexer (remover a animação): */
-    animation: none !important; /* ESSENCIAL para parar a animação */
-
-    /* 2. Para ajustar a altura da imagem do Pokémon (mantenha ou ajuste): */
-    /* Você pode ajustar 'max-height' para tornar o Pokémon maior ou menor. */
-    /* Ex: max-height: 120px !important; (para deixá-lo um pouco maior) */
-    max-height: 100px !important; /* Mantém o tamanho atual, mas garante a aplicação */
-
-    /* 3. Para ajustar a posição vertical do Pokémon sobre a grama: */
-    /* O valor original é 30px, que o faz flutuar. Um valor menor o "senta" mais na grama.
-       Experimente: 5px, 0px, 10px, etc., até ficar como você quer. */
-    bottom: 5px !important; /* Sugestão de posição mais baixa */
-
-    /* Garante que o transform inicial não cause problemas ao remover a animação */
-    transform: translateX(-50%) translateY(0) !important;
-}
-
-/* Opcional: Garante que a imagem da grama também não se mova, se ela tiver uma animação */
-.ultima-captura-image-wrapper .grass-base {
-    animation: none !important;
-}
-
-/* Opcional: Ajusta a altura total do contêiner da imagem se o Pokémon estiver cortando
-   ou se você quiser mais espaço vertical após ajustar o tamanho do Pokémon. */
-.ultima-captura-image-wrapper {
-    height: 110px !important; /* Manter ou aumentar se necessário */
-    /* overflow: hidden; */ /* Certifique-se de que não haja overflow que cause corte */
+    .background-options-grid {
+        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); /* Even smaller */
+    }
+    .background-thumbnail {
+        max-width: 70px;
+    }
 }

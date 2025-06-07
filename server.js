@@ -1,23 +1,21 @@
-// server.js
-
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
+const crypto = require('crypto');
+const fs = require('fs').promises; // Keep this as promises for async/await
 
-// --- Importações Existentes ---
 const { db, promiseDb } = require('./db');
-const accountController = require('./accountController'); // Certifique-se que accountController está definido/importado corretamente
+const accountController = require('./accountController');
 const avatarRoutes = require('./routes/avatar');
-
 
 const app = express();
 const port = 3000;
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -26,12 +24,11 @@ app.use(session({
     secret: 'uma_string_secreta_muito_forte_e_aleatoria_12345',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 hours
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// Middleware para disponibilizar informações do usuário logado e mensagens flash no template
 app.use((req, res, next) => {
-    res.locals.user = req.session.user || null; // Passa o objeto user para o template
+    res.locals.user = req.session.user || null;
     res.locals.errorMessage = req.session.errorMessage;
     res.locals.successMessage = req.session.successMessage;
     delete req.session.errorMessage;
@@ -39,26 +36,22 @@ app.use((req, res, next) => {
     next();
 });
 
-// Middleware para proteger rotas que exigem login
 function requireLogin(req, res, next) {
     if (req.session && req.session.user) {
-        next(); // Usuário logado, continua para a próxima middleware/rota
+        next();
     } else {
         req.session.errorMessage = 'Você precisa estar logado para acessar esta página.';
-        res.redirect('/login'); // Redireciona para login se não estiver logado
+        res.redirect('/login');
     }
 }
 
-// Middleware para redirecionar se já estiver logado (para rotas como login, register)
 function redirectIfLoggedIn(req, res, next) {
     if (req.session && req.session.user) {
-        // Se o usuário tentar acessar /login ou /register estando logado, redireciona
-        return res.redirect('/dashboard'); // Redireciona para o dashboard ou outra página
+        return res.redirect('/dashboard');
     }
-    next(); // Não logado, continua
+    next();
 }
 
-// --- Rotas Principais ---
 app.get('/', (req, res) => {
     res.render('index', { title: 'Home' });
 });
@@ -71,90 +64,216 @@ app.get('/download', (req, res) => {
     res.render('wiki', { title: 'Wiki - Held Items' });
 
 
-// --- Rota do MAPA (ADICIONADA AQUI) ---
 app.get('/mapa', (req, res) => {
     res.render('mapa', { title: 'Mapa do Mundo' });
 });
 
+// Mapeamento de nomes de países para códigos ISO 3166-1 alpha-2
+const countryNameToCodeMap = {
+    'Afeganistão': 'AF', 'África do Sul': 'ZA', 'Albânia': 'AL', 'Alemanha': 'DE',
+    'Andorra': 'AD', 'Angola': 'AO', 'Anguilla': 'AI', 'Antártida': 'AQ',
+    'Antígua e Barbuda': 'AG', 'Arábia Saudita': 'SA', 'Argélia': 'DZ',
+    'Argentina': 'AR', 'Armênia': 'AM', 'Aruba': 'AW', 'Austrália': 'AU',
+    'Áustria': 'AT', 'Azerbaijão': 'AZ', 'Bahamas': 'BS', 'Bahrein': 'BH',
+    'Bangladesh': 'BD', 'Barbados': 'BB', 'Belarus': 'BY', 'Bélgica': 'BE',
+    'Belize': 'BZ', 'Benin': 'BJ', 'Bermudas': 'BM', 'Bolívia': 'BO',
+    'Bósnia e Herzegovina': 'BA', 'Botsuana': 'BW', 'Brasil': 'BR', 'Brunei': 'BN',
+    'Bulgária': 'BG', 'Burkina Faso': 'BF', 'Burundi': 'BI', 'Butão': 'BT',
+    'Cabo Verde': 'CV', 'Camboja': 'KH', 'Canadá': 'CA', 'Catar': 'QA',
+    'Cazaquistão': 'KZ', 'República Centro-Africana': 'CF', 'Chade': 'TD',
+    'Chile': 'CL', 'China': 'CN', 'Chipre': 'CY', 'Colômbia': 'CO',
+    'Comores': 'KM', 'República do Congo': 'CG', 'República Democrática do Congo': 'CD',
+    'Coreia do Norte': 'KP', 'Coreia do Sul': 'KR', 'Costa do Marfim': 'CI',
+    'Costa Rica': 'CR', 'Croácia': 'HR', 'Cuba': 'CU', 'Dinamarca': 'DK',
+    'Djibouti': 'DJ', 'Dominica': 'DM', 'Egito': 'EG', 'El Salvador': 'SV',
+    'Emirados Árabes Unidos': 'AE', 'Equador': 'EC', 'Eritreia': 'ER',
+    'Eslováquia': 'SK', 'Eslovênia': 'SI', 'Espanha': 'ES', 'Estados Unidos': 'US',
+    'Estônia': 'EE', 'Etiópia': 'ET', 'Fiji': 'FJ', 'Filipinas': 'PH',
+    'Finlândia': 'FI', 'França': 'FR', 'Gabão': 'GA', 'Gâmbia': 'GM',
+    'Gana': 'GH', 'Geórgia': 'GE', 'Gibraltar': 'GI', 'Granada': 'GD',
+    'Grécia': 'GR', 'Groenlândia': 'GL', 'Guadalupe': 'GP', 'Guam': 'GU',
+    'Guatemala': 'GT', 'Guiana': 'GY', 'Guiana Francesa': 'GF', 'Guiné': 'GN',
+    'Guiné-Bissau': 'GW', 'Guiné Equatorial': 'GQ', 'Haiti': 'HT',
+    'Honduras': 'HN', 'Hong Kong': 'HK', 'Hungria': 'HU', 'Iêmen': 'YE',
+    'Ilha Bouvet': 'BV', 'Ilha Christmas': 'CX', 'Ilha Norfolk': 'NF',
+    'Ilhas Aland': 'AX', 'Ilhas Cayman': 'KY', 'Ilhas Cocos (Keeling)': 'CC',
+    'Ilhas Cook': 'CK', 'Ilhas Feroe': 'FO', 'Ilhas Malvinas': 'FK',
+    'Ilhas Marianas do Norte': 'MP', 'Ilhas Marshall': 'MH', 'Ilhas Pitcairn': 'PN',
+    'Ilhas Salomão': 'SB', 'Ilhas Turks e Caicos': 'TC', 'Ilhas Menores Distantes dos Estados Unidos': 'UM',
+    'Ilhas Virgens Britânicas': 'VG', 'Ilhas Virgens Americanas': 'VI', 'Ilhas Heard e McDonald': 'HM',
+    'Irlanda': 'IE', 'Irã': 'IR', 'Iraque': 'IQ', 'Islândia': 'IS',
+    'Israel': 'IL', 'Itália': 'IT', 'Jamaica': 'JM', 'Japão': 'JP',
+    'Jordânia': 'JO', 'Kuwait': 'KW', 'Laos': 'LA', 'Lesoto': 'LS',
+    'Letônia': 'LV', 'Líbano': 'LB', 'Libéria': 'LR', 'Líbia': 'LY',
+    'Liechtenstein': 'LI', 'Lituânia': 'LT', 'Luxemburgo': 'LU', 'Macau': 'MO',
+    'Macedônia do Norte': 'MK', 'Madagascar': 'MG', 'Malásia': 'MY',
+    'Malawi': 'MW', 'Maldivas': 'MV', 'Mali': 'ML', 'Malta': 'MT',
+    'Martinica': 'MQ', 'Mauritânia': 'MR', 'Maurício': 'MU', 'Mayotte': 'YT',
+    'México': 'MX', 'Micronésia': 'FM', 'Moçambique': 'MZ', 'Moldávia': 'MD',
+    'Mônaco': 'MC', 'Mongólia': 'MN', 'Montenegro': 'ME', 'Montserrat': 'MS',
+    'Marrocos': 'MA', 'Mianmar': 'MM', 'Namíbia': 'NA', 'Nauru': 'NR',
+    'Nepal': 'NP', 'Países Baixos': 'NL', 'Antilhas Holandesas': 'AN',
+    'Nova Caledônia': 'NC', 'Nova Zelândia': 'NZ', 'Nicarágua': 'NI',
+    'Níger': 'NE', 'Nigéria': 'NG', 'Niue': 'NU', 'Noruega': 'NO',
+    'Omã': 'OM', 'Palau': 'PW', 'Panamá': 'PA', 'Papua Nova Guiné': 'PG',
+    'Paquistão': 'PK', 'Paraguai': 'PY', 'Peru': 'PE', 'Polinésia Francesa': 'PF',
+    'Polônia': 'PL', 'Porto Rico': 'PR', 'Portugal': 'PT', 'Quênia': 'KE',
+    'Quirguistão': 'KG', 'Kiribati': 'KI', 'Reino Unido': 'GB', 'República Tcheca': 'CZ',
+    'República Dominicana': 'DO', 'Reunião': 'RE', 'Romênia': 'RO', 'Ruanda': 'RW',
+    'Rússia': 'RU', 'Saara Ocidental': 'EH', 'Saint Pierre e Miquelon': 'PM',
+    'Samoa': 'WS', 'Samoa Americana': 'AS', 'San Marino': 'SM', 'Santa Helena': 'SH',
+    'Santa Lúcia': 'LC', 'São Cristóvão e Nevis': 'KN', 'São Martinho (Parte Francesa)': 'MF',
+    'São Martinho (Parte Holandesa)': 'SX', 'São Tomé e Príncipe': 'ST',
+    'São Vicente e Granadinas': 'VC', 'Senegal': 'SN', 'Serra Leoa': 'SL',
+    'Sérvia': 'RS', 'Singapura': 'SG', 'Síria': 'SY', 'Somália': 'SO',
+    'Sri Lanka': 'LK', 'Eswatini': 'SZ', 'Sudão': 'SD', 'Sudão do Sul': 'SS',
+    'Suécia': 'SE', 'Suíça': 'CH', 'Suriname': 'SR', 'Svalbard e Jan Mayen': 'SJ',
+    'Tajiquistão': 'TJ', 'Tailândia': 'TH', 'Taiwan': 'TW', 'Tanzânia': 'TZ',
+    'Terras Austrais Francesas': 'TF', 'Território Britânico do Oceano Índico': 'IO',
+    'Timor-Leste': 'TL', 'Togo': 'TG', 'Tokelau': 'TK', 'Tonga': 'TO',
+    'Trinidad e Tobago': 'TT', 'Tunísia': 'TN', 'Turcomenistão': 'TM', 'Turquia': 'TR',
+    'Tuvalu': 'TV', 'Ucrânia': 'UA', 'Uganda': 'UG', 'Uruguai': 'UY',
+    'Uzbequistão': 'UZ', 'Vanuatu': 'VU', 'Cidade do Vaticano': 'VA',
+    'Venezuela': 'VE', 'Vietnã': 'VN', 'Wallis e Futuna': 'WF', 'Zâmbia': 'ZM',
+    'Zimbábue': 'ZW'
+};
+
+function getFlagCodeForServer(countryName) {
+    return countryNameToCodeMap[countryName] || 'BR'; // Padrão para BR se não encontrar
+}
+
 app.get('/ranking', async (req, res) => {
-    const pageSize = parseInt(req.query.pageSize) || 50; // Default to 50 players per page
-    const currentPage = parseInt(req.query.page) || 1;
+    const availablePageSizes = [5, 10, 20, 50, 100];
+
+    let pageSize = parseInt(req.query.pageSize, 10) || availablePageSizes[0];
+    if (!availablePageSizes.includes(pageSize)) {
+        pageSize = availablePageSizes[0];
+    }
+
+    const currentPage = parseInt(req.query.page, 10) || 1;
     const offset = (currentPage - 1) * pageSize;
-    // Sanitize search input to prevent SQL injection if not using prepared statements securely (promiseDb does this)
-    const search = req.query.search ? req.query.search.trim() : ''; // Trim whitespace
-    const searchQuery = search ? `%${search}%` : null; // Use for LIKE clause
-    const rankingType = req.query.type || 'level'; // Default to level ranking
+    const search = req.query.search ? req.query.search.trim() : '';
+    const rankingType = req.query.type || 'level';
 
     let connection;
 
     try {
         connection = await promiseDb.getConnection();
 
-        let totalPlayersCount;
-        let players;
-        let queryOrder = '';
-        // Base WHERE clause: not deleted, group_id less than 2 (assuming group_id 1 = player)
-        let queryWhere = 'WHERE deleted = 0 AND group_id < 2';
-        const queryParams = [];
+        let queryWhere = 'WHERE p.deleted = 0 AND p.group_id < 2';
+        const selectParams = [];
+        const countParams = [];
 
-        if (searchQuery) {
-            queryWhere += ' AND name LIKE ?';
-            queryParams.push(searchQuery);
+        if (search) {
+            queryWhere += ' AND p.name LIKE ?';
+            const searchQueryValue = `%${search}%`;
+            selectParams.push(searchQueryValue);
+            countParams.push(searchQueryValue);
         }
 
-        if (rankingType === 'level') {
-            queryOrder = 'ORDER BY level DESC, experience DESC';
-        } else if (rankingType === 'resets') {
-            queryOrder = 'ORDER BY resets DESC, level DESC, experience DESC'; // Order by resets first
-        } else {
-            // Default or invalid type
-            queryOrder = 'ORDER BY level DESC, experience DESC';
+        let queryOrder = 'ORDER BY p.level DESC, p.experience DESC';
+        if (rankingType === 'resets') {
+            queryOrder = 'ORDER BY p.resets DESC, p.level DESC, p.experience DESC';
         }
 
-        // Count total players matching criteria
-        const [countResult] = await connection.execute(
-            `SELECT COUNT(*) AS total FROM players ${queryWhere}`,
-            queryParams
-        );
-        totalPlayersCount = countResult[0].total;
+        const countSql = `SELECT COUNT(*) AS total FROM players p ${queryWhere}`;
+        const [countResult] = await connection.execute(countSql, countParams);
+        const totalPlayersCount = countResult[0].total;
 
-        // Fetch players for the current page and ranking type
-        const [rankingPlayers] = await connection.execute(
-            `SELECT id, account_id, name, level, vocation, experience, resets, deleted, group_id, looktype, lookhead, lookbody, looklegs, lookfeet, sex
-             FROM players
-             ${queryWhere}
-             ${queryOrder}
-             LIMIT ? OFFSET ?`,
-            [...queryParams, pageSize, offset] // Append limit and offset parameters
-        );
+        const selectSql = `
+            SELECT
+                p.id, p.account_id, p.name, p.level, p.vocation, p.experience,
+                p.resets, p.deleted, p.group_id, p.looktype, p.lookhead, p.lookbody,
+                p.looklegs, p.lookfeet, p.sex, p.background, p.isPrivate, a.location
+            FROM players p
+            JOIN accounts a ON p.account_id = a.id
+            ${queryWhere}
+            ${queryOrder}
+            LIMIT ? OFFSET ?`;
 
-        players = rankingPlayers; // Array of player objects
+        selectParams.push(pageSize, offset);
+
+        const [players] = await connection.execute(selectSql, selectParams);
+
+        // Processar jogadores para adicionar o código da bandeira
+        const processedPlayers = players.map(player => {
+            const flagCode = getFlagCodeForServer(player.location); // Obtém o código da bandeira
+            return {
+                ...player,
+                flagCode: flagCode // Adiciona a propriedade flagCode ao objeto do jogador
+            };
+        });
 
         const totalPages = Math.ceil(totalPlayersCount / pageSize);
 
-        res.render('ranking', {
-            title: `Ranking de ${rankingType === 'level' ? 'Nível' : 'Resets'}`,
-            players: players, // Pass players data
+        const responseData = {
+            players: processedPlayers, // Envia os jogadores processados
             currentPage: currentPage,
             totalPages: totalPages,
-            pageSize: pageSize, // Pass pageSize back for frontend JS
-            totalPlayers: totalPlayersCount,
-            search: search, // Pass actual search term back
-            rankingType: rankingType, // Pass ranking type back
-            user: req.session.user // Pass logged-in user object for highlight
-        });
+            pageSize: pageSize,
+            search: search,
+            rankingType: rankingType,
+        };
 
+        const isAjax = req.xhr || req.headers.accept.indexOf('json') > -1;
+
+        if (isAjax) {
+            res.json(responseData);
+        } else {
+            res.render('ranking', {
+                ...responseData,
+                title: `Ranking de ${rankingType === 'level' ? 'Nível' : 'Resets'}`,
+                availablePageSizes: availablePageSizes,
+                user: req.session.user
+            });
+        }
     } catch (error) {
         console.error('Erro ao buscar ranking:', error);
-        req.session.errorMessage = 'Erro ao carregar o ranking. Por favor, tente novamente mais tarde.';
-        return res.redirect('/'); // Redirect to home on error
+        if (!req.xhr) {
+            req.session.errorMessage = 'Erro ao carregar o ranking.';
+            return res.redirect('/');
+        } else {
+            res.status(500).json({ message: 'Erro ao carregar dados do ranking.' });
+        }
     } finally {
-        if (connection) connection.release(); // Release connection
+        if (connection) connection.release();
     }
 });
 
 
-// --- Rotas de Autenticação e Dashboard ---
+app.get('/character/:name', async (req, res) => {
+    const charName = req.params.name;
+    let connection;
+    try {
+        connection = await promiseDb.getConnection();
+        const [playerRows] = await connection.execute(
+            'SELECT * FROM players WHERE name = ? AND deleted = 0',
+            [charName]
+        );
+        if (playerRows.length > 0) {
+            const player = playerRows[0];
+            const [accountRows] = await connection.execute(
+                'SELECT name FROM accounts WHERE id = ?',
+                [player.account_id]
+            );
+            player.accountName = accountRows.length > 0 ? accountRows[0].name : 'N/A';
+
+            res.render('character', {
+                title: player.name,
+                player: player,
+                user: req.session.user
+            });
+        } else {
+            res.status(404).render('404', { title: 'Jogador Não Encontrado', message: `Jogador "${charName}" não encontrado ou foi deletado.` });
+        }
+    } catch (error) {
+        console.error('Erro ao buscar jogador:', error);
+        res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro ao buscar informações do jogador.' });
+    } finally {
+        if (connection) connection.release();
+    }
+});
+
 app.get('/register', redirectIfLoggedIn, (req, res) => {
     const formData = req.session.formDataStep1;
     delete req.session.formDataStep1;
@@ -250,22 +369,20 @@ app.post('/register', redirectIfLoggedIn, async (req, res) => {
             }
 
             const { name, email } = registrationData;
-
-            const hashedPassword = accountController.sha1(password); // Usando SHA1 conforme original
-            const generatedKey = require('crypto').randomBytes(64).toString('hex');
+            const hashedPassword = accountController.sha1(password);
+            const generatedKey = crypto.randomBytes(64).toString('hex');
             const creationTimestamp = Math.floor(Date.now() / 1000);
 
-            // Valores padrão para novas contas
             const defaultValues = {
                 change_pass: 0, salt: '', premdays: 0, lastday: 0, blocked: 0, warnings: 0,
                 group_id: 1, type: 1, accept_news: 0, event_points: 0, language: 0,
                 vip_time: 0, lang_id: 0, shop_points: 0, userInfoProcessed: 0, rcoins: 0
             };
 
-            const [result] = await connection.execute(
+            await connection.execute(
                 `INSERT INTO accounts (name, email, password, \`key\`, location, created,
-                 change_pass, salt, premdays, lastday, blocked, warnings, group_id, type,
-                 accept_news, event_points, language, vip_time, lang_id, shop_points, userInfoProcessed, rcoins
+                   change_pass, salt, premdays, lastday, blocked, warnings, group_id, type,
+                   accept_news, event_points, language, vip_time, lang_id, shop_points, userInfoProcessed, rcoins
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [name, email, hashedPassword, generatedKey, country, creationTimestamp,
                     defaultValues.change_pass, defaultValues.salt, defaultValues.premdays, defaultValues.lastday, defaultValues.blocked,
@@ -275,9 +392,6 @@ app.post('/register', redirectIfLoggedIn, async (req, res) => {
                 ]
             );
 
-            console.log('Novo usuário registrado com ID:', result.insertId);
-
-            // Clear registration data from session
             delete req.session.registrationData;
             delete req.session.formDataStep2;
 
@@ -285,26 +399,22 @@ app.post('/register', redirectIfLoggedIn, async (req, res) => {
             return res.redirect('/login');
 
         } else {
-            // Invalid step provided
             req.session.errorMessage = 'Etapa de registro inválida.';
             return res.redirect('/register');
         }
 
     } catch (error) {
         console.error('Erro durante o registro:', error);
-        // Preserve form data on error if possible and redirect back to the relevant step
         if (step === '2' && req.session.registrationData) {
             req.session.errorMessage = 'Erro ao finalizar o registro. Tente novamente mais tarde.';
-            // req.session.formDataStep2 is already set above
             return res.redirect('/register/step2');
         } else {
             req.session.errorMessage = 'Erro ao processar a Etapa 1. Tente novamente mais tarde.';
-            // req.session.formDataStep1 is already set above
             return res.redirect('/register');
         }
 
     } finally {
-        if (connection) connection.release(); // Release connection
+        if (connection) connection.release();
     }
 });
 
@@ -316,74 +426,16 @@ app.post('/login', redirectIfLoggedIn, async (req, res) => {
     const result = await accountController.login(req);
 
     if (result.success) {
-        // Store relevant user info in session
         req.session.user = {
-            id: result.user.id, // Account ID
-            name: result.user.name, // Account Name
+            id: result.user.id,
+            name: result.user.name,
             group_id: result.user.group_id
-            // Add other info if needed, like character list for dashboard
         };
         req.session.successMessage = `Bem-vindo de volta, ${result.user.name}!`;
-        return res.redirect('/dashboard'); // Redirect to dashboard or home
+        return res.redirect('/dashboard');
     } else {
         req.session.errorMessage = result.message;
-        return res.redirect('/login'); // Stay on login page with error
-    }
-});
-
-app.get('/dashboard', requireLogin, async (req, res) => {
-    const accountId = req.session.user.id;
-    const accountName = req.session.user.name; // Not strictly needed here, but good practice
-    const accountGroupId = req.session.user.group_id; // Not strictly needed here, but good practice
-
-    let connection;
-
-    try {
-        connection = await promiseDb.getConnection();
-
-        // Fetch account details - ensure fields match your DB schema
-        const [accountRows] = await connection.query(
-            'SELECT id, name, premdays, shop_points, group_id, rcoins FROM accounts WHERE id = ?',
-            [accountId]
-        );
-        if (accountRows.length === 0) {
-            // Account not found, something is wrong with the session ID
-            req.session.destroy(); // Destroy session
-            req.session.errorMessage = 'Sua conta não foi encontrada.';
-            return res.redirect('/login'); // Redirect to login
-        }
-        const account = accountRows[0];
-        // Map database names to potentially different display names if necessary
-        account.vip = account.premdays; // Example mapping as used in EJS
-        account.rcoins = account.shop_points; // Example mapping as used in EJS
-
-        const [characterRows] = await connection.query(
-            'SELECT id, name, sex, picture, level, online, created, resets, looktype, lookhead, lookbody, looklegs, lookfeet FROM players WHERE account_id = ? AND deleted = 0',
-            [accountId]
-        );
-
-        const characters = characterRows; // Array of characters
-
-        const maxPlayersPerAccount = 5; // Example limit
-        const canCreateCharacter = characters.length < maxPlayersPerAccount;
-
-
-        res.render('dashboard', {
-            title: 'Dashboard',
-            account: account, // Pass account details
-            characters: characters, // Pass characters list
-            // group_id: accountGroupId, // Already available in account object, might remove redundant pass
-            canCreateCharacter: canCreateCharacter,
-            maxPlayersPerAccount: maxPlayersPerAccount,
-            user: req.session.user // Make user object available for general header/footer includes
-        });
-
-    } catch (error) {
-        console.error('Erro ao carregar dashboard:', error);
-        req.session.errorMessage = 'Erro ao carregar informações do dashboard. Por favor, tente novamente mais tarde.';
-        return res.redirect('/'); // Redirect to home or error page
-    } finally {
-        if (connection) connection.release(); // Release connection
+        return res.redirect('/login');
     }
 });
 
@@ -391,73 +443,140 @@ app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             console.error('Erro ao destruir a sessão:', err);
-            // Optionally handle error, maybe keep user logged in or show a message
             req.session.errorMessage = 'Erro ao fazer logout. Tente novamente.';
-            return res.redirect('/dashboard'); // Or stay on current page
+            return res.redirect('/dashboard');
         }
         console.log('Usuário deslogado.');
-        // Successful logout, redirect
-        return res.redirect('/login'); // Redirect to login or home
+        return res.redirect('/login');
     });
 });
 
-
-app.post('/api/characters/create', requireLogin, accountController.createCharacter);
-app.get('/api/characters/checkname', accountController.checkCharacterName); // Keep public if needed for registration
-app.post('/api/characters/delete', requireLogin, accountController.deleteCharacter);
-
-
-// Example route for individual character page (optional but good for ranking links)
-app.get('/character/:name', async (req, res) => {
-    const charName = req.params.name;
+app.get('/dashboard', requireLogin, async (req, res) => {
+    const accountId = req.session.user.id;
     let connection;
+
     try {
         connection = await promiseDb.getConnection();
-        const [playerRows] = await connection.execute(
-            'SELECT * FROM players WHERE name = ? AND deleted = 0',
-            [charName]
+
+        const [accountRows] = await connection.query(
+            'SELECT id, name, premdays, shop_points, group_id, rcoins FROM accounts WHERE id = ?',
+            [accountId]
         );
-        if (playerRows.length > 0) {
-            const player = playerRows[0];
-            // Fetch account info if needed for account-specific details on character page
-            const [accountRows] = await connection.execute(
-                'SELECT name FROM accounts WHERE id = ?',
-                [player.account_id]
-            );
-            player.accountName = accountRows.length > 0 ? accountRows[0].name : 'N/A'; // Add account name
-
-
-            res.render('character', {
-                title: player.name,
-                player: player, // Pass the full player object including look data
-                user: req.session.user // Pass user for header/footer
-            });
-        } else {
-            res.status(404).render('404', { title: 'Jogador Não Encontrado', message: `Jogador "${charName}" não encontrado ou foi deletado.` });
+        if (accountRows.length === 0) {
+            req.session.destroy();
+            req.session.errorMessage = 'Sua conta não foi encontrada.';
+            return res.redirect('/login');
         }
+        const account = accountRows[0];
+        account.vip = account.premdays;
+        account.rcoins = account.shop_points;
+
+        const [characterRows] = await connection.query(
+            'SELECT id, name, sex, level, online, created, resets, looktype, lookhead, lookbody, looklegs, lookfeet, background, isPrivate FROM players WHERE account_id = ? AND deleted = 0',
+            [accountId]
+        );
+
+        const characters = characterRows;
+        const maxPlayersPerAccount = 5;
+        const canCreateCharacter = characters.length < maxPlayersPerAccount;
+
+        let backgroundFiles = [];
+        const backgroundsDirPath = path.join(__dirname, 'public', 'assets', 'images', 'characters', 'backgrounds');
+
+        try {
+            // FIX: Use await with fs.readdir
+            const files = await fs.readdir(backgroundsDirPath);
+            backgroundFiles = files
+                .filter(file => file.startsWith('background_') && file.endsWith('.png'))
+                .map(file => parseInt(file.replace('background_', '').replace('.png', ''), 10))
+                .filter(num => !isNaN(num))
+                .sort((a, b) => a - b);
+        } catch (readDirError) {
+            console.error('Erro ao ler o diretório de backgrounds:', readDirError);
+            // Se houver um erro, backgroundFiles permanecerá como um array vazio, o que é seguro.
+        }
+
+        res.render('dashboard', {
+            title: 'Dashboard',
+            account: account,
+            characters: characters,
+            canCreateCharacter: canCreateCharacter,
+            maxPlayersPerAccount: maxPlayersPerAccount,
+            user: req.session.user,
+            backgroundFiles: backgroundFiles // Passando a variável backgroundFiles para o EJS
+        });
+
     } catch (error) {
-        console.error('Erro ao buscar jogador:', error);
-        res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro ao buscar informações do jogador.' });
+        console.error('Erro ao carregar dashboard:', error);
+        req.session.errorMessage = 'Erro ao carregar informações do dashboard. Por favor, tente novamente mais tarde.';
+        return res.redirect('/');
     } finally {
         if (connection) connection.release();
     }
 });
 
-// --- Usar a nova rota de avatar ---
+// New PUT route for character updates (background and isPrivate)
+app.put('/api/characters/:charId', requireLogin, async (req, res) => {
+    const charId = req.params.charId;
+    const accountId = req.session.user.id;
+    const { background, isPrivate } = req.body;
+
+    let connection;
+    try {
+        connection = await promiseDb.getConnection();
+
+        // Check if character belongs to the logged-in user
+        const [characterCheck] = await connection.execute(
+            'SELECT account_id FROM players WHERE id = ? AND deleted = 0',
+            [charId]
+        );
+
+        if (characterCheck.length === 0 || characterCheck[0].account_id !== accountId) {
+            return res.status(403).json({ success: false, message: 'Não autorizado ou personagem não encontrado.' });
+        }
+
+        if (background !== undefined) {
+            // Update background
+            await connection.execute(
+                'UPDATE players SET background = ? WHERE id = ?',
+                [background, charId]
+            );
+            return res.json({ success: true, message: 'Background atualizado com sucesso!' });
+        } else if (isPrivate !== undefined) {
+            // Update isPrivate status
+            const privateStatus = isPrivate ? 1 : 0;
+            await connection.execute(
+                'UPDATE players SET isPrivate = ? WHERE id = ?',
+                [privateStatus, charId]
+            );
+            return res.json({ success: true, message: `Privacidade do perfil ${isPrivate ? 'ativada' : 'desativada'}!` });
+        } else {
+            return res.status(400).json({ success: false, message: 'Nenhum campo para atualizar fornecido.' });
+        }
+
+    } catch (error) {
+        console.error('Erro ao atualizar personagem:', error);
+        return res.status(500).json({ success: false, message: 'Erro interno ao atualizar personagem.' });
+    } finally {
+        if (connection) connection.release();
+    }
+});
+
+
+app.post('/api/characters/create', requireLogin, accountController.createCharacter);
+app.get('/api/characters/checkname', accountController.checkCharacterName);
+app.post('/api/characters/delete', requireLogin, accountController.deleteCharacter);
+
 app.use('/', avatarRoutes);
 
-
-// Catch-all for 404 pages (ESTE DEVE SER O ÚLTIMO app.use/app.get/app.post para rotas específicas)
 app.use((req, res) => {
     res.status(404).render('404', { title: 'Página Não Encontrada' });
 });
 
-// Global error handler (sempre depois do 404 handler)
 app.use((err, req, res, next) => {
     console.error('Global Error Handler:', err.stack);
     res.status(500).render('error', { title: 'Erro no Servidor', message: 'Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.' });
 });
-
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
