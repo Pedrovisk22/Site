@@ -60,9 +60,9 @@ app.get('/download', (req, res) => {
     res.render('download', { title: 'Download' });
 });
 
-app.get('/wiki', (req, res) => {
+
     res.render('wiki', { title: 'Wiki - Held Items' });
-});
+
 
 app.get('/mapa', (req, res) => {
     res.render('mapa', { title: 'Mapa do Mundo' });

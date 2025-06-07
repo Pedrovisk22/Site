@@ -1,47 +1,81 @@
+// mapa.js
+
 const mapViewport = document.querySelector('.map-viewport');
 const mapContent = document.querySelector('.map-content');
 const gameMap = document.getElementById('gameMap');
 const mapMarkers = document.getElementById('mapMarkers');
-const tooltip = document.getElementById('tooltip'); // Agora position: fixed no CSS
+const tooltip = document.getElementById('tooltip'); 
 
 let scale = 1;
 let translateX = 0;
 let translateY = 0;
-let isDragging = false;
-let startX;
-let startY;
+// isDragging, startX, startY não são mais necessários para arrastar, já foram desativados.
 const originalMapWidth = 1000;
 const originalMapHeight = 1000;
 
+// Função auxiliar para limitar um valor entre um mínimo e um máximo
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(value, max));
+}
+
 function initializeMap() {
-    // Estas dimensões agora serão as do .map-viewport, que tem uma altura fixa
     const viewportWidth = mapViewport.offsetWidth;
     const viewportHeight = mapViewport.offsetHeight;
 
-    // Garante que o mapa comece visível e preenchendo a área do viewport
-    // Ajustado para um zoom inicial mais razoável se o mapa for muito maior que o viewport
-    scale = Math.min(
+    // A lógica de escala inicial ainda serve para garantir que o mapa preencha o viewport
+    scale = Math.max(
         viewportWidth / originalMapWidth,
         viewportHeight / originalMapHeight
     );
-    // Definir limites razoáveis para zoom
-    scale = Math.max(0.5, Math.min(scale, 3)); // Mínimo 0.5x, Máximo 3x
+    
+    // Limites de zoom
+    scale = Math.max(0.5, Math.min(scale, 3)); 
 
-    // Centraliza o mapa no viewport
+    // Centraliza o mapa no viewport inicialmente
     translateX = (viewportWidth - originalMapWidth * scale) / 2;
     translateY = (viewportHeight - originalMapHeight * scale) / 2;
 
-    applyTransform();
-    positionMarkers(); // Marcadores são posicionados uma única vez, a escala do mapa cuida do resto
+    applyTransform(); // Aplica a transformação inicial e limita as posições
+    positionMarkers(); 
 }
 
 function applyTransform() {
+    const viewportWidth = mapViewport.offsetWidth;
+    const viewportHeight = mapViewport.offsetHeight;
+    const scaledMapWidth = originalMapWidth * scale;
+    const scaledMapHeight = originalMapHeight * scale;
+
+    let finalTranslateX = translateX;
+    let finalTranslateY = translateY;
+
+    // Limita a translação X
+    if (scaledMapWidth < viewportWidth) {
+        // Se o mapa for menor que o viewport, centraliza
+        finalTranslateX = (viewportWidth - scaledMapWidth) / 2;
+    } else {
+        // Se o mapa for maior, limita dentro das bordas para evitar espaço em branco
+        const minX = viewportWidth - scaledMapWidth;
+        finalTranslateX = clamp(translateX, minX, 0); // clamp(valor, min, max)
+    }
+
+    // Limita a translação Y
+    if (scaledMapHeight < viewportHeight) {
+        // Se o mapa for menor que o viewport, centraliza
+        finalTranslateY = (viewportHeight - scaledMapHeight) / 2;
+    } else {
+        // Se o mapa for maior, limita dentro das bordas para evitar espaço em branco
+        const minY = viewportHeight - scaledMapHeight;
+        finalTranslateY = clamp(translateY, minY, 0);
+    }
+    
+    // Atualiza as variáveis globais após o limite
+    translateX = finalTranslateX;
+    translateY = finalTranslateY;
+
     mapContent.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
 function positionMarkers() {
-    // Esta função apenas define a posição ORIGINAL dos marcadores.
-    // A escala e a translação do mapContent se aplicam a eles automaticamente.
     const markers = mapMarkers.querySelectorAll('.marker');
     markers.forEach(marker => {
         const x = parseFloat(marker.dataset.x);
@@ -51,54 +85,36 @@ function positionMarkers() {
     });
 }
 
+// Listeners de arrastar (já foram desativados no pedido anterior)
 mapViewport.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    mapViewport.classList.add('grabbing');
-    startX = e.clientX - translateX;
-    startY = e.clientY - translateY;
+    // Conteúdo removido/comentado
 });
 
 mapViewport.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    e.preventDefault(); // Impede o scroll da página enquanto arrasta o mapa
-    translateX = e.clientX - startX;
-    translateY = e.clientY - startY;
-    applyTransform();
+    // Conteúdo removido/comentado
 });
 
 mapViewport.addEventListener('mouseup', () => {
-    isDragging = false;
     mapViewport.classList.remove('grabbing');
 });
 
 mapViewport.addEventListener('mouseleave', () => {
-    isDragging = false;
     mapViewport.classList.remove('grabbing');
 });
 
+// ALTERAÇÃO AQUI: Evento de roda do mouse para PAN
 mapViewport.addEventListener('wheel', (e) => {
-    e.preventDefault(); // Impede o scroll da página ao rolar a roda sobre o mapa
+    e.preventDefault(); // Impede o scroll da página
 
-    const mouseX = e.clientX;
-    const mouseY = e.clientY;
+    const panSpeed = 2; // Ajuste este valor para controlar a velocidade do pan (quanto maior, mais rápido)
 
-    const oldScale = scale;
-    const zoomAmount = 0.1;
-    
-    if (e.deltaY < 0) { // Zoom in
-        scale += zoomAmount;
-    } else { // Zoom out
-        scale -= zoomAmount;
-    }
+    // Move o mapa com base no delta da roda do mouse
+    // e.deltaX para movimento horizontal
+    // e.deltaY para movimento vertical
+    translateX -= e.deltaX * panSpeed;
+    translateY -= e.deltaY * panSpeed;
 
-    scale = Math.max(0.2, Math.min(scale, 3)); // Limites de zoom
-
-    // Calcula nova translação para manter o ponto do mouse fixo
-    // (mouseX - translateX) é a posição do mouse em relação ao *conteúdo* do mapa
-    translateX = mouseX - ((mouseX - translateX) / oldScale) * scale;
-    translateY = mouseY - ((mouseY - translateY) / oldScale) * scale;
-
-    applyTransform();
+    applyTransform(); // Aplica a nova translação e garante que está dentro dos limites
 });
 
 mapMarkers.addEventListener('mouseover', (e) => {
@@ -108,11 +124,10 @@ mapMarkers.addEventListener('mouseover', (e) => {
         tooltip.textContent = name;
         tooltip.classList.add('visible');
         
-        // As coordenadas do tooltip agora são relativas à janela (viewport)
-        const rect = marker.getBoundingClientRect(); // Pega a posição do marcador na tela
+        const rect = marker.getBoundingClientRect(); 
         tooltip.style.left = `${rect.left + rect.width / 2}px`;
         tooltip.style.top = `${rect.top - 10}px`;
-        tooltip.style.transform = 'translate(-50%, -100%)'; // Centraliza o tooltip acima do marcador
+        tooltip.style.transform = 'translate(-50%, -100%)'; 
     }
 });
 
@@ -122,7 +137,5 @@ mapMarkers.addEventListener('mouseout', (e) => {
     }
 });
 
-// A inicialização do mapa pode ser atrasada para garantir que todos os elementos foram renderizados
-// window.addEventListener('load', initializeMap); // Pode ser tarde demais se o EJS for lento
-document.addEventListener('DOMContentLoaded', initializeMap); // Melhor para garantir que o DOM está pronto
-window.addEventListener('resize', initializeMap); // Recalcula ao redimensionar a janela
+document.addEventListener('DOMContentLoaded', initializeMap); 
+window.addEventListener('resize', initializeMap); 
