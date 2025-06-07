@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const rankingContentSection = document.getElementById('ranking-content-section');
+    if (!rankingContentSection) return;
+
     const searchInput = document.getElementById('rankingSearchInput');
     const searchBtn = document.getElementById('rankingSearchBtn');
     const paginationControls = document.querySelector('.pagination-controls');
@@ -7,17 +9,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingOverlay = document.getElementById('loading-overlay');
     const rankingTableBody = document.querySelector('.ranking-table tbody');
     const rankingTableContainer = document.getElementById('ranking-table-container');
-    const noResultsMessage = rankingContentSection ? rankingContentSection.querySelector('.no-results') : null;
+    const noResultsMessage = rankingContentSection.querySelector('.no-results');
 
+    let searchDebounceTimeout;
     let currentState = {
-        currentPage: parseInt(rankingContentSection?.dataset.currentPage, 10) || 1,
-        totalPages: parseInt(rankingContentSection?.dataset.totalPages, 10) || 1,
-        pageSize: parseInt(rankingContentSection?.dataset.pageSize, 10) || 5,
-        rankingType: rankingContentSection?.dataset.rankingType || 'level',
-        search: rankingContentSection?.dataset.searchTerm || '',
-        availablePageSizes: JSON.parse(pageSizeSelection?.dataset.availablePageSizes || '[]')
+        currentPage: parseInt(rankingContentSection.dataset.currentPage, 10) || 1,
+        totalPages: parseInt(rankingContentSection.dataset.totalPages, 10) || 1,
+        pageSize: parseInt(rankingContentSection.dataset.pageSize, 10) || 5,
+        rankingType: rankingContentSection.dataset.rankingType || 'level',
+        search: rankingContentSection.dataset.searchTerm || '',
+        availablePageSizes: JSON.parse(rankingContentSection.dataset.availablePageSizes || '[]')
     };
-    
+
     const showLoading = () => {
         if (loadingOverlay) loadingOverlay.classList.remove('hidden');
     };
@@ -30,24 +33,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = new URL(window.location.href);
         url.searchParams.set('page', page);
         url.searchParams.set('pageSize', pageSize);
-        url.searchParams.set('search', search);
+        if (search) {
+            url.searchParams.set('search', search);
+        } else {
+            url.searchParams.delete('search');
+        }
         history.pushState(null, '', url.toString());
     };
 
-    const preloadImages = (players) => {
-        if (!players || players.length === 0) return Promise.resolve();
-        const promises = players.map(player => new Promise((resolve) => {
-            const avatarImg = new Image();
-            avatarImg.src = `/avatar/${player.name}`;
-            avatarImg.onload = resolve;
-            avatarImg.onerror = resolve; // Continue mesmo se a imagem falhar
-            
-            // Pré-carregar a bandeira também, usando player.flagCode que já veio do servidor
-            const flagImg = new Image();
-            flagImg.src = `assets/svg/flags/${player.flagCode || 'BR'}.svg`;
-            flagImg.onload = resolve;
-            flagImg.onerror = resolve; // Continue mesmo se a imagem falhar
-        }));
+    const waitForImages = async (imageSelector) => {
+        const images = Array.from(document.querySelectorAll(imageSelector));
+        if (images.length === 0) return Promise.resolve();
+
+        const promises = images.map(img => {
+            return new Promise((resolve) => {
+                if (img.complete) {
+                    resolve();
+                } else {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                }
+            });
+        });
         return Promise.all(promises);
     };
 
@@ -61,12 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             
             const data = await response.json();
-            await preloadImages(data.players);
             
             currentState = { ...currentState, ...data };
             updateRankingTable(data.players);
@@ -74,12 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
             updatePageSizeButtons(data.pageSize);
             updateNoResultsMessage(data.players.length > 0);
             updateURL(data.currentPage, data.pageSize, data.search);
+            
+            await waitForImages('.ranking-table tbody .ranking-avatar');
 
         } catch (error) {
             console.error('Erro ao buscar dados do ranking:', error);
-            updateRankingTable([]); // Limpa a tabela em caso de erro
-            updatePaginationControls(1, 1); // Resetar paginação
-            updateNoResultsMessage(false); // Exibe mensagem de "sem resultados"
+            updateRankingTable([]);
+            updatePaginationControls(1, 1);
+            updateNoResultsMessage(false);
             if (noResultsMessage) {
                 noResultsMessage.textContent = 'Ocorreu um erro ao carregar o ranking. Tente novamente mais tarde.';
                 noResultsMessage.style.display = 'block';
@@ -91,16 +97,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateRankingTable = (players) => {
         if (!rankingTableBody) return;
-        rankingTableBody.innerHTML = ''; // Limpa a tabela existente
+        rankingTableBody.innerHTML = '';
 
         if (!players || players.length === 0) {
             if (rankingTableContainer) rankingTableContainer.style.display = 'none';
             if (noResultsMessage) noResultsMessage.style.display = 'block';
-            if (paginationControls) paginationControls.style.display = 'none'; // Oculta paginação se não há resultados
+            if (paginationControls) paginationControls.style.display = 'none';
             return;
         }
         
-        // Exibe a tabela e paginação se houver resultados
         if (rankingTableContainer) rankingTableContainer.style.display = 'block';
         if (noResultsMessage) noResultsMessage.style.display = 'none';
         if (paginationControls) paginationControls.style.display = 'flex';
@@ -114,8 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const isPlayerLoggedIn = window.user && player.account_id === window.user.id;
             const avatarUrl = `/avatar/${player.name}`;
-            // Usa player.flagCode que é adicionado no server.js
-            const flagUrl = `assets/svg/flags/${player.flagCode || 'BR'}.svg`; // Default para BR no cliente também, por segurança.
+            const flagUrl = `assets/svg/flags/${player.flagCode || 'BR'}.svg`;
 
             const row = document.createElement('tr');
             row.className = `${rankClass} ${isPlayerLoggedIn ? 'is-logged-in' : ''}`.trim();
@@ -124,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="rank-cell">${globalRank}</td>
                 <td class="player-cell">
                     <div class="ranked-avatar-wrapper">
-                        <img src="${avatarUrl}" alt="${player.name} Avatar">
+                        <img src="${avatarUrl}" alt="${player.name} Avatar" class="ranking-avatar">
                     </div>
                     <div class="ranked-name">
                         <a href="/character/${player.name}">
@@ -144,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updatePaginationControls = (currentPage, totalPages) => {
         if (!paginationControls || totalPages <= 1) {
-            if(paginationControls) paginationControls.innerHTML = '';
+            if (paginationControls) paginationControls.innerHTML = '';
             return;
         }
         paginationControls.innerHTML = '';
@@ -172,12 +176,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
         let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
 
-        // Ajusta startPage se houver menos de maxPagesToShow no final
         if (endPage - startPage + 1 < maxPagesToShow && totalPages > maxPagesToShow) {
             startPage = Math.max(1, totalPages - maxPagesToShow + 1);
             endPage = totalPages;
         }
-
 
         if (startPage > 1) {
             paginationControls.appendChild(createPageLink(1, false));
@@ -201,75 +203,85 @@ document.addEventListener('DOMContentLoaded', () => {
     const updatePageSizeButtons = (pageSize) => {
         if (!pageSizeSelection) return;
         pageSizeSelection.querySelectorAll('.btn').forEach(btn => {
-            btn.classList.toggle('active', parseInt(btn.dataset.pageSize, 10) === pageSize);
+            btn.classList.remove('active');
+            if (parseInt(btn.dataset.pageSize, 10) === Number(pageSize)) {
+                btn.classList.add('active');
+            }
         });
-        if (rankingContentSection) rankingContentSection.dataset.pageSize = pageSize;
+        rankingContentSection.dataset.pageSize = pageSize;
     };
 
     const updateNoResultsMessage = (hasResults) => {
-        if (noResultsMessage) {
-            noResultsMessage.style.display = hasResults ? 'none' : 'block';
-        }
-        if (rankingTableContainer) {
-            rankingTableContainer.style.display = hasResults ? 'block' : 'none';
-        }
-        if (paginationControls) {
-             paginationControls.style.display = hasResults ? 'flex' : 'none';
-        }
+        if (noResultsMessage) noResultsMessage.style.display = hasResults ? 'none' : 'block';
+        if (rankingTableContainer) rankingTableContainer.style.display = hasResults ? 'block' : 'none';
+        if (paginationControls) paginationControls.style.display = hasResults ? 'flex' : 'none';
     };
 
-    const handleRankingControlClick = (event) => {
+    const handleSearch = () => {
+        const newSearch = searchInput ? searchInput.value.trim() : currentState.search;
+        if (newSearch !== currentState.search) {
+            fetchRankingData(1, currentState.pageSize, newSearch);
+        }
+    };
+    
+    rankingContentSection.addEventListener('click', (event) => {
         const target = event.target.closest('button, a.page-number');
         if (!target) return;
         event.preventDefault();
 
-        let newSearch = searchInput ? searchInput.value.trim() : currentState.search;
         let newPage = currentState.currentPage;
         let newPageSize = currentState.pageSize;
-        
+        let newSearch = searchInput ? searchInput.value.trim() : currentState.search;
+
         if (target.id === 'rankingSearchBtn') {
-            if (newSearch !== currentState.search) {
-                newPage = 1; // Sempre volta para a primeira página ao pesquisar
+            handleSearch();
+            return;
+        }
+        if (target.closest('.pagination-controls')) {
+            if (target.id === 'prevPageBtn') newPage--;
+            else if (target.id === 'nextPageBtn') newPage++;
+            else if (target.dataset.page) newPage = parseInt(target.dataset.page, 10);
+            else return;
+        } else if (target.closest('.page-size-selection')) {
+            if (target.dataset.pageSize) {
+                const selectedPageSize = parseInt(target.dataset.pageSize, 10);
+                if (selectedPageSize !== newPageSize) {
+                    newPageSize = selectedPageSize;
+                    newPage = 1;
+                } else {
+                    return;
+                }
             } else {
-                return; // Não faz nada se a busca não mudou
-            }
-        } else if (paginationControls?.contains(target)) {
-            if (target.id === 'prevPageBtn' && !target.disabled) {
-                newPage--;
-            } else if (target.id === 'nextPageBtn' && !target.disabled) {
-                newPage++;
-            } else if (target.classList.contains('page-number') && target.dataset.page && !target.classList.contains('active')) {
-                newPage = parseInt(target.dataset.page, 10);
-            } else {
-                return; // Não faz nada se o botão está desabilitado ou a página já está ativa
-            }
-        } else if (pageSizeSelection?.contains(target) && target.dataset.pageSize && !target.classList.contains('active')) {
-            newPageSize = parseInt(target.dataset.pageSize, 10);
-            if (newPageSize !== currentState.pageSize) {
-                newPage = 1; // Sempre volta para a primeira página ao mudar o tamanho
-            } else {
-                return; // Não faz nada se o tamanho da página não mudou
+                return;
             }
         } else {
-            return; // Clique em um elemento não relevante
+            return;
         }
 
-        fetchRankingData(newPage, newPageSize, newSearch);
-    };
-    
-    rankingContentSection?.addEventListener('click', handleRankingControlClick);
-
-    searchInput?.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            const newSearch = searchInput.value.trim();
-            if (newSearch !== currentState.search) {
-                fetchRankingData(1, currentState.pageSize, newSearch);
-            }
+        if (newPage !== currentState.currentPage || newPageSize !== currentState.pageSize) {
+            fetchRankingData(newPage, newPageSize, newSearch);
         }
     });
 
-    window.addEventListener('popstate', (event) => {
+    searchInput?.addEventListener('input', () => {
+        clearTimeout(searchDebounceTimeout);
+        const newSearch = searchInput.value.trim();
+        if (newSearch.length >= 3 || newSearch.length === 0) {
+            searchDebounceTimeout = setTimeout(() => {
+                handleSearch();
+            }, 400);
+        }
+    });
+    
+    searchInput?.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            clearTimeout(searchDebounceTimeout);
+            handleSearch();
+        }
+    });
+
+    window.addEventListener('popstate', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const page = parseInt(urlParams.get('page'), 10) || 1;
         const pageSize = parseInt(urlParams.get('pageSize'), 10) || currentState.pageSize;
@@ -284,12 +296,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const now = new Date();
         lastUpdatedSpan.textContent = `${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
     }
+    
+    waitForImages('.ranking-table tbody .ranking-avatar').then(() => {
+        hideLoading();
+    });
 
-    // A paginação inicial e o estado são baseados nos dados do EJS,
-    // e o `updateRankingTable` dentro de `fetchRankingData` (chamado no popstate/interações)
-    // já lida com a renderização das bandeiras.
-    // Não é mais necessário um `setInitialFlags` separado ou chamadas de update diretas no DOMContentLoaded
-    // para bandeiras, pois o EJS já renderiza o `flagCode`.
     updatePaginationControls(currentState.currentPage, currentState.totalPages);
     updatePageSizeButtons(currentState.pageSize);
     updateNoResultsMessage(document.querySelectorAll('.ranking-table tbody tr').length > 0);
