@@ -52,8 +52,7 @@ function redirectIfLoggedIn(req, res, next) {
     next();
 }
 
----
-## Rotas Públicas
+
 
 app.get('/', (req, res) => {
     res.render('index', { title: 'Home' });
@@ -175,8 +174,7 @@ app.get('/character/:name', async (req, res) => {
     }
 });
 
----
-## Rotas de Autenticação
+
 
 app.get('/register', redirectIfLoggedIn, (req, res) => {
     const formData = req.session.formDataStep1;
@@ -355,8 +353,7 @@ app.get('/logout', (req, res) => {
     });
 });
 
----
-## Rotas do Dashboard e Personagens (Requer Login)
+
 
 app.get('/dashboard', requireLogin, async (req, res) => {
     const accountId = req.session.user.id;
@@ -422,20 +419,12 @@ app.get('/dashboard', requireLogin, async (req, res) => {
     }
 });
 
----
-## API de Personagens
 
 app.post('/api/characters/create', requireLogin, accountController.createCharacter);
 app.get('/api/characters/checkname', accountController.checkCharacterName);
 app.post('/api/characters/delete', requireLogin, accountController.deleteCharacter);
 
----
-## Rota de Avatar
-
 app.use('/', avatarRoutes);
-
----
-## Tratamento de Erros e 404
 
 // Catch-all for 404 pages - This should be the last route handler
 app.use((req, res) => {
