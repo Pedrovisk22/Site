@@ -81,7 +81,7 @@
                                   <div class="info">
                                     <div class="character-header">
                                        <div class="character-name-and-status">
-                                           <h3><%= char.name %></h3>
+                                           <h3><a href="/character/<%= char.name %>"><%= char.name %></a></h3>
                                            <span class="status-dot <%= char.online === 1 ? 'on' : 'off' %>" title="<%= char.online === 1 ? 'Online' : 'Offline' %>"></span>
                                        </div>
                                        <div class="character-actions">
