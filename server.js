@@ -173,7 +173,11 @@ app.get('/character/:name', async (req, res) => {
             SELECT 
                 p.id, p.name, p.level, p.experience, p.isPrivate, p.account_id,
                 p.background, p.online, p.mural_message,
-                a.created AS account_creation, a.lastday AS last_login, a.location
+                p.created, -- Data de criação do personagem (players.created)
+                p.lastlogin, -- Último login do personagem (players.lastlogin)
+                p.onlinetimetoday, -- Tempo online hoje (players.onlinetimetoday)
+                p.onlinetimeall, -- Tempo online total (players.onlinetimeall)
+                a.location -- Nacionalidade (accounts.location)
             FROM players p
             JOIN accounts a ON p.account_id = a.id
             WHERE p.name = ? AND p.deleted = 0 AND p.group_id < 2`;
@@ -189,9 +193,9 @@ app.get('/character/:name', async (req, res) => {
         if (player.isPrivate === 1 && !isOwner) {
             return res.render('character', {
                 title: 'Perfil Privado',
-                player: { name: player.name },
+                player: { name: player.name }, // Passa apenas o nome para a página privada
                 isPrivate: true,
-                isOwner: false, // Adicionado para consistência
+                isOwner: false,
                 user: req.session.user
             });
         }
@@ -199,6 +203,7 @@ app.get('/character/:name', async (req, res) => {
         // --- BUSCA DE DADOS ADICIONAIS ---
 
         // 1. Posição no Ranking
+        // Esta query calcula a posição baseada no level e experiência (e group_id/deleted)
         const rankQuery = `
             SELECT COUNT(*) + 1 AS rank 
             FROM players 
@@ -206,7 +211,7 @@ app.get('/character/:name', async (req, res) => {
             AND deleted = 0 AND group_id < 2`;
         const [rankRows] = await connection.execute(rankQuery, [player.level, player.level, player.experience]);
         player.rank = rankRows[0].rank;
-        player.flagCode = getFlagCodeForServer(player.location);
+        player.flagCode = getFlagCodeForServer(player.location); // Adiciona o código da bandeira
 
         // 2. Estatísticas Gerais (Exemplo: buscando de uma tabela 'player_stats')
         // Substitua esta query pela sua lógica real
@@ -217,7 +222,7 @@ app.get('/character/:name', async (req, res) => {
         );
         const playerStats = statsRows.length > 0 ? statsRows[0] : { total_captures: 0, total_deaths: 0, battles_won: 0, online_time_seconds: 0 };
         */
-        // Dados de exemplo até você implementar a query:
+        // Dados de exemplo para fins de demonstração:
         const playerStats = {
             total_captures: 123,
             total_deaths: 45,
@@ -233,7 +238,7 @@ app.get('/character/:name', async (req, res) => {
         );
         const playerBadges = badgeRows;
         */
-        // Dados de exemplo:
+        // Dados de exemplo para fins de demonstração:
         const playerBadges = [
             { name: 'Rocha', date_achieved: '2023-01-15', leader_name: 'Brock' },
             { name: 'Cascata', date_achieved: '2023-02-20', leader_name: 'Misty' },
@@ -243,51 +248,52 @@ app.get('/character/:name', async (req, res) => {
         // 4. Últimas Mortes (Exemplo: buscando de 'player_deaths')
         /*
         const [deathRows] = await connection.execute(
-            'SELECT `time`, `level`, killed_by, killer_sprite FROM player_deaths WHERE player_id = ? ORDER BY `time` DESC LIMIT 5',
+            'SELECT `time`, `level`, killed_by, killer_sprite, killer_type FROM player_deaths WHERE player_id = ? ORDER BY `time` DESC LIMIT 5', // Assumindo killer_type existe
             [player.id]
         );
         const lastDeaths = deathRows.map(d => ({ ...d, time: new Date(d.time * 1000) }));
         */
-        // Dados de exemplo:
+        // Dados de exemplo para fins de demonstração (com killer_type adicionado):
         const lastDeaths = [
-            { time: new Date(), level: 150, killed_by: 'um Dragonite', killer_sprite: '149.gif' },
-            { time: new Date(Date.now() - 86400000), level: 148, killed_by: 'um Gengar', killer_sprite: '094.gif' }
+            { time: new Date(), level: 150, killed_by: 'um Dragonite', killer_sprite: '149.gif', killer_type: 'pokemon selvagem' },
+            { time: new Date(Date.now() - 86400000), level: 148, killed_by: 'um Gengar', killer_sprite: '094.gif', killer_type: 'pokemon selvagem' },
+            { time: new Date(Date.now() - 172800000), level: 140, killed_by: 'Outro Treinador', killer_sprite: '068.gif', killer_type: 'jogador' } // Exemplo de morte por jogador
         ];
 
         // 5. Pokémons Derrotados (Exemplo: de 'player_kills')
         /*
         const [defeatedRows] = await connection.execute(
-            'SELECT pokemon_name, count, sprite_name FROM player_pokemon_kills WHERE player_id = ? ORDER BY count DESC',
+            'SELECT pokemon_name, count, sprite_name, type FROM player_pokemon_kills WHERE player_id = ? ORDER BY count DESC', // Assumindo 'type' existe
             [player.id]
         );
         const defeatedPokemons = defeatedRows;
         */
-       // Dados de exemplo:
+       // Dados de exemplo para fins de demonstração (com 'type' adicionado):
        const defeatedPokemons = [
-            { pokemon_name: 'Pikachu', count: 120, sprite_name: '025.gif' },
-            { pokemon_name: 'Snorlax', count: 95, sprite_name: '143.gif' },
-            { pokemon_name: 'Gengar', count: 80, sprite_name: '094.gif' },
-            { pokemon_name: 'Charizard', count: 50, sprite_name: '006.gif' }
+            { pokemon_name: 'Pikachu', count: 120, sprite_name: '025.gif', type: 'electric' },
+            { pokemon_name: 'Snorlax', count: 95, sprite_name: '143.gif', type: 'normal' },
+            { pokemon_name: 'Gengar', count: 80, sprite_name: '094.gif', type: 'ghost' },
+            { pokemon_name: 'Charizard', count: 50, sprite_name: '006.gif', type: 'fire' }
        ];
         
         // 6. Pokémons Capturados (Exemplo: de 'player_captures')
         /*
         const [capturedRows] = await connection.execute(
-            'SELECT pokemon_name, rarity, type, sprite_name FROM player_captures WHERE player_id = ? ORDER BY capture_date DESC',
+            'SELECT pokemon_name, rarity, type, sprite_name, capture_date FROM player_captures WHERE player_id = ? ORDER BY capture_date DESC', // Assumindo capture_date
             [player.id]
         );
         const capturedPokemons = capturedRows;
         */
-       // Dados de exemplo:
+       // Dados de exemplo para fins de demonstração (com capture_date adicionada):
        const capturedPokemons = [
-            { pokemon_name: 'Mewtwo', rarity: 'Lendário', type: 'shiny', sprite_name: '150.gif' },
-            { pokemon_name: 'Bulbasaur', rarity: 'Comum', type: 'normal', sprite_name: '001.gif' }
+            { pokemon_name: 'Mewtwo', rarity: 'Lendário', type: 'shiny', sprite_name: '150.gif', capture_date: new Date() },
+            { pokemon_name: 'Bulbasaur', rarity: 'Comum', type: 'grass', sprite_name: '001.gif', capture_date: new Date(Date.now() - 50000000) }
        ];
 
 
         res.render('character', {
             title: player.name,
-            player, // Contém os dados principais
+            player, // Agora contém created, lastlogin, onlinetimetoday, onlinetimeall
             playerStats,
             playerBadges,
             lastDeaths,

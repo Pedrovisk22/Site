@@ -1,5 +1,5 @@
 {
-  "name": "PokeMonster",
+  "name": "PokeCamp",
   "version": "1.0.0",
   "description": "Site de Pokémon com backend Node.js",
   "main": "server.js",

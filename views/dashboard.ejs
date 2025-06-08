@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= title %> - PokeMonster</title>
+  <title><%= title %> - PokeCamp</title>
 
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/dashboard.css" />
@@ -81,7 +81,7 @@
                                   <div class="info">
                                     <div class="character-header">
                                        <div class="character-name-and-status">
-                                           <h3><a href="/character/<%= char.name %>"><%= char.name %></a></h3>
+                                           <h3><%= char.name %></h3>
                                            <span class="status-dot <%= char.online === 1 ? 'on' : 'off' %>" title="<%= char.online === 1 ? 'Online' : 'Offline' %>"></span>
                                        </div>
                                        <div class="character-actions">
