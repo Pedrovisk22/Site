@@ -30,7 +30,7 @@
                 <div class="dropdown-menu">
                     <% if (user) { %>
                         <!-- Se logado: Dashboard e Sair -->
-                        <a href="/dashboard" class="dropdown-item">Dashboard</a> <%# Link para a Dashboard %>
+                        <a href="/dashboard" class="dropdown-item"><%= user.name %></a> <%# Link para a Dashboard com o nome do usuário %>
                         <a href="/logout" class="dropdown-item">Sair</a> <%# Link para Logout %>
                     <% } else { %>
                         <!-- Se não logado: Login e Criar Conta -->
