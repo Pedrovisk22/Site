@@ -48,9 +48,9 @@
 
         <% if (account && account.group_id >= 2) { %>
           <div class="admin-btn-container">
-            <a href="/admin/server" class="admin-btn">
-              Painel de Administrador
-            </a>
+            <a href="/admin/server" class="admin-btn">Painel de Administrador</a>
+            <a href="/admin/news/new" class="admin-btn">Escrever Notícia</a>
+            <a href="/admin/news" class="admin-btn">Editar Notícias</a>
           </div>
         <% } %>
 
@@ -59,6 +59,7 @@
             Meu Perfil
           </button>
           <button class="nav-tab" data-tab="tickets">Meus Tickets</button>
+          <button class="nav-tab" data-tab="news">Notícias</button>
         </nav>
 
         <div class="dashboard-tab-content">
@@ -155,6 +156,27 @@
                 </div>
                 <div id="tickets-section">
                   <p>Conteúdo da aba de tickets...</p>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div id="news-tab" class="tab-pane">
+            <section class="dashboard-section full-width-news">
+              <div class="dashboard-section-container">
+                <div class="section-header">
+                  <h2>Notícias</h2>
+                </div>
+                <div class="news-list">
+                  <% if (news && news.length > 0) { %>
+                    <% news.forEach(n => { %>
+                      <article class="news-item">
+                        <h3><a href="/news/<%= n.id %>"><%= n.title %></a></h3>
+                        <p class="news-meta"><%= new Date(n.created_at).toLocaleDateString() %></p>
+                      </article>
+                    <% }) %>
+                  <% } else { %>
+                    <p>Nenhuma notícia encontrada.</p>
+                  <% } %>
                 </div>
               </div>
             </section>
