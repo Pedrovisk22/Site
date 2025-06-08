@@ -108,3 +108,220 @@
   font-size: 1.1em;
   padding: var(--spacing-sm) var(--spacing-md);
 }
+
+.form-page {
+    /* Existing styles for centering the form */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - var(--header-height, 80px) - var(--footer-height, 150px)); /* Adjust heights as needed */
+    padding: var(--spacing-lg) var(--spacing-md);
+    background-color: var(--body-bg-overlay); /* Subtle overlay for contrast */
+}
+
+.form-card {
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-panel);
+    max-width: 700px; /* Increased max-width for better content area */
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md); /* Spacing between form elements */
+    opacity: 0; /* For animation */
+    transform: translateY(var(--spacing-md)); /* For animation */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Animation */
+}
+
+.form-card.animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.form-card .section-title.card-title {
+    font-size: 1.8em; /* Slightly larger title */
+    margin-bottom: var(--spacing-lg); /* More space below title */
+    color: var(--accent-color-light);
+    position: relative;
+    padding-bottom: var(--spacing-xs);
+}
+
+.form-card .section-title.card-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: var(--spacing-xl); /* Wider underline */
+    height: 4px; /* Thicker underline */
+    background-color: var(--accent-color);
+    border-radius: var(--radius-full);
+}
+
+.news-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md); /* Space between form groups */
+}
+
+.form-group {
+    text-align: left;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1em; /* Slightly larger label font */
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-primary); /* Darker background for inputs */
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 1em;
+    box-shadow: var(--shadow-inset);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 200px; /* Increased min-height for textarea */
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-color-light);
+    box-shadow: var(--shadow-inset), 0 0 0 3px rgba(66, 165, 245, 0.4); /* Stronger focus highlight */
+}
+
+.btn-submit-news {
+    width: auto; /* Allow button to size based on content */
+    align-self: center; /* Center the button */
+    margin-top: var(--spacing-md); /* More space above button */
+    font-size: 1.2em; /* Larger button text */
+    padding: var(--spacing-sm) var(--spacing-lg); /* More padding */
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs); /* Space between icon and text */
+}
+
+.btn-submit-news i {
+    font-size: 1.1em; /* Adjust icon size */
+}
+
+/* --- Hero Section for Forms (inherited from index.ejs) --- */
+#news-create-hero,
+#news-edit-hero {
+    height: 300px; /* Adjust height for form pages */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#news-create-hero .hero-text-content,
+#news-edit-hero .hero-text-content {
+    max-width: 800px;
+    text-align: center;
+    padding: 0;
+    justify-content: center;
+}
+
+#news-create-hero h1,
+#news-edit-hero h1 {
+    font-size: 2.8em; /* Slightly smaller than main hero but still prominent */
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-yellow-vibrant); /* Use vibrant yellow for titles */
+}
+
+#news-create-hero p,
+#news-edit-hero p {
+    font-size: 1.1em;
+    margin-bottom: 0;
+    color: var(--text-primary);
+}
+
+/* Responsive adjustments for forms */
+@media (max-width: 768px) {
+    .form-card {
+        padding: var(--spacing-md);
+        gap: var(--spacing-sm);
+    }
+    .form-card .section-title.card-title {
+        font-size: 1.6em;
+        margin-bottom: var(--spacing-md);
+    }
+    .form-group input[type="text"],
+    .form-group textarea {
+        font-size: 0.95em;
+    }
+    .btn-submit-news {
+        font-size: 1.1em;
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+    #news-create-hero,
+    #news-edit-hero {
+        height: 250px;
+    }
+    #news-create-hero h1,
+    #news-edit-hero h1 {
+        font-size: 2.2em;
+    }
+    #news-create-hero p,
+    #news-edit-hero p {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-card {
+        padding: var(--spacing-sm);
+        border-radius: var(--radius-md);
+    }
+    .form-card .section-title.card-title {
+        font-size: 1.4em;
+        margin-bottom: var(--spacing-sm);
+    }
+    .form-group label {
+        font-size: 0.9em;
+    }
+    .form-group input[type="text"],
+    .form-group textarea {
+        font-size: 0.9em;
+        padding: var(--spacing-xs);
+    }
+    .form-group textarea {
+        min-height: 150px;
+    }
+    .btn-submit-news {
+        width: 100%;
+        font-size: 1em;
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+    #news-create-hero,
+    #news-edit-hero {
+        height: 200px;
+    }
+    #news-create-hero h1,
+    #news-edit-hero h1 {
+        font-size: 1.8em;
+    }
+    #news-create-hero p,
+    #news-edit-hero p {
+        font-size: 0.9em;
+    }
+}
