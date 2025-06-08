@@ -1,352 +1,422 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de <%= title %> - PokeMonster</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/character.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="/assets/svg/pokeball.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <%- include('partials/header') %>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Perfil de <%= title %> - PokeCamp</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/character.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="icon" href="/assets/svg/pokeball.svg" type="image/svg+xml">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    <body>
+        <%- include('partials/header') %>
 
-    <% if (isPrivate) { %>
-        <main class="main-content">
-            <div class="character-page-wrapper container">
-                <div class="private-profile-notice">
-                    <i class="fas fa-user-secret"></i>
-                    <h2>Perfil Privado</h2>
-                    <p>O jogador <strong><%= player.name %></strong> configurou seu perfil como privado.</p>
-                    <a href="/ranking" class="btn btn-primary">Voltar ao Ranking</a>
-                </div>
-            </div>
-        </main>
-    <% } else { %>
-        <%
-            // Helper para formatar o tempo online
-            function formatOnlineTime(seconds) {
-                if (seconds === undefined || seconds === null || seconds < 1) return 'Pouco tempo';
-                const d = Math.floor(seconds / (3600*24));
-                const h = Math.floor(seconds % (3600*24) / 3600);
-                const m = Math.floor(seconds % 3600 / 60);
-
-                let parts = [];
-                if (d > 0) parts.push(`${d} dia${d > 1 ? 's' : ''}`);
-                if (h > 0) parts.push(`${h} hora${h > 1 ? 's' : ''}`);
-                if (m > 0 && d === 0 && h === 0) parts.push(`${m} minuto${m > 1 ? 's' : ''}`); // Mostra minutos só se não tiver horas/dias
-
-                if (parts.length === 0) return 'Pouco tempo';
-                if (parts.length === 1) return parts[0];
-                return `${parts[0]} e ${parts[1]}`;
-            }
-        %>
-        <!-- PONTO 6: ESTRUTURA VISUAL MELHORADA -->
-        <section class="hero-section character-hero-section animate-on-scroll">
-            <!-- AGORA USA A MESMA IMAGEM DE FUNDO DO RANKING -->
-            <div class="hero-background" style="background-image: url('/assets/images/background-4.png');"></div>
-            <div class="hero-overlay"></div>
-            <div class="container hero-content-wrapper">
-                <div class="hero-text-content">
-                    <h1 class="typewriter" data-text="PERFIL DE <%= player.name.toUpperCase() %>">PERFIL DE <%= player.name %></h1>
-                    <p>Explore as estatísticas e conquistas deste treinador!</p>
-                    <div class="hero-buttons">
-                        <a href="/ranking" class="btn btn-primary hero-cta">
-                            <i class="fas fa-arrow-left"></i> Voltar ao Ranking
-                        </a>
-                        <% if (!user || (user && user.id !== player.account_id)) { %>
-                            <a href="/register" class="btn btn-secondary hero-cta-secondary">
-                                <i class="fas fa-user-plus"></i> Criar Conta
-                            </a>
-                        <% } %>
+        <% if (isPrivate) { %>
+            <main class="main-content">
+                <div class="character-page-wrapper container">
+                    <div class="private-profile-notice">
+                        <i class="fas fa-user-secret"></i>
+                        <h2>Perfil Privado</h2>
+                        <p>O jogador <strong><%= player.name %></strong> configurou seu perfil como privado.</p>
+                        <a href="/ranking" class="btn btn-primary">Voltar ao Ranking</a>
                     </div>
                 </div>
-            </div>
-        </section>
+            </main>
+        <% } else { %>
+            <%
+                // Helper para formatar o tempo online (já existente)
+                function formatOnlineTime(seconds) {
+                    if (seconds === undefined || seconds === null || seconds < 1) return 'Pouco tempo';
+                    const d = Math.floor(seconds / (3600*24));
+                    const h = Math.floor(seconds % (3600*24) / 3600);
+                    const m = Math.floor(seconds % 3600 / 60);
 
-        <main class="main-content">
-            <div class="character-page-wrapper container">
-                <div class="character-content-grid">
-                    <!-- Coluna da Esquerda: Card Principal -->
-                    <aside class="character-profile-card">
-                        <!-- AGORA O BACKGROUND DO PERSONAGEM VEM AQUI, QUADRADO COMO NO DASHBOARD -->
-                        <div class="character-avatar-container" style="background-image: url('/assets/images/characters/backgrounds/background_<%= player.background || 1 %>.png');">
-                            <img src="/avatar/<%= player.name %>" alt="Avatar de <%= player.name %>" class="character-avatar">
-                            <div class="level-circle">
-                                <span><%= player.level %></span>
+                    let parts = [];
+                    if (d > 0) parts.push(`${d} dia${d > 1 ? 's' : ''}`);
+                    if (h > 0) parts.push(`${h} hora${h > 1 ? 's' : ''}`);
+                    if (m > 0 && d === 0 && h === 0) parts.push(`${m} minuto${m > 1 ? 's' : ''}`);
+
+                    if (parts.length === 0) return 'Pouco tempo';
+                    if (parts.length === 1) return parts[0];
+                    return `${parts[0]} e ${parts[1]}`;
+                }
+
+                // NOVO HELPER: Formata duração em segundos para HHh MMm SSs
+                function formatDuration(seconds) {
+                    if (seconds === undefined || seconds === null || seconds < 1) return '0h 0m 0s';
+                    seconds = Number(seconds); // Garante que é um número
+
+                    const totalMinutes = Math.floor(seconds / 60);
+                    const totalHours = Math.floor(totalMinutes / 60);
+                    const remainingMinutes = totalMinutes % 60;
+                    const remainingSeconds = seconds % 60;
+
+                    let parts = [];
+                    if (totalHours > 0) parts.push(`${totalHours}h`);
+                    // Sempre mostra minutos e segundos, a menos que as horas já existam e minutos/segundos sejam 0
+                    if (totalMinutes > 0 || totalHours === 0) parts.push(`${remainingMinutes}m`);
+                    if (remainingSeconds > 0 || (totalMinutes === 0 && totalHours === 0)) parts.push(`${remainingSeconds}s`);
+
+                    if (parts.length === 0) return '0s'; // Fallback se tudo for zero
+                    return parts.join(' ');
+                }
+            %>
+            <section class="hero-section character-hero-section animate-on-scroll">
+                <div class="hero-background" style="background-image: url('/assets/images/background-4.png');"></div>
+                <div class="hero-overlay"></div>
+                <div class="container hero-content-wrapper">
+                    <div class="hero-text-content">
+                        <h1 class="typewriter" data-text="PERFIL DE <%= player.name.toUpperCase() %>">PERFIL DE <%= player.name %></h1>
+                        <p>Explore as estatísticas e conquistas deste treinador!</p>
+                        <div class="hero-buttons">
+                            <a href="/ranking" class="btn btn-primary hero-cta">
+                                <i class="fas fa-arrow-left"></i> Voltar ao Ranking
+                            </a>
+                            <% if (!user || (user && user.id !== player.account_id)) { %>
+                                <a href="/register" class="btn btn-secondary hero-cta-secondary">
+                                    <i class="fas fa-user-plus"></i> Criar Conta
+                                </a>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <main class="main-content">
+                <div class="character-page-wrapper container">
+                    <div class="character-content-grid">
+                        <aside class="character-profile-card">
+                            <div class="character-scene-container">
+                                <div class="character-name-online-wrapper">
+                                    <h3 class="character-name-display-top"><%= player.name %></h3>
+                                    <span class="online-status-dot-top <%= player.online ? 'online' : 'offline' %>"
+                                        title="<%= player.online ? 'Online agora' : 'Último login: ' + new Date(player.lastlogin * 1000).toLocaleString('pt-BR') %>">
+                                    </span>
+                                </div>
+                                <div class="character-scene-background" style="background-image: url('/assets/images/characters/backgrounds/background_<%= player.background || 1 %>.png');"></div>
+                                <img src="/avatar/<%= player.name %>" alt="Avatar de <%= player.name %>" class="character-scene-sprite">
                             </div>
-                        </div>
 
-                        <div class="character-identity">
-                            <h2><%= player.name %></h2>
-                            <!-- PONTO 5: BOLA DE ONLINE -->
-                            <span class="online-status-dot <%= player.online ? 'online' : 'offline' %>" 
-                                  title="<%= player.online ? 'Online agora' : 'Último login: ' + new Date(player.last_login * 1000).toLocaleString('pt-BR') %>">
-                            </span>
-                        </div>
-                        
-                        <!-- PONTO 4: MURAL PÚBLICO -->
-                        <div class="profile-mural">
-                            <div class="mural-header">
-                                <h4>Mural Público</h4>
-                                <% if (isOwner) { %>
-                                    <button id="open-mural-modal-btn" class="btn btn-tertiary btn-sm">
-                                        <i class="fas fa-edit"></i> Editar
+                            <%
+                                let rankClass = '';
+                                if (player.rank === 1) rankClass = 'top-1';
+                                else if (player.rank === 2) rankClass = 'top-2';
+                                else if (player.rank === 3) rankClass = 'top-3';
+                                else rankClass = 'default-rank'; // Nova classe para ranks > 3
+                            %>
+                            <div class="character-level-display">
+                                <div class="level-circle <%= rankClass %>">
+                                    <span>#<%= player.rank %></span>
+                                </div>
+                                <span class="rank-label">Rank Geral</span>
+                            </div>
+                            <div class="profile-mural">
+                                <div class="mural-header">
+                                    <h4>Mural Público</h4>
+                                    <% if (isOwner) { %>
+                                        <button id="open-mural-modal-btn" class="btn btn-tertiary btn-sm">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </button>
+                                    <% } %>
+                                </div>
+                                <p id="mural-display-text">
+                                    "<%= player.mural_message && player.mural_message.trim() !== '' ? player.mural_message : 'Este treinador ainda não definiu uma mensagem.' %>"
+                                </p>
+                            </div>
+
+                            <div class="share-link-box">
+                                <label>Link do Perfil</label>
+                                <div class="input-group">
+                                    <input type="text" id="profile-url" value="https://pokecamp.com/character/<%= player.name %>" readonly>
+                                    <button id="copy-link-btn" data-tooltip="Copiar link do perfil">
+                                        <i class="fas fa-copy"></i>
                                     </button>
-                                <% } %>
-                            </div>
-                            <p id="mural-display-text">
-                                "<%= player.mural_message && player.mural_message.trim() !== '' ? player.mural_message : 'Este treinador ainda não definiu uma mensagem.' %>"
-                            </p>
-                        </div>
-                        
-                        <!-- PONTO 1: LINK COMPARTILHÁVEL -->
-                        <div class="share-link-box">
-                            <label>Link do Perfil</label>
-                            <div class="input-group">
-                                <input type="text" id="profile-url" value="https://pokecamp.com/character/<%= player.name %>" readonly>
-                                <button id="copy-link-btn" data-tooltip="Copiar link do perfil">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- PONTO 3: ESTATÍSTICAS GERAIS - AGORA COMO AS ESTATÍSTICAS DO SERVIDOR NO HOME -->
-                        <div class="general-stats character-stats-bar">
-                            <h4>Estatísticas Gerais</h4>
-                            <div class="status-items">
-                                <div class="status-item">
-                                    <div class="status-icon">
-                                        <i class="fas fa-bullseye"></i>
-                                    </div>
-                                    <div class="status-value"><%= playerStats.total_captures %></div>
-                                    <div class="status-label">Total de Capturas</div>
-                                </div>
-                                <div class="status-item">
-                                    <div class="status-icon">
-                                        <i class="fas fa-skull-crossbones"></i>
-                                    </div>
-                                    <div class="status-value"><%= playerStats.total_deaths %></div>
-                                    <div class="status-label">Total de Mortes</div>
-                                </div>
-                                <div class="status-item">
-                                    <div class="status-icon">
-                                        <i class="fas fa-fist-raised"></i>
-                                    </div>
-                                    <div class="status-value"><%= playerStats.battles_won %></div>
-                                    <div class="status-label">Batalhas Vencidas</div>
-                                </div>
-                                <div class="status-item">
-                                    <div class="status-icon">
-                                        <i class="fas fa-clock"></i>
-                                    </div>
-                                    <div class="status-value"><%= formatOnlineTime(playerStats.online_time_seconds) %></div>
-                                    <div class="status-label">Tempo Online</div>
                                 </div>
                             </div>
-                        </div>
-                    </aside>
+                        </aside>
 
-                    <!-- Coluna da Direita: Abas de Conteúdo -->
-                    <div class="character-details-column">
-                        <!-- PONTO 2: TABS COM SEÇÕES COLAPSÁVEIS -->
-                        <nav class="profile-tabs">
-                            <button class="tab-link active" data-tab="insignias"><i class="fas fa-shield-alt"></i> Insígnias</button>
-                            <button class="tab-link" data-tab="derrotados"><i class="fas fa-crosshairs"></i> Derrotados</button>
-                            <button class="tab-link" data-tab="capturados"><i class="fas fa-pokeball"></i> Capturados</button>
-                            <button class="tab-link" data-tab="mortes"><i class="fas fa-book-dead"></i> Últimas Mortes</button>
-                        </nav>
-                        
-                        <div class="tab-content">
-                            <!-- PONTO 7: ORGANIZAÇÃO DAS INSÍGNIAS -->
-                            <div id="insignias" class="tab-pane active">
-                                <% const kantoBadges = [
-                                    { name: 'Rocha', img: 'badge_kanto_1.png', leader: 'Brock' }, { name: 'Cascata', img: 'badge_kanto_2.png', leader: 'Misty' },
-                                    { name: 'Trovão', img: 'badge_kanto_3.png', leader: 'Lt. Surge' }, { name: 'Arco-Íris', img: 'badge_kanto_4.png', leader: 'Erika' },
-                                    { name: 'Alma', img: 'badge_kanto_5.png', leader: 'Koga' }, { name: 'Lama', img: 'badge_kanto_6.png', leader: 'Sabrina' },
-                                    { name: 'Vulcão', img: 'badge_kanto_7.png', leader: 'Blaine' }, { name: 'Terra', img: 'badge_kanto_8.png', leader: 'Giovanni' }
-                                ]; %>
-                                <div class="badges-grid">
-                                    <% kantoBadges.forEach(badge => {
-                                        const obtainedBadge = playerBadges.find(pb => pb.name.toLowerCase() === badge.name.toLowerCase());
-                                    %>
-                                    <div class="badge-item <%= obtainedBadge ? 'completed' : '' %>" 
-                                         title="<%= obtainedBadge ? `${badge.name} - Conquistada em ${new Date(obtainedBadge.date_achieved).toLocaleDateString('pt-BR')} do líder ${obtainedBadge.leader_name}` : `Insígnia da ${badge.name} (não obtida)` %>">
-                                        <img src="/assets/images/icons/<%= badge.img %>" alt="Insígnia <%= badge.name %>">
-                                        <span><%= badge.name %></span>
+                        <div class="character-details-column">
+                            <div class="character-combined-info-card">
+                                <h4>Estatísticas Gerais</h4>
+                                <div class="status-items">
+                                    <div class="status-item">
+                                        <div class="status-icon">
+                                            <i class="fas fa-level-up-alt"></i>
+                                        </div>
+                                        <div class="status-value"><%= player.level %></div>
+                                        <div class="status-label">Nível Atual</div>
                                     </div>
-                                    <% }) %>
+                                    <div class="status-item">
+                                        <div class="status-icon">
+                                            <i class="fas fa-bullseye"></i>
+                                        </div>
+                                        <div class="status-value"><%= playerStats.total_captures %></div>
+                                        <div class="status-label">Total de Capturas</div>
+                                    </div>
+                                    <div class="status-item">
+                                        <div class="status-icon">
+                                            <i class="fas fa-skull-crossbones"></i>
+                                        </div>
+                                        <div class="status-value"><%= playerStats.total_deaths %></div>
+                                        <div class="status-label">Total de Mortes</div>
+                                    </div>
+                                    <div class="status-item">
+                                        <div class="status-icon">
+                                            <i class="fas fa-fist-raised"></i>
+                                        </div>
+                                        <div class="status-value"><%= playerStats.battles_won %></div>
+                                        <div class="status-label">Batalhas Vencidas</div>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <!-- POKEMONS DERROTADOS - COM FILTRO E PESQUISA -->
-                            <div id="derrotados" class="tab-pane">
-                                <div class="tab-controls">
-                                    <input type="text" class="search-input" placeholder="Buscar Pokémon derrotado..." data-target="defeated-list">
-                                    <select class="filter-select" data-target="defeated-list">
-                                        <option value="">Todos os Tipos</option>
-                                        <option value="normal">Normal</option>
-                                        <option value="fire">Fire</option>
-                                        <option value="water">Water</option>
-                                        <option value="grass">Grass</option>
-                                        <option value="electric">Electric</option>
-                                        <option value="ice">Ice</option>
-                                        <option value="fighting">Fighting</option>
-                                        <option value="poison">Poison</option>
-                                        <option value="ground">Ground</option>
-                                        <option value="flying">Flying</option>
-                                        <option value="psychic">Psychic</option>
-                                        <option value="bug">Bug</option>
-                                        <option value="rock">Rock</option>
-                                        <option value="ghost">Ghost</option>
-                                        <option value="dragon">Dragon</option>
-                                        <option value="steel">Steel</option>
-                                        <option value="dark">Dark</option>
-                                        <option value="fairy">Fairy</option>
-                                    </select>
-                                </div>
-                                <% if(defeatedPokemons && defeatedPokemons.length > 0) { %>
-                                <div class="table-scroll-wrapper">
-                                    <table class="pokemon-table" data-list-id="defeated-list">
-                                        <thead>
-                                            <tr>
-                                                <th>Sprite</th>
-                                                <th>Pokémon</th>
-                                                <th>Derrotados</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% defeatedPokemons.forEach(p => { %>
-                                            <tr data-pokemon-name="<%= p.pokemon_name.toLowerCase() %>" data-pokemon-type="<%= p.type ? p.type.toLowerCase() : 'desconhecido' %>">
-                                                <td><img src="/assets/images/pokemons/<%= p.sprite_name %>" alt="<%= p.pokemon_name %>" class="pokemon-sprite-icon"></td>
-                                                <td><%= p.pokemon_name %></td>
-                                                <td>x<%= p.count %></td>
-                                            </tr>
-                                            <% }) %>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <% } else { %>
-                                    <p class="no-data">Nenhum Pokémon derrotado registrado.</p>
-                                <% } %>
+
+                                <hr class="divider"> <h4>Detalhes do Treinador</h4>
+<div class="details-two-columns">
+    <div class="info-item">
+        <i class="fas fa-map-marker-alt info-icon"></i>
+        <span>Localidade: <strong>
+            <%= player.location || 'Desconhecida' %>
+            <% if (player.flagCode) { %>
+                <img src="/assets/svg/flags/<%= player.flagCode %>.svg" alt="<%= player.location %> Flag" class="info-flag-icon small-flag">
+            <% } %>
+        </strong></span>
+
+    </div>
+    <div class="info-item">
+        <i class="fas fa-calendar-alt info-icon"></i>
+        <span>Criado em: <strong><%= new Date(player.created * 1000).toLocaleDateString('pt-BR') %></strong></span>
+    </div>
+    <div class="info-item">
+        <i class="fas fa-sign-in-alt info-icon"></i>
+        <span>Último Login: <strong><%= new Date(player.lastlogin * 1000).toLocaleString('pt-BR') %></strong></span>
+    </div>
+    <div class="info-item">
+        <i class="fas fa-ring info-icon"></i>
+        <span>Status Civil: <strong><%= player.married ? 'Casado(a)' : 'Solteiro(a)' %></strong></span>
+    </div>
+    <div class="info-item">
+        <i class="fas fa-hourglass-half info-icon"></i>
+        <span>Tempo Online Hoje: <strong><%= formatDuration(player.onlinetimetoday) %></strong></span>
+    </div>
+    <div class="info-item">
+        <i class="fas fa-clock info-icon"></i>
+        <span>Tempo Online Total: <strong><%= formatOnlineTime(playerStats.online_time_seconds) %></strong></span>
+    </div>
+</div>
+
                             </div>
 
-                            <!-- POKEMONS CAPTURADOS - COM FILTRO E PESQUISA -->
-                            <div id="capturados" class="tab-pane">
-                                <div class="tab-controls">
-                                    <input type="text" class="search-input" placeholder="Buscar Pokémon capturado..." data-target="captured-list">
-                                    <select class="filter-select" data-target="captured-list">
-                                        <option value="">Todas as Raridades</option>
-                                        <option value="comum">Comum</option>
-                                        <option value="raro">Raro</option>
-                                        <option value="lendário">Lendário</option>
-                                        <option value="shiny">Shiny</option>
-                                    </select>
-                                </div>
-                                <% if(capturedPokemons && capturedPokemons.length > 0) { %>
-                                <div class="table-scroll-wrapper">
-                                    <table class="pokemon-table" data-list-id="captured-list">
-                                        <thead>
-                                            <tr>
-                                                <th>Data</th>
-                                                <th>Pokémon</th>
-                                                <th>Sprite</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% capturedPokemons.forEach(p => { %>
-                                            <tr data-pokemon-name="<%= p.pokemon_name.toLowerCase() %>" data-pokemon-rarity="<%= p.rarity ? p.rarity.toLowerCase() : 'desconhecido' %>" data-pokemon-type="<%= p.type ? p.type.toLowerCase() : '' %>">
-                                                <td><%= new Date(p.capture_date).toLocaleDateString('pt-BR') %></td>
-                                                <td>
-                                                    <%= p.pokemon_name %>
-                                                    <div class="tags">
-                                                        <span class="tag rarity-<%= p.rarity ? p.rarity.toLowerCase() : 'desconhecido' %>"><%= p.rarity || 'Desconhecido' %></span>
-                                                        <% if (p.type && p.type.toLowerCase() === 'shiny') { %>
-                                                            <span class="tag type-shiny">Shiny</span>
-                                                        <% } %>
-                                                    </div>
-                                                </td>
-                                                <td><img src="/assets/images/pokemons/<%= p.sprite_name %>" alt="<%= p.pokemon_name %>" class="pokemon-sprite-icon"></td>
-                                            </tr>
-                                            <% }) %>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <% } else { %>
-                                    <p class="no-data">Nenhum Pokémon capturado registrado.</p>
-                                <% } %>
-                            </div>
+                            <nav class="profile-tabs">
+                                <button class="tab-link active" data-tab="insignias"><i class="fas fa-shield-alt"></i> Insígnias</button>
+                                <button class="tab-link" data-tab="derrotados"><i class="fas fa-crosshairs"></i> Derrotados</button>
+                                <button class="tab-link" data-tab="capturados"><i class="fas fa-pokeball"></i> Capturados</button>
+                                <button class="tab-link" data-tab="mortes"><i class="fas fa-book-dead"></i> Últimas Mortes</button>
+                            </nav>
 
-                            <!-- ÚLTIMAS MORTES - COM FILTRO E PESQUISA -->
-                            <div id="mortes" class="tab-pane">
-                                <div class="tab-controls">
-                                    <input type="text" class="search-input" placeholder="Buscar morto por..." data-target="deaths-list">
-                                    <select class="filter-select" data-target="deaths-list">
-                                        <option value="">Todos os Assassinos</option>
-                                        <option value="pokemon selvagem">Pokémon Selvagem</option>
-                                        <option value="jogador">Jogador</option>
-                                        <!-- Adicione mais opções de tipo de assassino se tiver no seu DB -->
-                                    </select>
+                            <div class="tab-content">
+                                <div id="insignias" class="tab-pane active">
+<% const kantoBadges = [
+    { name: 'Rocha', img: 'Boulder-Badge.png', leader: 'Brock' },
+    { name: 'Cascata', img: 'Cascade-Badge.png', leader: 'Misty' },
+    { name: 'Trovão', img: 'Thunder-Badge.png', leader: 'Lt. Surge' },
+    { name: 'Arco-Íris', img: 'Rainbow-Badge.png', leader: 'Erika' },
+    { name: 'Alma', img: 'Soul-Badge.png', leader: 'Koga' },
+    { name: 'Lama', img: 'Marsh-Badge.png', leader: 'Sabrina' },
+    { name: 'Vulcão', img: 'Volcano-Badge.png', leader: 'Blaine' },
+    { name: 'Terra', img: 'Earth-Badge.png', leader: 'Giovanni' },
+]; %>
+
+<div class="badges-grid">
+    <% kantoBadges.forEach(badge => {
+        const obtainedBadge = playerBadges.find(pb => pb.name.toLowerCase() === badge.name.toLowerCase());
+    %>
+        <div class="badge-item <%= obtainedBadge ? 'completed' : '' %>"
+            title="<%= obtainedBadge ? `${badge.name} - Conquistada em ${new Date(obtainedBadge.date_achieved).toLocaleDateString('pt-BR')} do líder ${obtainedBadge.leader_name}` : `Insígnia da ${badge.name} (não obtida)` %>">
+            <img src="/assets/images/badges/<%= badge.img %>" alt="Insígnia <%= badge.name %>">
+            <span><%= badge.name %></span>
+            <% if (obtainedBadge) { %>
+                <i class="fas fa-check-circle badge-check-icon"></i>
+            <% } %>
+        </div>
+    <% }) %>
+</div>
+
+
+                                <div id="derrotados" class="tab-pane">
+                                    <div class="tab-controls">
+                                        <input type="text" class="search-input" placeholder="Buscar Pokémon derrotado..." data-target="defeated-list">
+                                        <select class="filter-select" data-target="defeated-list">
+                                            <option value="">Todos os Tipos</option>
+                                            <option value="normal">Normal</option>
+                                            <option value="fire">Fire</option>
+                                            <option value="water">Water</option>
+                                            <option value="grass">Grass</option>
+                                            <option value="electric">Electric</option>
+                                            <option value="ice">Ice</option>
+                                            <option value="fighting">Fighting</option>
+                                            <option value="poison">Poison</option>
+                                            <option value="ground">Ground</option>
+                                            <option value="flying">Flying</option>
+                                            <option value="psychic">Psychic</option>
+                                            <option value="bug">Bug</option>
+                                            <option value="rock">Rock</option>
+                                            <option value="ghost">Ghost</option>
+                                            <option value="dragon">Dragon</option>
+                                            <option value="steel">Steel</option>
+                                            <option value="dark">Dark</option>
+                                            <option value="fairy">Fairy</option>
+                                        </select>
+                                    </div>
+                                    <% if(defeatedPokemons && defeatedPokemons.length > 0) { %>
+                                    <div class="table-scroll-wrapper">
+                                        <table class="pokemon-table" data-list-id="defeated-list">
+                                            <thead>
+                                                <tr>
+                                                    <th>Pokémon</th>
+                                                    <th class="text-right">Vezes Derrotado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% defeatedPokemons.forEach(p => { %>
+                                                <tr data-pokemon-name="<%= p.pokemon_name.toLowerCase() %>" data-pokemon-type="<%= p.type ? p.type.toLowerCase() : 'desconhecido' %>">
+                                                    <td>
+                                                        <div class="pokemon-info-row">
+                                                            <img src="/assets/images/pokemons/<%= p.sprite_name %>" alt="<%= p.pokemon_name %>" class="pokemon-sprite-icon">
+                                                            <span><%= p.pokemon_name %></span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right">x<%= p.count %></td>
+                                                </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <% } else { %>
+                                        <p class="no-data">Nenhum Pokémon derrotado registrado.</p>
+                                    <% } %>
                                 </div>
-                                <% if(lastDeaths && lastDeaths.length > 0) { %>
-                                <div class="table-scroll-wrapper">
-                                    <table class="pokemon-table deaths-table" data-list-id="deaths-list">
-                                        <thead>
+
+                                <div id="capturados" class="tab-pane">
+                                    <div class="tab-controls">
+                                        <input type="text" class="search-input" placeholder="Buscar Pokémon capturado..." data-target="captured-list">
+                                        <select class="filter-select" data-target="captured-list">
+                                            <option value="">Todas as Raridades</option>
+                                            <option value="comum">Comum</option>
+                                            <option value="raro">Raro</option>
+                                            <option value="lendário">Lendário</option>
+                                            <option value="shiny">Shiny</option>
+                                        </select>
+                                    </div>
+                                    <% if(capturedPokemons && capturedPokemons.length > 0) { %>
+                                    <div class="table-scroll-wrapper">
+                                        <table class="pokemon-table" data-list-id="captured-list">
+                                            <thead>
+                                                <tr>
+                                                    <th>Data</th>
+                                                    <th>Pokémon</th>
+                                                    <th class="text-center">Raridade</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% capturedPokemons.forEach(p => { %>
+                                                <tr data-pokemon-name="<%= p.pokemon_name.toLowerCase() %>" data-pokemon-rarity="<%= p.rarity ? p.rarity.toLowerCase() : 'desconhecido' %>" data-pokemon-type="<%= p.type ? p.type.toLowerCase() : '' %>">
+                                                    <td><%= new Date(p.capture_date).toLocaleDateString('pt-BR') %></td>
+                                                    <td>
+                                                        <div class="pokemon-info-row">
+                                                            <img src="/assets/images/pokemons/<%= p.sprite_name %>" alt="<%= p.pokemon_name %>" class="pokemon-sprite-icon">
+                                                            <span><%= p.pokemon_name %></span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <div class="tags">
+                                                            <span class="tag rarity-<%= p.rarity ? p.rarity.toLowerCase() : 'desconhecido' %>"><%= p.rarity || 'Desconhecido' %></span>
+                                                            <% if (p.type && p.type.toLowerCase() === 'shiny') { %>
+                                                                <span class="tag type-shiny">Shiny</span>
+                                                            <% } %>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <% } else { %>
+                                        <p class="no-data">Nenhum Pokémon capturado registrado.</p>
+                                    <% } %>
+                                </div>
+
+                                <div id="mortes" class="tab-pane">
+                                    <div class="tab-controls">
+                                        <input type="text" class="search-input" placeholder="Buscar morto por..." data-target="deaths-list">
+                                        <select class="filter-select" data-target="deaths-list">
+                                            <option value="">Todos os Assassinos</option>
+                                            <option value="pokemon selvagem">Pokémon Selvagem</option>
+                                            <option value="jogador">Jogador</option>
+                                            </select>
+                                    </div>
+                                    <% if(lastDeaths && lastDeaths.length > 0) { %>
+                                    <div class="table-scroll-wrapper">
+                                        <table class="pokemon-table deaths-table" data-list-id="deaths-list">
+                                                <thead>
                                             <tr>
                                                 <th>Data</th>
                                                 <th>Detalhes da Morte</th>
-                                                <th>Sprite</th>
+                                                <th></th>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% lastDeaths.forEach(death => { %>
-                                            <tr data-killer-name="<%= death.killed_by ? death.killed_by.toLowerCase() : 'desconhecido' %>" data-killer-type="<%= death.killer_type ? death.killer_type.toLowerCase() : 'desconhecido' %>">
-                                                <td><%= death.time.toLocaleString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }) %></td>
-                                                <td>
-                                                    Derrotado no nível <%= death.level %> por <strong><%= death.killed_by.replace('um ', '').replace('uma ', '') %></strong>.
-                                                </td>
-                                                <td><img src="/assets/images/pokemons/<%= death.killer_sprite %>" alt="Inimigo" class="pokemon-sprite-icon"></td>
-                                            </tr>
-                                            <% }) %>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+
+                                            <tbody>
+                                                <% lastDeaths.forEach(death => { %>
+                                                <tr data-killer-name="<%= death.killed_by ? death.killed_by.toLowerCase().replace(/um |uma /g, '') : 'desconhecido' %>" data-killer-type="<%= death.killer_type ? death.killer_type.toLowerCase() : 'desconhecido' %>">
+                                                    <td><%= death.time.toLocaleString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }) %></td>
+<td class="death-message-text">
+    Derrotado no nível <%= death.level %> por <strong><%= death.killed_by.replace('um ', '').replace('uma ', '') %></strong>.
+</td>
+<td class="death-sprite-cell">
+    <% if (death.killer_sprite) { %>
+        <img src="/assets/images/pokemons/<%= death.killer_sprite %>" alt="Inimigo" class="death-killer-sprite-icon">
+    <% } %>
+</td>
+
+                                                </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <% } else { %>
+                                        <p class="no-data">Este jogador nunca foi derrotado!</p>
+                                    <% } %>
                                 </div>
-                                <% } else { %>
-                                    <p class="no-data">Este jogador nunca foi derrotado!</p>
-                                <% } %>
                             </div>
                         </div>
                     </div>
                 </div>
+            </main>
+        <% } %>
+
+        <% if (isOwner) { %>
+        <div id="editMuralModal" class="modal">
+            <div class="modal-content">
+                <span id="close-mural-modal" class="close-modal">×</span>
+                <h2>Editar Mural</h2>
+                <form id="mural-edit-form" data-char-id="<%= player.id %>">
+                    <div class="form-group">
+                        <label for="mural-edit-textarea">Sua mensagem (máx. 140 caracteres):</label>
+                        <textarea id="mural-edit-textarea" name="muralMessage" placeholder="Escreva algo legal sobre você..." maxlength="140"><%= player.mural_message || '' %></textarea>
+                        <small id="mural-char-counter" class="char-counter">0/140</small>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancel-mural-edit" class="btn btn-secondary">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    </div>
+                </form>
             </div>
-        </main>
-    <% } %>
-
-    <!-- MODAL DE EDIÇÃO DO MURAL (VISÍVEL SOMENTE PARA O DONO) -->
-    <% if (isOwner) { %>
-    <div id="editMuralModal" class="modal">
-        <div class="modal-content">
-            <span id="close-mural-modal" class="close-modal">×</span>
-            <h2>Editar Mural</h2>
-            <form id="mural-edit-form" data-char-id="<%= player.id %>">
-                <div class="form-group">
-                    <label for="mural-edit-textarea">Sua mensagem (máx. 140 caracteres):</label>
-                    <textarea id="mural-edit-textarea" name="muralMessage" placeholder="Escreva algo legal sobre você..." maxlength="140"><%= player.mural_message || '' %></textarea>
-                    <small id="mural-char-counter" class="char-counter">0/140</small>
-                </div>
-                <div class="form-actions">
-                    <button type="button" id="cancel-mural-edit" class="btn btn-secondary">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                </div>
-            </form>
         </div>
-    </div>
-    <% } %>
+        <% } %>
 
-    <%- include('partials/footer') %>
-    <script src="/js/character.js"></script>
-    <script src="/js/script.js"></script> <!-- Para o efeito typewriter do hero -->
-</body>
-</html>
+        <%- include('partials/footer') %>
+        <script src="/js/character.js"></script>
+        <script src="/js/script.js"></script>
+    </body>
+    </html>
