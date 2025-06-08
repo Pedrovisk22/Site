@@ -8,6 +8,7 @@ const fs = require('fs').promises;
 const { db, promiseDb } = require('./db');
 const accountController = require('./accountController');
 const avatarRoutes = require('./routes/avatar');
+const newsController = require('./newsController');
 
 const app = express();
 const port = 3000;
@@ -490,6 +491,7 @@ app.get('/dashboard', requireLogin, async (req, res) => {
         const maxPlayersPerAccount = 5;
         const canCreateCharacter = characters.length < maxPlayersPerAccount;
         let backgroundFiles = [];
+        const news = await newsController.getAllNews();
         const backgroundsDirPath = path.join(__dirname, 'public', 'assets', 'images', 'characters', 'backgrounds');
         try {
             const files = await fs.readdir(backgroundsDirPath);
@@ -497,7 +499,7 @@ app.get('/dashboard', requireLogin, async (req, res) => {
         } catch (readDirError) {
             console.error('Erro ao ler o diretório de backgrounds:', readDirError);
         }
-        res.render('dashboard', { title: 'Dashboard', account, characters, canCreateCharacter, maxPlayersPerAccount, user: req.session.user, backgroundFiles });
+        res.render('dashboard', { title: 'Dashboard', account, characters, canCreateCharacter, maxPlayersPerAccount, user: req.session.user, backgroundFiles, news });
     } catch (error) {
         console.error('Erro ao carregar dashboard:', error);
         req.session.errorMessage = 'Erro ao carregar informações do dashboard. Por favor, tente novamente mais tarde.';
@@ -539,6 +541,79 @@ app.put('/api/characters/:charId', requireLogin, async (req, res) => {
 app.post('/api/characters/create', requireLogin, accountController.createCharacter);
 app.get('/api/characters/checkname', accountController.checkCharacterName);
 app.post('/api/characters/delete', requireLogin, accountController.deleteCharacter);
+
+app.get('/news', async (req, res) => {
+    try {
+        const news = await newsController.getAllNews();
+        res.render('news/list', { title: 'Notícias', news, user: req.session.user });
+    } catch (err) {
+        console.error('Erro ao carregar notícias:', err);
+        res.render('news/list', { title: 'Notícias', news: [], user: req.session.user, errorMessage: 'Erro ao carregar notícias.' });
+    }
+});
+
+app.get('/news/:id', async (req, res) => {
+    try {
+        const newsItem = await newsController.getNewsById(req.params.id);
+        if (!newsItem) return res.status(404).render('404', { title: 'Notícia Não Encontrada' });
+        res.render('news/view', { title: newsItem.title, news: newsItem, user: req.session.user });
+    } catch (err) {
+        console.error('Erro ao carregar notícia:', err);
+        res.status(500).render('error', { title: 'Erro', message: 'Erro ao carregar notícia.' });
+    }
+});
+
+app.get('/admin/news', requireLogin, async (req, res) => {
+    if (req.session.user.group_id < 2) return res.redirect('/dashboard');
+    try {
+        const news = await newsController.getAllNews();
+        res.render('news/admin_list', { title: 'Gerenciar Notícias', news, user: req.session.user });
+    } catch (err) {
+        console.error('Erro ao listar notícias:', err);
+        res.render('news/admin_list', { title: 'Gerenciar Notícias', news: [], user: req.session.user, errorMessage: 'Erro ao listar notícias.' });
+    }
+});
+
+app.get('/admin/news/new', requireLogin, (req, res) => {
+    if (req.session.user.group_id < 2) return res.redirect('/dashboard');
+    res.render('news/create', { title: 'Nova Notícia', user: req.session.user });
+});
+
+app.post('/admin/news/new', requireLogin, async (req, res) => {
+    if (req.session.user.group_id < 2) return res.redirect('/dashboard');
+    const { title, content, keywords } = req.body;
+    try {
+        await newsController.createNews({ title, content, keywords, author_id: req.session.user.id });
+        res.redirect('/admin/news');
+    } catch (err) {
+        console.error('Erro ao criar notícia:', err);
+        res.render('news/create', { title: 'Nova Notícia', user: req.session.user, errorMessage: 'Erro ao criar notícia.' });
+    }
+});
+
+app.get('/admin/news/:id/edit', requireLogin, async (req, res) => {
+    if (req.session.user.group_id < 2) return res.redirect('/dashboard');
+    try {
+        const newsItem = await newsController.getNewsById(req.params.id);
+        if (!newsItem) return res.redirect('/admin/news');
+        res.render('news/edit', { title: 'Editar Notícia', news: newsItem, user: req.session.user });
+    } catch (err) {
+        console.error('Erro ao carregar notícia para edição:', err);
+        res.redirect('/admin/news');
+    }
+});
+
+app.post('/admin/news/:id/edit', requireLogin, async (req, res) => {
+    if (req.session.user.group_id < 2) return res.redirect('/dashboard');
+    const { title, content, keywords } = req.body;
+    try {
+        await newsController.updateNews(req.params.id, { title, content, keywords });
+        res.redirect(`/news/${req.params.id}`);
+    } catch (err) {
+        console.error('Erro ao atualizar notícia:', err);
+        res.render('news/edit', { title: 'Editar Notícia', news: { id: req.params.id, title, content, keywords }, user: req.session.user, errorMessage: 'Erro ao atualizar notícia.' });
+    }
+});
 
 app.use('/', avatarRoutes);
 

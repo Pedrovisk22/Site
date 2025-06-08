@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Notícia - PokeCamp</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/news.css">
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({ selector: '#content' });
+  </script>
+</head>
+<body>
+  <%- include('../partials/header', { user: user }) %>
+  <main class="main-content container form-page">
+    <section class="form-card">
+      <h2 class="section-title card-title">Editar Notícia</h2>
+      <% if (errorMessage) { %><div class="alert alert-danger"><%= errorMessage %></div><% } %>
+      <form action="/admin/news/<%= news.id %>/edit" method="POST">
+        <div class="form-group">
+          <label for="title">Título:</label>
+          <input type="text" id="title" name="title" value="<%= news.title %>" required>
+        </div>
+        <div class="form-group">
+          <label for="content">Texto:</label>
+          <textarea id="content" name="content" rows="10" required><%- news.content %></textarea>
+        </div>
+        <div class="form-group">
+          <label for="keywords">Palavras-Chave:</label>
+          <input type="text" id="keywords" name="keywords" value="<%= news.keywords %>">
+        </div>
+        <button type="submit" class="btn btn-primary">Atualizar</button>
+      </form>
+    </section>
+  </main>
+  <%- include('../partials/footer') %>
+</body>
+</html>

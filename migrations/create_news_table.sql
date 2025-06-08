@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS news (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    keywords VARCHAR(255),
+    author_id INT NOT NULL
+);

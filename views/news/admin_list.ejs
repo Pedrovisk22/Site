@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar Notícias - PokeCamp</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/news.css">
+  <link rel="icon" href="/assets/svg/pokeball.svg" type="image/svg+xml">
+</head>
+<body>
+  <%- include('../partials/header', { user: user }) %>
+  <main class="main-content container">
+    <h2 class="section-title" style="margin-bottom: var(--spacing-md);">Gerenciar Notícias</h2>
+    <table class="news-admin-table">
+      <thead>
+        <tr><th>Título</th><th>Data</th><th>Ações</th></tr>
+      </thead>
+      <tbody>
+        <% if (news && news.length > 0) { %>
+          <% news.forEach(item => { %>
+            <tr>
+              <td><%= item.title %></td>
+              <td><%= new Date(item.created_at).toLocaleDateString() %></td>
+              <td><a href="/admin/news/<%= item.id %>/edit" class="btn btn-secondary btn-sm">Editar</a></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="3">Nenhuma notícia cadastrada.</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </main>
+  <%- include('../partials/footer') %>
+</body>
+</html>
