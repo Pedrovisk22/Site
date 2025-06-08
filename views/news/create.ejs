@@ -13,7 +13,18 @@
 </head>
 <body>
   <%- include('../partials/header', { user: user }) %>
-  <main class="main-content container form-page">
+  <main class="main-content">
+    <section class="hero hero-single-slide animate-on-scroll" id="news-create-hero">
+      <div class="hero-background" style="background-image: url('/assets/images/background-4.png');"></div>
+      <div class="hero-overlay"></div>
+      <div class="container hero-content-wrapper">
+        <div class="hero-text-content">
+          <h1>Criar Notícia</h1>
+          <p>Compartilhe novidades com a comunidade.</p>
+        </div>
+      </div>
+    </section>
+    <div class="container form-page">
     <section class="form-card">
       <h2 class="section-title card-title">Nova Notícia</h2>
       <% if (errorMessage) { %><div class="alert alert-danger"><%= errorMessage %></div><% } %>
@@ -33,6 +44,7 @@
         <button type="submit" class="btn btn-primary">Salvar</button>
       </form>
     </section>
+    </div>
   </main>
   <%- include('../partials/footer') %>
 </body>
