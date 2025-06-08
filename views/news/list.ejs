@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - PokeCamp</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/news.css">
+  <link rel="icon" href="/assets/svg/pokeball.svg" type="image/svg+xml">
+</head>
+<body>
+  <%- include('../partials/header', { user: user }) %>
+  <main class="main-content container">
+    <h2 class="section-title" style="margin-bottom: var(--spacing-md);">Notícias</h2>
+    <div class="news-list">
+      <% if (news && news.length > 0) { %>
+        <% news.forEach(item => { %>
+          <article class="news-item">
+            <h3><a href="/news/<%= item.id %>"><%= item.title %></a></h3>
+            <p class="news-meta"><%= new Date(item.created_at).toLocaleDateString() %></p>
+            <p><%- item.content.substring(0, 150) %>...</p>
+          </article>
+        <% }) %>
+      <% } else { %>
+        <p>Nenhuma notícia encontrada.</p>
+      <% } %>
+    </div>
+  </main>
+  <%- include('../partials/footer') %>
+</body>
+</html>
