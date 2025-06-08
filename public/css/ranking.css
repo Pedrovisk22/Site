@@ -1,4 +1,5 @@
-.ranking-hero-section.hero-section {
+.ranking-hero-section.hero-section,
+.ranking-hero-section.hero {
     height: 550px;
 }
 
