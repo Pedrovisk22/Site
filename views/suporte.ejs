@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Suporte - Poké Residuals</title>
+    <!-- Inclua Font Awesome para os ícones, como o de upload -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/suporte.css"> <!-- O SEU CSS DE SUPORTE -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+    <div id="background-container">
+        <div class="background-overlay"></div>
+    </div>
+
+    <!-- Partial do Cabeçalho (Assumindo que você tem um header.ejs) -->
+    <%- include('partials/header') %>
+
+    <main>
+        <section class="hero">
+            <h1 class="hero-title" data-lang-key="support-title">Suporte ao Jogador</h1>
+            <p class="hero-subtitle" data-lang-key="support-subtitle">
+                Encontrou um problema? Tem alguma dúvida? Nossa equipe está pronta para ajudar. 
+                Confira nossas FAQs ou entre em contato conosco.
+            </p>
+        </section>
+        
+        <section class="support-main">
+            <div class="support-container">
+                <div class="support-left">
+                    <div class="alert alert-success" id="alert-success" style="display:none;">
+                        Mensagem enviada com sucesso! Nossa equipe irá analisar e responder em breve.
+                    </div>
+                    
+                    <div class="alert alert-danger" id="alert-danger" style="display:none;">
+                        Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.
+                    </div>
+                    
+                    <div class="contact-form">
+                        <h2 class="form-title" data-lang-key="contact-title">Entre em Contato</h2>
+                        
+                        <!-- Navegação entre abas -->
+                        <div class="tab-nav">
+                          <button type="button" id="tab-msg"    class="active" data-lang-key="contact-tab-message">Mensagem</button>
+                          <button type="button" id="tab-anexo" data-lang-key="contact-tab-attachment">Print / Anexo</button>
+                        </div>
+                      
+                        <form id="support-form" enctype="multipart/form-data">
+                          <!-- PANE: mensagem -->
+                          <div id="pane-msg" class="tab-pane active">
+                            <div class="form-group">
+                              <label for="name" data-lang-key="form-name">Nome</label>
+                              <input type="text" id="name" name="name" required>
+                            </div>
+                      
+                            <div class="form-group">
+                              <label for="email" data-lang-key="form-email">E-mail</label>
+                              <input type="email" id="email" name="email" required>
+                            </div>
+                      
+                            <div class="form-group">
+                              <label for="subject" data-lang-key="form-subject">Assunto</label>
+                              <select id="subject" name="subject" required>
+                                <option value="" selected disabled data-lang-key="form-subject-select">Selecione</option>
+                                <option value="bug" data-lang-key="form-subject-bug">Bug</option>
+                                <option value="account" data-lang-key="form-subject-account">Conta</option>
+                                <option value="payment" data-lang-key="form-subject-payment">Pagamento</option>
+                                <option value="suggestion" data-lang-key="form-subject-suggestion">Sugestão</option>
+                                <option value="other" data-lang-key="form-subject-other">Outro</option>
+                              </select>
+                            </div>
+                      
+                            <div class="form-group">
+                              <label for="message" data-lang-key="form-message">Mensagem</label>
+                              <textarea id="message" name="message" required></textarea>
+                            </div>
+                          </div>
+                      
+                          <!-- PANE: anexo -->
+                          <div id="pane-anexo" class="tab-pane">
+                            <label class="input-drop" for="screenshot">
+                              <i class="fas fa-cloud-upload-alt"></i>
+                              <span data-lang-key="form-screenshot-placeholder">Arraste a imagem aqui ou clique para selecionar</span>
+                              <input type="file" id="screenshot" name="screenshot" multiple accept=".png,.jpg,.jpeg,.webp">
+
+                              <img id="preview-img" class="preview-img" hidden>
+                            </label>
+                          </div>
+                      
+                          <button type="submit" class="btn btn-primary btn-block" data-lang-key="form-submit">Enviar</button>
+                        </form>
+                      </div>
+                      
+                </div>
+                
+                <div class="support-right">
+                    <div class="support-options">
+                        <h3 class="options-title" data-lang-key="other-options">Outras Opções de Suporte</h3>
+                        
+                        <div class="support-option">
+                            <img src="/assets/images/flag-disc2.png" alt="Discord">
+                            <div class="option-content">
+                                <h4 class="option-title">Discord</h4>
+                                <p class="option-description" data-lang-key="discord-support">
+                                    Junte-se ao nosso servidor Discord para suporte em tempo real.
+                                    <a href="https://discord.gg/SEUCONVITEAQUI" target="_blank" rel="noopener noreferrer">POKEMONSTER</a>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="support-option">
+                            <img src="/assets/images/flag-insta.png" alt="Instagram"> <!-- Ícone do Instagram -->
+                            <div class="option-content">
+                                <h4 class="option-title" data-lang-key="instagram-title">Instagram</h4>
+                                <p class="option-description" data-lang-key="instagram-support">
+                                    Siga-nos para novidades, eventos e conteúdos exclusivos.
+                                    <a href="https://instagram.com/SEUINSTAGRAMAQUI" target="_blank" rel="noopener noreferrer">@POKE_MONSTER</a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="support-option">
+                            <img src="assets/images/flag-email.png" alt="E-mail">
+                            <div class="option-content">
+                                <h4 class="option-title">E-mail</h4>
+                                <p class="option-description" data-lang-key="email-support">
+                                    Envie um e-mail para <strong>suporte@pokemonster.com</strong>
+                                </p>
+                            </div>
+                        </div>
+                        
+                       
+                        
+                        <div class="support-option">
+                            <img src="assets/images/flag-forum.png" alt="Fórum">
+                            <div class="option-content">
+                                <h4 class="option-title">Fórum</h4>
+                                <p class="option-description" data-lang-key="forum-support">
+                                    Poste suas dúvidas no nosso fórum e receba ajuda da comunidade.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="support-hours">
+                        <h3 class="options-title" data-lang-key="support-hours">Horário de Atendimento</h3>
+                        <p class="text-center" data-lang-key="support-hours-desc">
+                          Nossa equipe de suporte está disponível nos seguintes horários:
+                        </p>
+                        
+                        <!-- Horários estilizados -->
+                        <div class="support-hours-schedule">
+                          <div class="hour-row">
+                            <span class="day-of-week">
+                              <strong data-lang-key="monday-friday">Segunda a Sexta</strong>
+                            </span>
+                            <span class="time-range">9h - 18h</span>
+                          </div>
+                          <div class="hour-row">
+                            <span class="day-of-week">
+                              <strong data-lang-key="saturday">Sábado</strong>
+                            </span>
+                            <span class="time-range">10h - 15h</span>
+                          </div>
+                          <div class="hour-row">
+                            <span class="day-of-week">
+                              <strong data-lang-key="sunday">Domingo</strong>
+                            </span>
+                            <span class="time-range">Fechado</span>
+                          </div>
+                          <div class="hour-row">
+                            <span class="day-of-week">
+                              <strong data-lang-key="holidays">Feriados</strong>
+                            </span>
+                            <span class="time-range">Fechado</span>
+                          </div>
+                        </div>
+                      
+                        <p class="text-center" data-lang-key="timezone">
+                          Todos os horários estão no fuso horário de Brasília (GMT-3).
+                        </p>
+                      </div>
+                      
+                </div>
+            </div>
+        </section>
+        
+        <section class="status-section">
+            <div class="status-container">
+                <h2 class="status-title" data-lang-key="server-status">Status dos Servidores</h2>
+                
+                <div class="server-status">
+                    <div class="status-header">
+                        <h3 data-lang-key="current-status">Status Atual</h3>
+                        <p data-lang-key="last-updated">Última atualização: 25/04/2024 15:30</p>
+                    </div>
+                    
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <div class="status-name" data-lang-key="login-server">Servidor Principal</div>
+                            <span class="status-badge status-online" data-lang-key="status-online">Online</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-name" data-lang-key="game-server">Servidor de Jogo</div>
+                            <span class="status-badge status-online" data-lang-key="status-online">Online</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-name" data-lang-key="event-server">Servidor de Eventos</div>
+                            <span class="status-badge status-online" data-lang-key="status-online">Online</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-name" data-lang-key="web-server">Servidor Web</div>
+                            <span class="status-badge status-online" data-lang-key="status-online">Online</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 data-lang-key="recent-alerts">Alertas Recentes</h3>
+                <div class="alerts-container">
+                    <div class="alert-item">
+                        <div class="alert-header">
+                            <span class="alert-type alert-maintenance" data-lang-key="maintenance">Manutenção</span>
+                            <span class="alert-time">25/04/2024 14:00</span>
+                        </div>
+                        <p class="alert-message" data-lang-key="maintenance-message">
+                            Manutenção programada no servidor de eventos para implementação de novos recursos.
+                            Duração estimada: 4 horas.
+                        </p>
+                    </div>
+                    
+                    <div class="alert-item">
+                        <div class="alert-header">
+                            <span class="alert-type alert-update" data-lang-key="update">Atualização</span>
+                            <span class="alert-time">24/04/2024 10:00</span>
+                        </div>
+                        <p class="alert-message" data-lang-key="update-message">
+                            Nova atualização (v1.2.5) implementada com sucesso em todos os servidores.
+                            Veja as notas de atualização para mais detalhes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="faq-section">
+            <div class="faq-container">
+                <h2 class="faq-title" data-lang-key="faq-title">Perguntas Frequentes</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" data-lang-key="faq-q1">Como recupero minha senha?</div>
+                    <div class="faq-answer">
+                        <p data-lang-key="faq-a1">
+                            Para recuperar sua senha, clique em "Esqueci minha senha" na tela de login. 
+                            Um e-mail de recuperação será enviado para o endereço associado à sua conta. 
+                            Siga as instruções no e-mail para criar uma nova senha.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" data-lang-key="faq-q2">O jogo não inicia depois da atualização. O que fazer?</div>
+                    <div class="faq-answer">
+                        <p data-lang-key="faq-a2">
+                            Primeiro, verifique se o seu computador atende aos requisitos mínimos. 
+                            Tente reiniciar o computador, verificar a integridade dos arquivos do jogo, ou reinstalar o jogo. 
+                            Se o problema persistir, entre em contato com o suporte com detalhes do seu sistema.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" data-lang-key="faq-q3">Como transfiro Pokémon entre contas?</div>
+                    <div class="faq-answer">
+                        <p data-lang-key="faq-a3">
+                            Não é possível transferir Pokémon diretamente entre contas. No entanto, você pode usar o sistema de 
+                            troca no jogo para trocar Pokémon entre dois jogadores. Lembre-se que algumas trocas podem exigir 
+                            itens especiais ou níveis mínimos de amizade.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" data-lang-key="faq-q4">Posso jogar em dispositivos móveis?</div>
+                    <div class="faq-answer">
+                        <p data-lang-key="faq-a4">
+                            No momento, Poké Residuals está disponível apenas para PC (Windows, macOS e Linux). 
+                            Uma versão para dispositivos móveis está em desenvolvimento e será anunciada em nossos 
+                            canais oficiais quando estiver disponível.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" data-lang-key="faq-q5">Por que fui banido?</div>
+                    <div class="faq-answer">
+                        <p data-lang-key="faq-a5">
+                            Contas podem ser banidas por violar nossos Termos de Serviço, incluindo uso de trapaças, 
+                            comportamento tóxico, ou abuso de bugs. Se você acredita que seu banimento foi injusto, 
+                            entre em contato com o suporte fornecendo detalhes da sua conta e situação.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" data-lang-key="faq-q6">Como reporto um bug?</div>
+                    <div class="faq-answer">
+                        <p data-lang-key="faq-a6">
+                            Para reportar um bug, use o formulário de contato nesta página, selecionando "Reportar um Bug" 
+                            como assunto. Inclua detalhes como: o que aconteceu, passos para reproduzir o bug, seu sistema 
+                            operacional, e se possível, anexe capturas de tela.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" data-lang-key="faq-q7">Existe um canal oficial para sugestões?</div>
+                    <div class="faq-answer">
+                        <p data-lang-key="faq-a7">
+                            Sim! Você pode enviar suas sugestões através do formulário de contato nesta página, selecionando o assunto "Sugestão". Além disso, temos um canal dedicado no nosso servidor Discord onde a comunidade pode discutir e votar em ideias.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" data-lang-key="faq-q8">Como faço para participar de eventos no jogo?</div>
+                    <div class="faq-answer">
+                        <p data-lang-key="faq-a8">
+                            Nossos eventos são anunciados no Discord, Instagram e no Fórum. Fique de olho nesses canais para saber as datas, horários e requisitos de participação. Alguns eventos podem exigir um certo nível ou itens específicos para entrar.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Partial do Rodapé (Assumindo que você tem um footer.ejs) -->
+    <%- include('partials/footer') %>
+
+    <!-- Seus scripts gerais -->
+    <script src="js/main.js"></script>
+    <script src="js/lang.js"></script> <!-- Assumindo que você tem um sistema de multi-idiomas -->
+    <!-- Scripts específicos para esta página -->
+    <script src="js/suporte.js"></script>
+
+</body>
+</html>
